@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import game.fish.cars.tools.MapLoader;
 import game.fish.cars.tools.ShapeFactory;
 
 import static game.fish.cars.Constants.GRAVITY;
@@ -27,6 +28,7 @@ public class PlayScreen implements Screen {
 	private final OrthographicCamera mCamera;
 	private final Viewport mViewport;
 	private final Body mPlayer;
+	private final MapLoader mLoader;
 	
 	public PlayScreen() {
 		mBatch = new SpriteBatch();
@@ -34,7 +36,8 @@ public class PlayScreen implements Screen {
 		mB2debug = new Box2DDebugRenderer();
 		mCamera = new OrthographicCamera();
 		mViewport = new FitViewport(640 / PPM, 480 / PPM, mCamera);
-		mPlayer = ShapeFactory.createRectangle(new Vector2(0,0), new Vector2(64,128), BodyDef.BodyType.DynamicBody, mWorld, 0.4f);
+		mLoader = new MapLoader(mWorld);
+		mPlayer = mLoader.getPlayer();
 		
 		mCamera.zoom = DEFAULT_ZOOM;
 		
