@@ -13,26 +13,22 @@ public abstract class Entity {
 	private Vector2 lateralSpeed;
 	
 	private final Body body;
-	private final int id;
 	
 	protected static float FRICTION_TOLERANCE = 100f;
 	protected static float FRICTION_MODIFIER = 0.01f;
 	
 	public Entity (Body body) {
 		this.body = body;
-		id = -1;
 	}
 	
-	public Entity (final Vector2 position, final Vector2 size, final BodyDef.BodyType type, final World world, float density, final int id) {
+	public Entity (final Vector2 position, final Vector2 size, final BodyDef.BodyType type, final World world, float density) {
         this.body = ShapeFactory.createRectangle(position, size, type, world, density);
-        this.id = id;
     }
 	
 	public void update() {
 		forwardSpeed = getForwardVelocity();
 		lateralSpeed = getLateralVelocity();
 		applyFriction();
-		applyDrag();
 	}
 
 	public Body getBody() {
@@ -56,10 +52,6 @@ public abstract class Entity {
 		Vector2 bodyVelocity = this.body.getLinearVelocity();
 		float normalVelocity = bodyOrientation.dot(bodyVelocity);
 		return bodyOrientation.scl(normalVelocity);
-	}
-	
-	private void applyDrag() {
-		//float normalizedForwardSpeed = this.forwardSpeed.nor();
 	}
 	
 	private void applyFriction() {
