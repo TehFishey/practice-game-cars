@@ -16,7 +16,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import game.fish.cars.entities.CarEntity;
 import game.fish.cars.tools.MapLoader;
-import game.fish.cars.tools.ShapeFactory;
 
 import static game.fish.cars.Constants.GRAVITY;
 import static game.fish.cars.Constants.DEFAULT_ZOOM;
@@ -46,7 +45,7 @@ public class PlayScreen implements Screen {
 		mCamera = new OrthographicCamera();
 		mViewport = new FitViewport(640 / PPM, 480 / PPM, mCamera);
 		mLoader = new MapLoader(mWorld);
-		mPlayer = new CarEntity(mLoader.getPlayer());
+		mPlayer = new CarEntity(mLoader.getPlayer(), mWorld);
 		
 		mCamera.zoom = DEFAULT_ZOOM;
 	}
