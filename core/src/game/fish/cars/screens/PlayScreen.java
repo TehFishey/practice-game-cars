@@ -69,24 +69,31 @@ public class PlayScreen implements Screen {
 		
 	
 	private void takeInput() {
-		if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
 			mPlayer.setDriveDirection(DRIVE_DIRECTION_FORWARD);
 		}
-		else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+		else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
 			mPlayer.setDriveDirection(DRIVE_DIRECTION_BACKWARD);
 		}
 		else {
 			mPlayer.setDriveDirection(DRIVE_DIRECTION_NONE);
 		}
 		
-		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
 			mPlayer.setTurnDirection(TURN_DIRECTION_LEFT);
 		}
-		else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+		else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
 			mPlayer.setTurnDirection(TURN_DIRECTION_RIGHT);
 		}
 		else {
 			mPlayer.setTurnDirection(TURN_DIRECTION_NONE);
+		}
+		
+		if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+			mPlayer.setBrakes(true);
+		}
+		else {
+			mPlayer.setBrakes(false);
 		}
 		
 		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {

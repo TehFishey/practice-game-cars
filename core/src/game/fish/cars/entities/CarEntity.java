@@ -21,7 +21,14 @@ public class CarEntity extends Entity {
 	
 	private static final float WHEEL_POSITION_X = 64f;
     private static final float WHEEL_POSITION_Y = 80f;
-	private static final float WHEEL_LOCK_ANGLE = 20f;
+	private static final float WHEEL_LOCK_ANGLE = 30f;
+	
+	private static final float MAX_ACCELERATION = 90f;
+	private static final float MAX_REVERSE_ACCELERATION = -40f;
+	private static final float ACCELERATION_STEP = 10f;
+	private static final float REVERSE_ACCELERATION_STEP = -5f;
+	private static final float ACCELERATION_DECAY = 30f;
+	private static final float BRAKE_STRENGTH = 60f;
     
 	private final Array<WheelEntity> frontWheels = new Array<WheelEntity>();
 	private final Array<WheelEntity> rearWheels = new Array<WheelEntity>();
@@ -29,15 +36,18 @@ public class CarEntity extends Entity {
 	private World world;
 	
 	private int driveDirection = DRIVE_DIRECTION_NONE;
-	private int turnDirection = DRIVE_DIRECTION_NONE;
+	private int turnDirection = TURN_DIRECTION_NONE;
+	
+	private boolean brakesOn = false;
+	private float currentAcceleration = 0f;
 	private float wheelAngle = 0f;
 	
 	public CarEntity(Body body, World world) {
 		super(body);
 		
 		this.world = world;
-		getBody().setAngularDamping(2f);
-		getBody().setLinearDamping(2f);
+		getBody().setAngularDamping(6f);
+		getBody().setLinearDamping(0.5f);
 		constructCar();
 	}
 
@@ -87,6 +97,10 @@ public class CarEntity extends Entity {
 		this.turnDirection = direction;
 	}
 	
+	public void setBrakes(boolean on) {
+		this.brakesOn = on;
+	}
+	
 	private void processInput() {
 		Vector2 baseVector = new Vector2();
 		
@@ -105,25 +119,50 @@ public class CarEntity extends Entity {
 			break;
 		case TURN_DIRECTION_NONE:
 			if (wheelAngle < 0 && driveDirection != DRIVE_DIRECTION_NONE)
-				wheelAngle += 0.5f;
+				wheelAngle += 1f;
 			else if (wheelAngle > 0 && driveDirection != DRIVE_DIRECTION_NONE)
-				wheelAngle -= 0.5f;
+				wheelAngle -= 1f;
 			for (WheelEntity frontWheel : frontWheels) 
 				frontWheel.getBody().setTransform(frontWheel.getBody().getPosition(), this.getBody().getAngle() + wheelAngle * MathUtils.degRad);		
 		}
 		
 		switch(driveDirection) {
 		case DRIVE_DIRECTION_FORWARD:
-			baseVector.set(0, 120f);
+			if (currentAcceleration < 0)
+				currentAcceleration = Math.min(currentAcceleration + ACCELERATION_DECAY, 0);
+			if (currentAcceleration < MAX_ACCELERATION)
+				currentAcceleration = Math.min(currentAcceleration + ACCELERATION_STEP, MAX_ACCELERATION);
 			break;
 		case DRIVE_DIRECTION_BACKWARD:
-			baseVector.set(0, -120f);
+			if (currentAcceleration > 0)
+				currentAcceleration = Math.max(currentAcceleration - ACCELERATION_DECAY, 0);
+			if (currentAcceleration > MAX_REVERSE_ACCELERATION)
+				currentAcceleration = Math.max(currentAcceleration + REVERSE_ACCELERATION_STEP , MAX_REVERSE_ACCELERATION);	
 			break;
+		case DRIVE_DIRECTION_NONE:
+			if (currentAcceleration > 0)
+				currentAcceleration = Math.max(currentAcceleration - ACCELERATION_DECAY, 0);
+			else if (currentAcceleration < 0)
+				currentAcceleration = Math.min(currentAcceleration + ACCELERATION_DECAY, 0);
 		}
+		baseVector.set(0, currentAcceleration);
 		
 		if (!baseVector.isZero()) {
 			for (WheelEntity frontWheel : frontWheels)
 			frontWheel.getBody().applyForceToCenter(frontWheel.getBody().getWorldVector(baseVector), true);
+		}
+		
+		if (brakesOn) {
+			for (WheelEntity frontWheel : frontWheels) {
+				frontWheel.getBody().setLinearDamping(BRAKE_STRENGTH);
+				frontWheel.getBody().setAngularDamping(BRAKE_STRENGTH);
+			}
+		}
+		else {
+			for (WheelEntity frontWheel : frontWheels) {
+				frontWheel.getBody().setLinearDamping(2f);
+				frontWheel.getBody().setAngularDamping(2f);
+			}
 		}
 	}
 	

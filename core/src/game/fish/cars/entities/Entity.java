@@ -15,7 +15,8 @@ public abstract class Entity {
 	private final Body body;
 	private final int id;
 	
-	private static final float VELOCITY_MOD = 0;
+	protected static float FRICTION_TOLERANCE = 100f;
+	protected static float FRICTION_MODIFIER = 0.01f;
 	
 	public Entity (Body body) {
 		this.body = body;
@@ -30,12 +31,17 @@ public abstract class Entity {
 	public void update() {
 		forwardSpeed = getForwardVelocity();
 		lateralSpeed = getLateralVelocity();
-		handleDrift();
+		applyFriction();
 		applyDrag();
 	}
 
 	public Body getBody() {
 		return this.body;
+	}
+	
+	public float getAbsoluteSpeed() {
+		Vector2 bodyVelocity = this.body.getLinearVelocity();
+		return Math.abs(bodyVelocity.x) + Math.abs(bodyVelocity.y);
 	}
 	
 	private Vector2 getForwardVelocity() {
@@ -56,9 +62,10 @@ public abstract class Entity {
 		//float normalizedForwardSpeed = this.forwardSpeed.nor();
 	}
 	
-	private void handleDrift() {
-		//Vector2 forwardSpeed = getForwardVelocity(body);
-		//Vector2 lateralSpeed = getLateralVelocity(body);
-		this.body.setLinearVelocity( forwardSpeed.x + lateralSpeed.x * VELOCITY_MOD, forwardSpeed.y + lateralSpeed.y * VELOCITY_MOD);
+	private void applyFriction() {
+		if (getAbsoluteSpeed() > FRICTION_TOLERANCE)
+			this.body.setLinearVelocity( forwardSpeed.x + lateralSpeed.x * FRICTION_MODIFIER, forwardSpeed.y + lateralSpeed.y * FRICTION_MODIFIER);
+		else
+			this.body.setLinearVelocity( forwardSpeed.x, forwardSpeed.y);
 	}
 }
