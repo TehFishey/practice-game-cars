@@ -12,20 +12,24 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import game.fish.cars.CarsGame;
+import game.fish.cars.commands.AccelerateBackwardCommand;
+import game.fish.cars.commands.AccelerateForwardCommand;
+import game.fish.cars.commands.AccelerateNoneCommand;
+import game.fish.cars.commands.BrakeOffCommand;
+import game.fish.cars.commands.BrakeOnCommand;
+import game.fish.cars.commands.MenuCommand;
+import game.fish.cars.commands.TurnLeftCommand;
+import game.fish.cars.commands.TurnNoneCommand;
+import game.fish.cars.commands.TurnRightCommand;
+import game.fish.cars.commands.ZoomInCommand;
+import game.fish.cars.commands.ZoomOutCommand;
 import game.fish.cars.entities.CarEntity;
 import game.fish.cars.tools.MapLoader;
 
-import static game.fish.cars.Constants.MENU_SCREEN;
 import static game.fish.cars.Constants.GRAVITY;
 import static game.fish.cars.Constants.DEFAULT_ZOOM;
 import static game.fish.cars.Constants.PPM;
 
-import static game.fish.cars.entities.CarEntity.DRIVE_DIRECTION_NONE;
-import static game.fish.cars.entities.CarEntity.DRIVE_DIRECTION_FORWARD;
-import static game.fish.cars.entities.CarEntity.DRIVE_DIRECTION_BACKWARD;
-import static game.fish.cars.entities.CarEntity.TURN_DIRECTION_NONE;
-import static game.fish.cars.entities.CarEntity.TURN_DIRECTION_LEFT;
-import static game.fish.cars.entities.CarEntity.TURN_DIRECTION_RIGHT;
 import static game.fish.cars.entities.CarEntity.FRONT_WHEEL_DRIVE;
 //import static game.fish.cars.entities.CarEntity.REAR_WHEEL_DRIVE;
 //import static game.fish.cars.entities.CarEntity.ALL_WHEEL_DRIVE;
@@ -40,6 +44,18 @@ public class PlayScreen implements Screen {
 	private final Viewport viewport;
 	private final CarEntity player;
 	private final MapLoader loader;
+	
+	private final AccelerateForwardCommand driveCommand = new AccelerateForwardCommand();
+	private final AccelerateBackwardCommand reverseCommand = new AccelerateBackwardCommand();
+	private final AccelerateNoneCommand stopCommand = new AccelerateNoneCommand();
+	private final TurnLeftCommand leftCommand = new TurnLeftCommand();
+	private final TurnRightCommand rightCommand = new TurnRightCommand();
+	private final TurnNoneCommand straightCommand = new TurnNoneCommand();
+	private final BrakeOnCommand brakeCommand = new BrakeOnCommand();
+	private final BrakeOffCommand unbrakeCommand = new BrakeOffCommand();
+	private final ZoomInCommand zoomInCommand = new ZoomInCommand();
+	private final ZoomOutCommand zoomOutCommand = new ZoomOutCommand();
+	private final MenuCommand menuCommand = new MenuCommand();
 	
 	public PlayScreen(CarsGame parent) {
 		this.parent = parent;
@@ -73,43 +89,21 @@ public class PlayScreen implements Screen {
 		
 	
 	private void takeInput() {
-		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-			player.inputDriveDirection(DRIVE_DIRECTION_FORWARD);
-		}
-		else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-			player.inputDriveDirection(DRIVE_DIRECTION_BACKWARD);
-		}
-		else {
-			player.inputDriveDirection(DRIVE_DIRECTION_NONE);
-		}
+		if (Gdx.input.isKeyPressed(Input.Keys.W)) driveCommand.execute(player);
+		else if (Gdx.input.isKeyPressed(Input.Keys.S)) reverseCommand.execute(player);
+		else stopCommand.execute(player);
 		
-		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-			player.inputTurnDirection(TURN_DIRECTION_LEFT);
-		}
-		else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-			player.inputTurnDirection(TURN_DIRECTION_RIGHT);
-		}
-		else {
-			player.inputTurnDirection(TURN_DIRECTION_NONE);
-		}
+		if (Gdx.input.isKeyPressed(Input.Keys.A)) leftCommand.execute(player);
+		else if (Gdx.input.isKeyPressed(Input.Keys.D)) rightCommand.execute(player);
+		else straightCommand.execute(player);
 		
-		if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-			player.inputBrakes(true);
-		}
-		else {
-			player.inputBrakes(false);
-		}
+		if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) brakeCommand.execute(player);
+		else unbrakeCommand.execute(player);
 		
-		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-			parent.changeScreen(MENU_SCREEN);
-		}
+		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) menuCommand.execute(parent);
 		
-		if (Gdx.input.isKeyPressed(Input.Keys.MINUS)) {
-			camera.zoom += 0.4f;
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.EQUALS)) {
-			camera.zoom -= 0.4f;
-		}
+		if (Gdx.input.isKeyPressed(Input.Keys.MINUS)) zoomInCommand.execute(camera);
+		else if (Gdx.input.isKeyPressed(Input.Keys.EQUALS)) zoomOutCommand.execute(camera);
 	}
 	
 	private void update(final float delta) {
