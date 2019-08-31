@@ -42,13 +42,13 @@ public class PlayScreen implements Screen {
 	private final MapLoader loader;
 	
 	public PlayScreen() {
-		batch = new SpriteBatch();
-		world = new World(GRAVITY, true);
-		b2debug = new Box2DDebugRenderer();
-		camera = new OrthographicCamera();
-		viewport = new FitViewport(640 / PPM, 480 / PPM, camera);
-		loader = new MapLoader(world);
-		player = new CarEntity(loader.getPlayer(), world, FRONT_WHEEL_DRIVE);
+		mBatch = new SpriteBatch();
+		mWorld = new World(GRAVITY, true);
+		mB2debug = new Box2DDebugRenderer();
+		mCamera = new OrthographicCamera();
+		mViewport = new FitViewport(640 / PPM, 480 / PPM, mCamera);
+		mLoader = new MapLoader(mWorld);
+		mPlayer = new CarEntity(mLoader.getPlayer(), mWorld);
 		
 		camera.zoom = DEFAULT_ZOOM;
 	}
