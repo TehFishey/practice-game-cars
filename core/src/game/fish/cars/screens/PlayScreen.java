@@ -28,7 +28,7 @@ import static game.fish.cars.entities.CarEntity.TURN_DIRECTION_NONE;
 import static game.fish.cars.entities.CarEntity.TURN_DIRECTION_LEFT;
 import static game.fish.cars.entities.CarEntity.TURN_DIRECTION_RIGHT;
 import static game.fish.cars.entities.CarEntity.FRONT_WHEEL_DRIVE;
-import static game.fish.cars.entities.CarEntity.REAR_WHEEL_DRIVE;
+//import static game.fish.cars.entities.CarEntity.REAR_WHEEL_DRIVE;
 import static game.fish.cars.entities.CarEntity.ALL_WHEEL_DRIVE;
 
 public class PlayScreen implements Screen {
@@ -42,13 +42,13 @@ public class PlayScreen implements Screen {
 	private final MapLoader loader;
 	
 	public PlayScreen() {
-		mBatch = new SpriteBatch();
-		mWorld = new World(GRAVITY, true);
-		mB2debug = new Box2DDebugRenderer();
-		mCamera = new OrthographicCamera();
-		mViewport = new FitViewport(640 / PPM, 480 / PPM, mCamera);
-		mLoader = new MapLoader(mWorld);
-		mPlayer = new CarEntity(mLoader.getPlayer(), mWorld, FRONT_WHEEL_DRIVE);
+		batch = new SpriteBatch();
+		world = new World(GRAVITY, true);
+		b2debug = new Box2DDebugRenderer();
+		camera = new OrthographicCamera();
+		viewport = new FitViewport(640 / PPM, 480 / PPM, camera);
+		loader = new MapLoader(world);
+		player = new CarEntity(loader.getPlayer(), world, FRONT_WHEEL_DRIVE);
 		
 		camera.zoom = DEFAULT_ZOOM;
 	}
@@ -73,30 +73,30 @@ public class PlayScreen implements Screen {
 	
 	private void takeInput() {
 		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-			mPlayer.inputDriveDirection(DRIVE_DIRECTION_FORWARD);
+			player.inputDriveDirection(DRIVE_DIRECTION_FORWARD);
 		}
 		else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-			mPlayer.inputDriveDirection(DRIVE_DIRECTION_BACKWARD);
+			player.inputDriveDirection(DRIVE_DIRECTION_BACKWARD);
 		}
 		else {
-			mPlayer.inputDriveDirection(DRIVE_DIRECTION_NONE);
+			player.inputDriveDirection(DRIVE_DIRECTION_NONE);
 		}
 		
 		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-			mPlayer.inputTurnDirection(TURN_DIRECTION_LEFT);
+			player.inputTurnDirection(TURN_DIRECTION_LEFT);
 		}
 		else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-			mPlayer.inputTurnDirection(TURN_DIRECTION_RIGHT);
+			player.inputTurnDirection(TURN_DIRECTION_RIGHT);
 		}
 		else {
-			mPlayer.inputTurnDirection(TURN_DIRECTION_NONE);
+			player.inputTurnDirection(TURN_DIRECTION_NONE);
 		}
 		
 		if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-			mPlayer.inputBrakes(true);
+			player.inputBrakes(true);
 		}
 		else {
-			mPlayer.inputBrakes(false);
+			player.inputBrakes(false);
 		}
 		
 		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
