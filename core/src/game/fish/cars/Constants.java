@@ -13,4 +13,10 @@ public class Constants {
 	public static final String MAP_WALL = "walls";
 	public static final String MAP_OBSTACLES = "debris";
 	public static final String MAP_PLAYER = "player";
+	
+	public static final int PLAY_SCREEN = 0;
+	public static final int MENU_SCREEN = 1;
+	public static final int SETTINGS_SCREEN = 2;
+	public static final int ACHIEVEMENTS_SCREEN = 3;
+	public static final int LOADING_SCREEN = 4;
 }

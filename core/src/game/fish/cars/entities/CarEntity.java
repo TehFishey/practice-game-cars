@@ -28,6 +28,7 @@ public class CarEntity extends Entity {
 	private static final float ANGULAR_DAMPING = 6f;
 	private static final float LINEAR_DAMPING = 0.5f;
 	private static final float RESTITUTION = 0.2f;
+	
 	private static final float MAX_ACCELERATION = 120f;
 	private static final float MAX_REVERSE_ACCELERATION = -60f;
 	private static final float ACCELERATION_STEP = 15f;
@@ -39,19 +40,20 @@ public class CarEntity extends Entity {
 	private final Array<WheelEntity> rearWheels = new Array<WheelEntity>();
 	private final Array<WheelEntity> driveWheels = new Array<WheelEntity>();
 	
-	private World world;
+	private final World world;
+	private final int drive;
 	
 	private int driveDirection = DRIVE_DIRECTION_NONE;
 	private int turnDirection = TURN_DIRECTION_NONE;
-	
 	private boolean brakesOn = false;
+	
 	private float currentAcceleration = 0f;
 	private float wheelAngle = 0f;
 	
 	public CarEntity(Body body, World world, int drive) {
 		super(body);
-		
 		this.world = world;
+		this.drive = drive;
 				
 		final WheelEntity wheelFL = new WheelEntity(
 			new Vector2(getBody().getPosition().x * PPM + WHEEL_POSITION_X, getBody().getPosition().y * PPM + WHEEL_POSITION_Y), 
@@ -96,6 +98,7 @@ public class CarEntity extends Entity {
 		case ALL_WHEEL_DRIVE:
 			driveWheels.addAll(frontWheels);
 			driveWheels.addAll(rearWheels);
+			break;
 		}
 		
 		getBody().setAngularDamping(ANGULAR_DAMPING);
@@ -129,12 +132,12 @@ public class CarEntity extends Entity {
 				wheelAngle = Math.min(wheelAngle += 2f, WHEEL_LOCK_ANGLE);
 			break;
 		case TURN_DIRECTION_NONE:
-			if (wheelAngle < 0 && driveDirection != DRIVE_DIRECTION_NONE)
+			if (wheelAngle < 0)
 				wheelAngle += 1f;
-			else if (wheelAngle > 0 && driveDirection != DRIVE_DIRECTION_NONE)
+			else if (wheelAngle > 0)
 				wheelAngle -= 1f;
+			break;
 		}
-		
 		for (WheelEntity frontWheel : frontWheels)
 			frontWheel.setAngle(wheelAngle);
 		
@@ -156,6 +159,7 @@ public class CarEntity extends Entity {
 				currentAcceleration = Math.max(currentAcceleration - ACCELERATION_DECAY, 0);
 			else if (currentAcceleration < 0)
 				currentAcceleration = Math.min(currentAcceleration + ACCELERATION_DECAY, 0);
+			break;
 		}
 		
 		engineForce.set(0, currentAcceleration);
@@ -166,10 +170,30 @@ public class CarEntity extends Entity {
 			driveWheel.setBrakes(brakesOn, BRAKE_STRENGTH);
 	}
 	
+	/*private void adjustMomentum() {
+		if (drive == FRONT_WHEEL_DRIVE) {
+			for (WheelEntity frontWheel : frontWheels)
+				frontWheel.setForce(new Vector2(0, currentAcceleration * 0.75f));
+			for (WheelEntity rearWheel : rearWheels)
+				rearWheel.setForce(new Vector2(0, currentAcceleration * 0.25f));
+		}
+		else if (drive == REAR_WHEEL_DRIVE) {
+			for (WheelEntity rearWheel : rearWheels)
+				rearWheel.setForce(new Vector2(0, currentAcceleration * 0.75f));
+			for (WheelEntity frontWheel : frontWheels)
+				frontWheel.setForce(new Vector2(0, currentAcceleration * 0.25f));
+		}
+		else {
+			for (WheelEntity driveWheel : driveWheels)
+				driveWheel.setForce(new Vector2(0, currentAcceleration * 0.75f));
+		}
+	}*/
+	
 	@Override
 	public void update() {
 		super.update();
 		processInput();
+		//adjustMomentum();
 	}
 	
 }

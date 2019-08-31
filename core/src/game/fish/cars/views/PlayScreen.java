@@ -1,4 +1,4 @@
-package game.fish.cars.screens;
+package game.fish.cars.views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -6,17 +6,16 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import game.fish.cars.CarsGame;
 import game.fish.cars.entities.CarEntity;
 import game.fish.cars.tools.MapLoader;
 
+import static game.fish.cars.Constants.MENU_SCREEN;
 import static game.fish.cars.Constants.GRAVITY;
 import static game.fish.cars.Constants.DEFAULT_ZOOM;
 import static game.fish.cars.Constants.PPM;
@@ -29,10 +28,11 @@ import static game.fish.cars.entities.CarEntity.TURN_DIRECTION_LEFT;
 import static game.fish.cars.entities.CarEntity.TURN_DIRECTION_RIGHT;
 import static game.fish.cars.entities.CarEntity.FRONT_WHEEL_DRIVE;
 //import static game.fish.cars.entities.CarEntity.REAR_WHEEL_DRIVE;
-import static game.fish.cars.entities.CarEntity.ALL_WHEEL_DRIVE;
+//import static game.fish.cars.entities.CarEntity.ALL_WHEEL_DRIVE;
 
 public class PlayScreen implements Screen {
 
+	private CarsGame parent;
 	private final SpriteBatch batch;
 	private final World world;
 	private final Box2DDebugRenderer b2debug;
@@ -41,7 +41,8 @@ public class PlayScreen implements Screen {
 	private final CarEntity player;
 	private final MapLoader loader;
 	
-	public PlayScreen() {
+	public PlayScreen(CarsGame parent) {
+		this.parent = parent;
 		batch = new SpriteBatch();
 		world = new World(GRAVITY, true);
 		b2debug = new Box2DDebugRenderer();
@@ -52,7 +53,7 @@ public class PlayScreen implements Screen {
 		
 		camera.zoom = DEFAULT_ZOOM;
 	}
-	
+
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
@@ -100,7 +101,7 @@ public class PlayScreen implements Screen {
 		}
 		
 		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-			Gdx.app.exit();
+			parent.changeScreen(MENU_SCREEN);
 		}
 		
 		if (Gdx.input.isKeyPressed(Input.Keys.MINUS)) {

@@ -10,18 +10,18 @@ public class WheelEntity extends Entity {
 	private static final float ANGULAR_DAMPING = 2f;
 	private static final float LINEAR_DAMPING = 2f;
 	
-	private final CarEntity car;
+	private final CarEntity parent;
 	
-	public WheelEntity(Vector2 position, Vector2 size, World world, float density, CarEntity car) {
+	public WheelEntity(Vector2 position, Vector2 size, World world, float density, CarEntity parent) {
 		super(position, size, BodyDef.BodyType.DynamicBody, world, density);
 		
-		this.car = car;
+		this.parent = parent;
 		getBody().setAngularDamping(ANGULAR_DAMPING);
 		getBody().setLinearDamping(ANGULAR_DAMPING);
 	}
 	
 	public void setAngle (float angle) {
-		getBody().setTransform(getBody().getPosition(), car.getBody().getAngle() + angle * MathUtils.degRad);
+		getBody().setTransform(getBody().getPosition(), parent.getBody().getAngle() + angle * MathUtils.degRad);
 	}
 	
 	public void setForce (Vector2 force) {
