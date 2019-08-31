@@ -28,7 +28,7 @@ import static game.fish.cars.entities.CarEntity.TURN_DIRECTION_NONE;
 import static game.fish.cars.entities.CarEntity.TURN_DIRECTION_LEFT;
 import static game.fish.cars.entities.CarEntity.TURN_DIRECTION_RIGHT;
 import static game.fish.cars.entities.CarEntity.FRONT_WHEEL_DRIVE;
-//import static game.fish.cars.entities.CarEntity.REAR_WHEEL_DRIVE;
+import static game.fish.cars.entities.CarEntity.REAR_WHEEL_DRIVE;
 import static game.fish.cars.entities.CarEntity.ALL_WHEEL_DRIVE;
 
 public class PlayScreen implements Screen {
@@ -48,7 +48,7 @@ public class PlayScreen implements Screen {
 		mCamera = new OrthographicCamera();
 		mViewport = new FitViewport(640 / PPM, 480 / PPM, mCamera);
 		mLoader = new MapLoader(mWorld);
-		mPlayer = new CarEntity(mLoader.getPlayer(), mWorld);
+		mPlayer = new CarEntity(mLoader.getPlayer(), mWorld, FRONT_WHEEL_DRIVE);
 		
 		camera.zoom = DEFAULT_ZOOM;
 	}
@@ -73,30 +73,30 @@ public class PlayScreen implements Screen {
 	
 	private void takeInput() {
 		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-			mPlayer.setDriveDirection(DRIVE_DIRECTION_FORWARD);
+			mPlayer.inputDriveDirection(DRIVE_DIRECTION_FORWARD);
 		}
 		else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-			mPlayer.setDriveDirection(DRIVE_DIRECTION_BACKWARD);
+			mPlayer.inputDriveDirection(DRIVE_DIRECTION_BACKWARD);
 		}
 		else {
-			player.inputDriveDirection(DRIVE_DIRECTION_NONE);
+			mPlayer.inputDriveDirection(DRIVE_DIRECTION_NONE);
 		}
 		
 		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-			mPlayer.setTurnDirection(TURN_DIRECTION_LEFT);
+			mPlayer.inputTurnDirection(TURN_DIRECTION_LEFT);
 		}
 		else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-			mPlayer.setTurnDirection(TURN_DIRECTION_RIGHT);
+			mPlayer.inputTurnDirection(TURN_DIRECTION_RIGHT);
 		}
 		else {
-			player.inputTurnDirection(TURN_DIRECTION_NONE);
+			mPlayer.inputTurnDirection(TURN_DIRECTION_NONE);
 		}
 		
 		if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-			mPlayer.setBrakes(true);
+			mPlayer.inputBrakes(true);
 		}
 		else {
-			mPlayer.setBrakes(false);
+			mPlayer.inputBrakes(false);
 		}
 		
 		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {

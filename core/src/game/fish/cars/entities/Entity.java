@@ -29,7 +29,6 @@ public abstract class Entity {
 		forwardSpeed = getForwardVelocity();
 		lateralSpeed = getLateralVelocity();
 		applyFriction();
-		applyDrag();
 	}
 
 	public Body getBody() {
@@ -53,13 +52,6 @@ public abstract class Entity {
 		Vector2 bodyVelocity = this.body.getLinearVelocity();
 		float normalVelocity = bodyOrientation.dot(bodyVelocity);
 		return bodyOrientation.scl(normalVelocity);
-	}
-	
-	private void applyFriction() {
-		if (getAbsoluteSpeed() > FRICTION_TOLERANCE)
-			this.body.setLinearVelocity( forwardSpeed.x + lateralSpeed.x * FRICTION_MODIFIER, forwardSpeed.y + lateralSpeed.y * FRICTION_MODIFIER);
-		else
-			this.body.setLinearVelocity( forwardSpeed.x, forwardSpeed.y);
 	}
 	
 	private void applyFriction() {
