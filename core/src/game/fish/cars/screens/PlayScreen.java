@@ -28,29 +28,29 @@ import static game.fish.cars.entities.CarEntity.TURN_DIRECTION_NONE;
 import static game.fish.cars.entities.CarEntity.TURN_DIRECTION_LEFT;
 import static game.fish.cars.entities.CarEntity.TURN_DIRECTION_RIGHT;
 import static game.fish.cars.entities.CarEntity.FRONT_WHEEL_DRIVE;
-import static game.fish.cars.entities.CarEntity.REAR_WHEEL_DRIVE;
+//import static game.fish.cars.entities.CarEntity.REAR_WHEEL_DRIVE;
 import static game.fish.cars.entities.CarEntity.ALL_WHEEL_DRIVE;
 
 public class PlayScreen implements Screen {
 
-	private final SpriteBatch mBatch;
-	private final World mWorld;
-	private final Box2DDebugRenderer mB2debug;
-	private final OrthographicCamera mCamera;
-	private final Viewport mViewport;
-	private final CarEntity mPlayer;
-	private final MapLoader mLoader;
+	private final SpriteBatch batch;
+	private final World world;
+	private final Box2DDebugRenderer b2debug;
+	private final OrthographicCamera camera;
+	private final Viewport viewport;
+	private final CarEntity player;
+	private final MapLoader loader;
 	
 	public PlayScreen() {
-		mBatch = new SpriteBatch();
-		mWorld = new World(GRAVITY, true);
-		mB2debug = new Box2DDebugRenderer();
-		mCamera = new OrthographicCamera();
-		mViewport = new FitViewport(640 / PPM, 480 / PPM, mCamera);
-		mLoader = new MapLoader(mWorld);
-		mPlayer = new CarEntity(mLoader.getPlayer(), mWorld, FRONT_WHEEL_DRIVE);
+		batch = new SpriteBatch();
+		world = new World(GRAVITY, true);
+		b2debug = new Box2DDebugRenderer();
+		camera = new OrthographicCamera();
+		viewport = new FitViewport(640 / PPM, 480 / PPM, camera);
+		loader = new MapLoader(world);
+		player = new CarEntity(loader.getPlayer(), world, FRONT_WHEEL_DRIVE);
 		
-		mCamera.zoom = DEFAULT_ZOOM;
+		camera.zoom = DEFAULT_ZOOM;
 	}
 	
 	@Override
@@ -65,7 +65,7 @@ public class PlayScreen implements Screen {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		takeInput();
-		mPlayer.update();
+		player.update();
 		update(delta);
 		draw();
 	}
@@ -73,30 +73,30 @@ public class PlayScreen implements Screen {
 	
 	private void takeInput() {
 		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-			mPlayer.inputDriveDirection(DRIVE_DIRECTION_FORWARD);
+			player.inputDriveDirection(DRIVE_DIRECTION_FORWARD);
 		}
 		else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-			mPlayer.inputDriveDirection(DRIVE_DIRECTION_BACKWARD);
+			player.inputDriveDirection(DRIVE_DIRECTION_BACKWARD);
 		}
 		else {
-			mPlayer.inputDriveDirection(DRIVE_DIRECTION_NONE);
+			player.inputDriveDirection(DRIVE_DIRECTION_NONE);
 		}
 		
 		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-			mPlayer.inputTurnDirection(TURN_DIRECTION_LEFT);
+			player.inputTurnDirection(TURN_DIRECTION_LEFT);
 		}
 		else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-			mPlayer.inputTurnDirection(TURN_DIRECTION_RIGHT);
+			player.inputTurnDirection(TURN_DIRECTION_RIGHT);
 		}
 		else {
-			mPlayer.inputTurnDirection(TURN_DIRECTION_NONE);
+			player.inputTurnDirection(TURN_DIRECTION_NONE);
 		}
 		
 		if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-			mPlayer.inputBrakes(true);
+			player.inputBrakes(true);
 		}
 		else {
-			mPlayer.inputBrakes(false);
+			player.inputBrakes(false);
 		}
 		
 		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
@@ -104,30 +104,30 @@ public class PlayScreen implements Screen {
 		}
 		
 		if (Gdx.input.isKeyPressed(Input.Keys.MINUS)) {
-			mCamera.zoom += 0.4f;
+			camera.zoom += 0.4f;
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.EQUALS)) {
-			mCamera.zoom -= 0.4f;
+			camera.zoom -= 0.4f;
 		}
 	}
 	
 	private void update(final float delta) {
-		mCamera.position.set(mPlayer.getBody().getPosition(), 0);
-		mCamera.update();
+		camera.position.set(player.getBody().getPosition(), 0);
+		camera.update();
 		
-		mWorld.step(delta, 6, 2);
+		world.step(delta, 6, 2);
 	}
 		
 	private void draw() {
-		mBatch.setProjectionMatrix(mCamera.combined);
-		mB2debug.render(mWorld, mCamera.combined);
+		batch.setProjectionMatrix(camera.combined);
+		b2debug.render(world, camera.combined);
 	}
 		
 	
 
 	@Override
 	public void resize(int width, int height) {
-		mViewport.update(width, height);
+		viewport.update(width, height);
 
 	}
 
@@ -151,9 +151,9 @@ public class PlayScreen implements Screen {
 
 	@Override
 	public void dispose() {
-		mBatch.dispose();
-		mWorld.dispose();
-		mB2debug.dispose();
+		batch.dispose();
+		world.dispose();
+		b2debug.dispose();
 	}
 
 }
