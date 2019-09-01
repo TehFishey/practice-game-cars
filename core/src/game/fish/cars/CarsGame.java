@@ -20,6 +20,8 @@ import static game.fish.cars.Constants.LOADING_SCREEN;
 //import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class CarsGame extends Game {
+	public Settings settings;
+	
 	private LoadingScreen loadingScreen;
 	private PlayScreen playScreen;
 	private MenuScreen menuScreen;
@@ -27,6 +29,7 @@ public class CarsGame extends Game {
 	private AchievementsScreen achievementsScreen;
 	
 	public void create() {
+		settings = new Settings();
 		menuScreen = new MenuScreen(this);
 		setScreen(this.menuScreen);
 	}
@@ -55,6 +58,63 @@ public class CarsGame extends Game {
 			break;
 		}
 	}
+	
+	public void clearScreen(int screen) {
+		switch(screen) {
+		case LOADING_SCREEN:
+			if (loadingScreen != null) {
+				loadingScreen.dispose();
+				loadingScreen = null;
+			}
+			break;
+		case PLAY_SCREEN:
+			if (playScreen != null) {
+				playScreen.dispose();
+				playScreen = null;
+			}
+			break;
+		case MENU_SCREEN:
+			if (menuScreen != null) {
+				menuScreen.dispose();
+				menuScreen = null;
+			}
+			break;
+		case SETTINGS_SCREEN:
+			if (settingsScreen != null) {
+				settingsScreen.dispose();
+				settingsScreen = null;
+			}
+			break;
+		case ACHIEVEMENTS_SCREEN:
+			if (achievementsScreen != null) {
+				achievementsScreen.dispose();
+				achievementsScreen = null;
+			}
+			break;
+		}
+	}
+	
+	public boolean doesScreenExist(int screen) {
+		switch(screen) {
+		case LOADING_SCREEN:
+			return (loadingScreen != null);
+		case PLAY_SCREEN:
+			return (playScreen != null);
+		case MENU_SCREEN:
+			return (menuScreen != null);
+		case SETTINGS_SCREEN:
+			return (settingsScreen != null);
+		case ACHIEVEMENTS_SCREEN:
+			return (achievementsScreen != null);
+		default:
+			return false;
+		}
+	}
+	
+	public Settings getSettings() {
+		return settings;
+	}
+	
 	
 	@Override
 	public void render() {

@@ -21,13 +21,16 @@ public class MenuScreen implements Screen {
 	
 	private final CarsGame parent;
 	private final Stage stage;
-	private final Table table;
 	private final Skin skin;
-	private final TextButton playButton;
+	
+	private final TextButton newGameButton;
+	private final TextButton resumeButton;
 	private final TextButton settingsButton;
 	private final TextButton achievementsButton;
 	private final TextButton exitButton;
-	private ChangeListener playListener;
+	
+	private ChangeListener newGameListener;
+	private ChangeListener resumeListener;
 	private ChangeListener settingsListener;
 	private ChangeListener achievementsListener;
 	private ChangeListener exitListener;
@@ -35,20 +38,27 @@ public class MenuScreen implements Screen {
 	public MenuScreen(final CarsGame parent) {
 		this.parent = parent;
 		stage = new Stage(new ScreenViewport());
-		table = new Table();
 		skin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
-		playButton = new TextButton("Play", skin);
+		
+		newGameButton = new TextButton("New Game", skin);
+		resumeButton = new TextButton("Resume", skin);
 		settingsButton = new TextButton("Settings", skin);
 		achievementsButton = new TextButton("Achievements", skin);
 		exitButton = new TextButton("Quit", skin);
 		
-		buildMenu();
-		Gdx.input.setInputProcessor(stage);
+		buildControls();
 	}
 	
-	private void buildMenu() {
+	private void buildControls() {
 		//Replace with some kind of generic buttonMap loop? Useable on other menus?
-		playListener = new ChangeListener() {
+		newGameListener = new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				if (parent.doesScreenExist(PLAY_SCREEN)) parent.clearScreen(PLAY_SCREEN);
+				parent.changeScreen(PLAY_SCREEN);
+			}
+		};
+		resumeListener = new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				parent.changeScreen(PLAY_SCREEN);
@@ -72,27 +82,35 @@ public class MenuScreen implements Screen {
 				Gdx.app.exit();
 			}
 		};
-		playButton.addListener(playListener);
+		newGameButton.addListener(newGameListener);
+		resumeButton.addListener(resumeListener);
 		settingsButton.addListener(settingsListener);
 		achievementsButton.addListener(achievementsListener);
 		exitButton.addListener(exitListener);
-				
-		table.setFillParent(true);
+	}
+	
+	@Override
+	public void show() {
+		Table table = new Table();
+		
 		table.setDebug(true);
-		table.add(playButton).fillX().uniformX();
+		table.setFillParent(true);
+		table.add(newGameButton).fillX().uniformX();
 		table.row().pad(10,0,10,0);
+		if (parent.doesScreenExist(PLAY_SCREEN)) {
+			table.add(resumeButton).fillX().uniformX();
+			table.row().pad(10,0,10,0);
+		}
 		table.add(settingsButton).fillX().uniformX();
 		table.row().pad(10,0,10,0);
 		table.add(achievementsButton).fillX().uniformX();
 		table.row().pad(10,0,10,0);
 		table.add(exitButton).fillX().uniformX();
 		table.row().pad(10,0,10,0);
-	}
-	
-	@Override
-	public void show() {		
+		
 		stage.clear();
 		stage.addActor(table);
+		Gdx.input.setInputProcessor(stage);
 	}
 
 	@Override
