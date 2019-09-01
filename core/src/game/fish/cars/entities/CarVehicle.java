@@ -9,14 +9,8 @@ import com.badlogic.gdx.utils.Array;
 
 import static game.fish.cars.Constants.PPM;
 
-public class CarEntity extends Entity {
+public class CarVehicle extends VehicleEntity {
 	
-	public static final int DRIVE_DIRECTION_NONE = 0;
-	public static final int DRIVE_DIRECTION_FORWARD = 1;
-	public static final int DRIVE_DIRECTION_BACKWARD = 2;
-	public static final int TURN_DIRECTION_NONE = 0;
-	public static final int TURN_DIRECTION_LEFT = 1;
-	public static final int TURN_DIRECTION_RIGHT = 2;
 	public static final int FRONT_WHEEL_DRIVE = 0;
 	public static final int REAR_WHEEL_DRIVE = 1;
 	public static final int ALL_WHEEL_DRIVE = 2;
@@ -24,35 +18,18 @@ public class CarEntity extends Entity {
 	private static final float WHEEL_POSITION_X = 64f;
     private static final float WHEEL_POSITION_Y = 80f;
 	private static final float WHEEL_LOCK_ANGLE = 30f;
-	
-	private static final float ANGULAR_DAMPING = 6f;
-	private static final float LINEAR_DAMPING = 0.5f;
-	private static final float RESTITUTION = 0.2f;
-	
-	private static final float MAX_ACCELERATION = 120f;
-	private static final float MAX_REVERSE_ACCELERATION = -60f;
-	private static final float ACCELERATION_STEP = 15f;
-	private static final float REVERSE_ACCELERATION_STEP = -7.5f;
-	private static final float ACCELERATION_DECAY = 45f;
-	private static final float BRAKE_STRENGTH = 90f;
-    
+
 	private final Array<WheelEntity> frontWheels = new Array<WheelEntity>();
 	private final Array<WheelEntity> rearWheels = new Array<WheelEntity>();
 	private final Array<WheelEntity> driveWheels = new Array<WheelEntity>();
 	
-	private final World world;
-	private final int drive;
-	
-	private int driveDirection = DRIVE_DIRECTION_NONE;
-	private int turnDirection = TURN_DIRECTION_NONE;
-	private boolean brakesOn = false;
-	
 	private float currentAcceleration = 0f;
 	private float wheelAngle = 0f;
 	
-	public CarEntity(Body body, World world, int drive) {
-		super(body);
-		this.world = world;
+	private final int drive;
+	
+	public CarVehicle(Body body, World world, int drive) {
+		super(body, world);
 		this.drive = drive;
 				
 		final WheelEntity wheelFL = new WheelEntity(
@@ -101,22 +78,21 @@ public class CarEntity extends Entity {
 			break;
 		}
 		
+		ANGULAR_DAMPING = 6f;
+		LINEAR_DAMPING = 0.5f;
+		RESTITUTION = 0.2f;
+		
+		MAX_ACCELERATION = 120f;
+		MAX_REVERSE_ACCELERATION = -60f;
+		ACCELERATION_STEP = 15f;
+		REVERSE_ACCELERATION_STEP = -7.5f;
+		ACCELERATION_DECAY = 45f;
+		BRAKE_STRENGTH = 90f;
+		
 		getBody().setAngularDamping(ANGULAR_DAMPING);
 		getBody().setLinearDamping(LINEAR_DAMPING);
 		getBody().getFixtureList().get(0).setRestitution(RESTITUTION);
 		
-	}
-
-	public void inputDriveDirection(int direction) {
-		this.driveDirection = direction;
-	}
-	
-	public void inputTurnDirection(int direction) {
-		this.turnDirection = direction;
-	}
-	
-	public void inputBrakes(boolean bool) {
-		this.brakesOn = bool;
 	}
 	
 	private void processInput() {
@@ -161,7 +137,6 @@ public class CarEntity extends Entity {
 				currentAcceleration = Math.min(currentAcceleration + ACCELERATION_DECAY, 0);
 			break;
 		}
-		
 		engineForce.set(0, currentAcceleration);
 		for (WheelEntity driveWheel : driveWheels)
 			driveWheel.setForce(engineForce);
@@ -170,30 +145,10 @@ public class CarEntity extends Entity {
 			driveWheel.setBrakes(brakesOn, BRAKE_STRENGTH);
 	}
 	
-	/*private void adjustMomentum() {
-		if (drive == FRONT_WHEEL_DRIVE) {
-			for (WheelEntity frontWheel : frontWheels)
-				frontWheel.setForce(new Vector2(0, currentAcceleration * 0.75f));
-			for (WheelEntity rearWheel : rearWheels)
-				rearWheel.setForce(new Vector2(0, currentAcceleration * 0.25f));
-		}
-		else if (drive == REAR_WHEEL_DRIVE) {
-			for (WheelEntity rearWheel : rearWheels)
-				rearWheel.setForce(new Vector2(0, currentAcceleration * 0.75f));
-			for (WheelEntity frontWheel : frontWheels)
-				frontWheel.setForce(new Vector2(0, currentAcceleration * 0.25f));
-		}
-		else {
-			for (WheelEntity driveWheel : driveWheels)
-				driveWheel.setForce(new Vector2(0, currentAcceleration * 0.75f));
-		}
-	}*/
-	
 	@Override
 	public void update() {
 		super.update();
 		processInput();
-		//adjustMomentum();
 	}
 	
 }

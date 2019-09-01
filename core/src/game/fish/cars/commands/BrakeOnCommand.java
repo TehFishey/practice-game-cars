@@ -1,10 +1,10 @@
 package game.fish.cars.commands;
 
-import game.fish.cars.entities.CarEntity;
+import game.fish.cars.entities.VehicleEntity;
 
 public class BrakeOnCommand extends Command {
 	
-	public void execute(CarEntity entity){
+	public void execute(VehicleEntity entity){
 		entity.inputBrakes(true);
 	}
 }

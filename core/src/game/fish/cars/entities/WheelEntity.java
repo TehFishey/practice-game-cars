@@ -10,9 +10,9 @@ public class WheelEntity extends Entity {
 	private static final float ANGULAR_DAMPING = 2f;
 	private static final float LINEAR_DAMPING = 2f;
 	
-	private final CarEntity parent;
+	private final CarVehicle parent;
 	
-	public WheelEntity(Vector2 position, Vector2 size, World world, float density, CarEntity parent) {
+	public WheelEntity(Vector2 position, Vector2 size, World world, float density, CarVehicle parent) {
 		super(position, size, BodyDef.BodyType.DynamicBody, world, density);
 		
 		this.parent = parent;

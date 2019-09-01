@@ -23,14 +23,17 @@ import game.fish.cars.commands.TurnNoneCommand;
 import game.fish.cars.commands.TurnRightCommand;
 import game.fish.cars.commands.ZoomInCommand;
 import game.fish.cars.commands.ZoomOutCommand;
-import game.fish.cars.entities.CarEntity;
+import game.fish.cars.entities.CarVehicle;
+import game.fish.cars.entities.Entity;
+import game.fish.cars.entities.HoverVehicle;
+import game.fish.cars.entities.VehicleEntity;
 import game.fish.cars.tools.MapLoader;
 
 import static game.fish.cars.Constants.GRAVITY;
 import static game.fish.cars.Constants.DEFAULT_ZOOM;
 import static game.fish.cars.Constants.PPM;
 
-import static game.fish.cars.entities.CarEntity.FRONT_WHEEL_DRIVE;
+import static game.fish.cars.entities.CarVehicle.FRONT_WHEEL_DRIVE;
 //import static game.fish.cars.entities.CarEntity.REAR_WHEEL_DRIVE;
 //import static game.fish.cars.entities.CarEntity.ALL_WHEEL_DRIVE;
 
@@ -42,7 +45,7 @@ public class PlayScreen implements Screen {
 	private final Box2DDebugRenderer b2debug;
 	private final OrthographicCamera camera;
 	private final Viewport viewport;
-	private final CarEntity player;
+	private final VehicleEntity player;
 	private final MapLoader loader;
 	
 	private final AccelerateForwardCommand driveCommand = new AccelerateForwardCommand();
@@ -65,7 +68,8 @@ public class PlayScreen implements Screen {
 		camera = new OrthographicCamera();
 		viewport = new FitViewport(640 / PPM, 480 / PPM, camera);
 		loader = new MapLoader(world);
-		player = new CarEntity(loader.getPlayer(), world, FRONT_WHEEL_DRIVE);
+		//player = new CarVehicle(loader.getPlayer(), world, FRONT_WHEEL_DRIVE);
+		player = new HoverVehicle(loader.getPlayer(), world);
 		
 		camera.zoom = DEFAULT_ZOOM;
 	}
