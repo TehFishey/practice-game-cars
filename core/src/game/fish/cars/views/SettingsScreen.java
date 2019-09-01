@@ -61,6 +61,7 @@ public class SettingsScreen implements Screen {
     		@Override
     		public boolean handle(Event event) {
     			parent.getSettings().setMusicVolume(musicVolumeSlider.getValue());
+    			parent.getMusic().setVolume(musicVolumeSlider.getValue());
     			return false;
     		}
     	};
@@ -68,6 +69,8 @@ public class SettingsScreen implements Screen {
     		@Override
     		public boolean handle(Event event) {
     			parent.getSettings().setMusicEnabled(musicEnableCheckbox.isChecked());
+    			if (musicEnableCheckbox.isChecked()) parent.getMusic().play();
+    			else parent.getMusic().stop();
     			return false;
     		}
     	};

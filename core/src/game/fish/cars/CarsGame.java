@@ -1,6 +1,10 @@
 package game.fish.cars;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.Audio;
 
 import game.fish.cars.views.AchievementsScreen;
 import game.fish.cars.views.LoadingScreen;
@@ -8,6 +12,7 @@ import game.fish.cars.views.MenuScreen;
 import game.fish.cars.views.PlayScreen;
 import game.fish.cars.views.SettingsScreen;
 
+import static game.fish.cars.Constants.MUSIC;
 import static game.fish.cars.Constants.PLAY_SCREEN;
 import static game.fish.cars.Constants.MENU_SCREEN;
 import static game.fish.cars.Constants.SETTINGS_SCREEN;
@@ -21,6 +26,7 @@ import static game.fish.cars.Constants.LOADING_SCREEN;
 
 public class CarsGame extends Game {
 	public Settings settings;
+	private Music music;
 	
 	private LoadingScreen loadingScreen;
 	private PlayScreen playScreen;
@@ -30,8 +36,15 @@ public class CarsGame extends Game {
 	
 	public void create() {
 		settings = new Settings();
+		
+		music = Gdx.audio.newMusic(Gdx.files.internal(MUSIC));
+		music.setLooping(true);
+		music.setVolume(settings.getMusicVolume());
+        if (settings.getMusicEnabled()) music.play();
+		
 		menuScreen = new MenuScreen(this);
 		setScreen(this.menuScreen);
+		
 	}
 
 	public void changeScreen(int screen) {
@@ -115,6 +128,9 @@ public class CarsGame extends Game {
 		return settings;
 	}
 	
+	public Music getMusic() {
+		return music;
+	}
 	
 	@Override
 	public void render() {
@@ -124,5 +140,6 @@ public class CarsGame extends Game {
 	@Override
 	public void dispose() {
 		super.dispose();
+		music.dispose();
 	}
 }

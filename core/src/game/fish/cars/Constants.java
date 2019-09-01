@@ -12,7 +12,9 @@ public class Constants {
 	
 	public static final float PPM = 50f;
 	
+	public static final String MUSIC = "music.ogg";
 	public static final String MAP1 = "map1.tmx";
+	
 	public static final String MAP_WALL = "walls";
 	public static final String MAP_OBSTACLES = "debris";
 	public static final String MAP_PLAYER = "player";
