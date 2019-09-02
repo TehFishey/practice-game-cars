@@ -7,7 +7,8 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.Audio;
 
 import game.fish.cars.views.AchievementsScreen;
-import game.fish.cars.views.LoadingScreen;
+import game.fish.cars.views.KeyBindingsScreen;
+import game.fish.cars.views.SetupScreen;
 import game.fish.cars.views.MenuScreen;
 import game.fish.cars.views.PlayScreen;
 import game.fish.cars.views.SettingsScreen;
@@ -16,8 +17,9 @@ import static game.fish.cars.Constants.MUSIC;
 import static game.fish.cars.Constants.PLAY_SCREEN;
 import static game.fish.cars.Constants.MENU_SCREEN;
 import static game.fish.cars.Constants.SETTINGS_SCREEN;
+import static game.fish.cars.Constants.KEYBINDINGS_SCREEN;
 import static game.fish.cars.Constants.ACHIEVEMENTS_SCREEN;
-import static game.fish.cars.Constants.LOADING_SCREEN;
+import static game.fish.cars.Constants.SETUP_SCREEN;
 
 //import com.badlogic.gdx.Gdx;
 //import com.badlogic.gdx.graphics.GL20;
@@ -26,16 +28,19 @@ import static game.fish.cars.Constants.LOADING_SCREEN;
 
 public class CarsGame extends Game {
 	public Settings settings;
+	public KeyBindings keyBindings;
 	private Music music;
 	
-	private LoadingScreen loadingScreen;
+	private SetupScreen setupScreen;
 	private PlayScreen playScreen;
 	private MenuScreen menuScreen;
 	private SettingsScreen settingsScreen;
+	private KeyBindingsScreen keyBindingsScreen;
 	private AchievementsScreen achievementsScreen;
 	
 	public void create() {
 		settings = new Settings();
+		keyBindings = new KeyBindings();
 		
 		music = Gdx.audio.newMusic(Gdx.files.internal(MUSIC));
 		music.setLooping(true);
@@ -49,9 +54,9 @@ public class CarsGame extends Game {
 
 	public void changeScreen(int screen) {
 		switch(screen) {
-		case LOADING_SCREEN:
-			if (loadingScreen == null) loadingScreen = new LoadingScreen(this);
-			this.setScreen(loadingScreen);
+		case SETUP_SCREEN:
+			if (setupScreen == null) setupScreen = new SetupScreen(this);
+			this.setScreen(setupScreen);
 			break;
 		case PLAY_SCREEN:
 			if (playScreen == null) playScreen = new PlayScreen(this);
@@ -65,6 +70,10 @@ public class CarsGame extends Game {
 			if (settingsScreen == null) settingsScreen = new SettingsScreen(this);
 			this.setScreen(settingsScreen);
 			break;
+		case KEYBINDINGS_SCREEN:
+			if (keyBindingsScreen == null) keyBindingsScreen = new KeyBindingsScreen(this);
+			this.setScreen(keyBindingsScreen);
+			break;
 		case ACHIEVEMENTS_SCREEN:
 			if (achievementsScreen == null) achievementsScreen = new AchievementsScreen(this);
 			this.setScreen(achievementsScreen);
@@ -74,10 +83,10 @@ public class CarsGame extends Game {
 	
 	public void clearScreen(int screen) {
 		switch(screen) {
-		case LOADING_SCREEN:
-			if (loadingScreen != null) {
-				loadingScreen.dispose();
-				loadingScreen = null;
+		case SETUP_SCREEN:
+			if (setupScreen != null) {
+				setupScreen.dispose();
+				setupScreen = null;
 			}
 			break;
 		case PLAY_SCREEN:
@@ -98,6 +107,12 @@ public class CarsGame extends Game {
 				settingsScreen = null;
 			}
 			break;
+		case KEYBINDINGS_SCREEN:
+			if (keyBindingsScreen != null) {
+				keyBindingsScreen.dispose();
+				keyBindingsScreen = null;
+			}
+			break;
 		case ACHIEVEMENTS_SCREEN:
 			if (achievementsScreen != null) {
 				achievementsScreen.dispose();
@@ -107,16 +122,18 @@ public class CarsGame extends Game {
 		}
 	}
 	
-	public boolean doesScreenExist(int screen) {
+	public boolean getScreenExists(int screen) {
 		switch(screen) {
-		case LOADING_SCREEN:
-			return (loadingScreen != null);
+		case SETUP_SCREEN:
+			return (setupScreen != null);
 		case PLAY_SCREEN:
 			return (playScreen != null);
 		case MENU_SCREEN:
 			return (menuScreen != null);
 		case SETTINGS_SCREEN:
 			return (settingsScreen != null);
+		case KEYBINDINGS_SCREEN:
+			return (keyBindingsScreen != null);
 		case ACHIEVEMENTS_SCREEN:
 			return (achievementsScreen != null);
 		default:
@@ -126,6 +143,10 @@ public class CarsGame extends Game {
 	
 	public Settings getSettings() {
 		return settings;
+	}
+	
+	public KeyBindings getKeyBindings() {
+		return keyBindings;
 	}
 	
 	public Music getMusic() {

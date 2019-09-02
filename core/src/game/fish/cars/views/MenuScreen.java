@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import game.fish.cars.CarsGame;
 
+import static game.fish.cars.Constants.SETUP_SCREEN;
 import static game.fish.cars.Constants.PLAY_SCREEN;
 import static game.fish.cars.Constants.SETTINGS_SCREEN;
 import static game.fish.cars.Constants.ACHIEVEMENTS_SCREEN;
@@ -50,11 +51,11 @@ public class MenuScreen implements Screen {
 	}
 	
 	private void buildControls() {
-		//Replace with some kind of generic buttonMap loop? Useable on other menus?
+		//Replace with some kind of generic buttonMap loop? Usable on other menus?
 		newGameListener = new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				if (parent.doesScreenExist(PLAY_SCREEN)) parent.clearScreen(PLAY_SCREEN);
+				if (parent.getScreenExists(PLAY_SCREEN)) parent.clearScreen(PLAY_SCREEN);
 				parent.changeScreen(PLAY_SCREEN);
 			}
 		};
@@ -97,7 +98,7 @@ public class MenuScreen implements Screen {
 		table.setFillParent(true);
 		table.add(newGameButton).fillX().uniformX();
 		table.row().pad(10,0,10,0);
-		if (parent.doesScreenExist(PLAY_SCREEN)) {
+		if (parent.getScreenExists(PLAY_SCREEN)) {
 			table.add(resumeButton).fillX().uniformX();
 			table.row().pad(10,0,10,0);
 		}

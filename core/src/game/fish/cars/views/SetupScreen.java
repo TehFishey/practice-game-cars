@@ -1,16 +1,23 @@
 package game.fish.cars.views;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import game.fish.cars.CarsGame;
 
-public class LoadingScreen implements Screen {
+public class SetupScreen implements Screen {
 	
-	private CarsGame parent;
+	private final CarsGame parent;
+	private final Stage stage;
+	private final Skin skin;
 	
-	public LoadingScreen(CarsGame parent) {
+	public SetupScreen(CarsGame parent) {
 		this.parent = parent;
-
+		stage = new Stage(new ScreenViewport());
+		skin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
 	}
 	
 	@Override

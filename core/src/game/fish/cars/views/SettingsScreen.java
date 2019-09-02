@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import game.fish.cars.CarsGame;
 
 import static game.fish.cars.Constants.MENU_SCREEN;
+import static game.fish.cars.Constants.KEYBINDINGS_SCREEN;
 
 public class SettingsScreen implements Screen {
 	
@@ -33,10 +34,12 @@ public class SettingsScreen implements Screen {
 	private final Slider musicVolumeSlider;
 	private final CheckBox musicEnableCheckbox;
 	private final TextButton backButton;
+	private final TextButton keyBindingsButton;
 	
 	private EventListener musicVolumeListener;
 	private EventListener musicEnableListener;
 	private ChangeListener backListener;
+	private ChangeListener keyBindingsListener;
 	
 	public SettingsScreen(final CarsGame parent) {
 		this.parent = parent;
@@ -52,6 +55,7 @@ public class SettingsScreen implements Screen {
 		musicEnableCheckbox = new CheckBox(null, skin);
 		musicEnableCheckbox.setChecked(parent.getSettings().getMusicEnabled());
 		backButton = new TextButton("Back", skin);
+		keyBindingsButton = new TextButton("Key Bindings", skin);
 		
 		buildControls();
 	}
@@ -80,10 +84,17 @@ public class SettingsScreen implements Screen {
 				parent.changeScreen(MENU_SCREEN);
 			}
 		};
+		keyBindingsListener = new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				parent.changeScreen(KEYBINDINGS_SCREEN);
+			}
+		};
     	
     	musicVolumeSlider.addListener(musicVolumeListener);
     	musicEnableCheckbox.addListener(musicEnableListener);
     	backButton.addListener(backListener);
+    	keyBindingsButton.addListener(keyBindingsListener);
 	}
 	
 	@Override
@@ -101,6 +112,7 @@ public class SettingsScreen implements Screen {
 		table.add(musicEnableCheckbox);
 		table.row();
 		table.add(backButton);
+		table.add(keyBindingsButton);
 		
 		stage.clear();
 		stage.addActor(table);

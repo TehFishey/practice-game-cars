@@ -1,7 +1,6 @@
 package game.fish.cars.views;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -12,6 +11,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import game.fish.cars.CarsGame;
+import game.fish.cars.KeyBindings;
 import game.fish.cars.commands.AccelerateBackwardCommand;
 import game.fish.cars.commands.AccelerateForwardCommand;
 import game.fish.cars.commands.AccelerateNoneCommand;
@@ -24,7 +24,6 @@ import game.fish.cars.commands.TurnRightCommand;
 import game.fish.cars.commands.ZoomInCommand;
 import game.fish.cars.commands.ZoomOutCommand;
 import game.fish.cars.entities.CarVehicle;
-import game.fish.cars.entities.Entity;
 import game.fish.cars.entities.HoverVehicle;
 import game.fish.cars.entities.VehicleEntity;
 import game.fish.cars.tools.MapLoader;
@@ -33,13 +32,23 @@ import static game.fish.cars.Constants.GRAVITY;
 import static game.fish.cars.Constants.DEFAULT_ZOOM;
 import static game.fish.cars.Constants.PPM;
 
+import static game.fish.cars.KeyBindings.KEY_DRIVE;
+import static game.fish.cars.KeyBindings.KEY_REVERSE;
+import static game.fish.cars.KeyBindings.KEY_LEFT;
+import static game.fish.cars.KeyBindings.KEY_RIGHT;
+import static game.fish.cars.KeyBindings.KEY_BRAKE;
+import static game.fish.cars.KeyBindings.KEY_ZOOMIN;
+import static game.fish.cars.KeyBindings.KEY_ZOOMOUT;
+import static game.fish.cars.KeyBindings.KEY_MENU;
+
 import static game.fish.cars.entities.CarVehicle.FRONT_WHEEL_DRIVE;
 //import static game.fish.cars.entities.CarEntity.REAR_WHEEL_DRIVE;
 //import static game.fish.cars.entities.CarEntity.ALL_WHEEL_DRIVE;
 
 public class PlayScreen implements Screen {
 
-	private CarsGame parent;
+	private final CarsGame parent;
+	private final KeyBindings keyBindings;
 	private final SpriteBatch batch;
 	private final World world;
 	private final Box2DDebugRenderer b2debug;
@@ -62,14 +71,15 @@ public class PlayScreen implements Screen {
 	
 	public PlayScreen(CarsGame parent) {
 		this.parent = parent;
+		keyBindings = this.parent.getKeyBindings();
 		batch = new SpriteBatch();
 		world = new World(GRAVITY, true);
 		b2debug = new Box2DDebugRenderer();
 		camera = new OrthographicCamera();
 		viewport = new FitViewport(640 / PPM, 480 / PPM, camera);
 		loader = new MapLoader(world);
-		//player = new CarVehicle(loader.getPlayer(), world, FRONT_WHEEL_DRIVE);
-		player = new HoverVehicle(loader.getPlayer(), world);
+		player = new CarVehicle(loader.getPlayer(), world, FRONT_WHEEL_DRIVE);
+		//player = new HoverVehicle(loader.getPlayer(), world);
 		
 		camera.zoom = DEFAULT_ZOOM;
 	}
@@ -93,21 +103,21 @@ public class PlayScreen implements Screen {
 		
 	
 	private void takeInput() {
-		if (Gdx.input.isKeyPressed(Input.Keys.W)) driveCommand.execute(player);
-		else if (Gdx.input.isKeyPressed(Input.Keys.S)) reverseCommand.execute(player);
+		if (keyBindings.checkKeyBinding(KEY_DRIVE)) driveCommand.execute(player);
+		else if (keyBindings.checkKeyBinding(KEY_REVERSE)) reverseCommand.execute(player);
 		else stopCommand.execute(player);
 		
-		if (Gdx.input.isKeyPressed(Input.Keys.A)) leftCommand.execute(player);
-		else if (Gdx.input.isKeyPressed(Input.Keys.D)) rightCommand.execute(player);
+		if (keyBindings.checkKeyBinding(KEY_LEFT)) leftCommand.execute(player);
+		else if (keyBindings.checkKeyBinding(KEY_RIGHT)) rightCommand.execute(player);
 		else straightCommand.execute(player);
 		
-		if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) brakeCommand.execute(player);
+		if (keyBindings.checkKeyBinding(KEY_BRAKE)) brakeCommand.execute(player);
 		else unbrakeCommand.execute(player);
 		
-		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) menuCommand.execute(parent);
+		if (keyBindings.checkKeyBinding(KEY_MENU)) menuCommand.execute(parent);
 		
-		if (Gdx.input.isKeyPressed(Input.Keys.MINUS)) zoomInCommand.execute(camera);
-		else if (Gdx.input.isKeyPressed(Input.Keys.EQUALS)) zoomOutCommand.execute(camera);
+		if (keyBindings.checkKeyBinding(KEY_ZOOMIN)) zoomInCommand.execute(camera);
+		else if (keyBindings.checkKeyBinding(KEY_ZOOMOUT)) zoomOutCommand.execute(camera);
 	}
 	
 	private void update(final float delta) {

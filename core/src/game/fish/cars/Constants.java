@@ -22,7 +22,8 @@ public class Constants {
 	public static final int PLAY_SCREEN = 0;
 	public static final int MENU_SCREEN = 1;
 	public static final int SETTINGS_SCREEN = 2;
-	public static final int ACHIEVEMENTS_SCREEN = 3;
-	public static final int LOADING_SCREEN = 4;
+	public static final int KEYBINDINGS_SCREEN = 3;
+	public static final int ACHIEVEMENTS_SCREEN = 4;
+	public static final int SETUP_SCREEN = 5;
 
 }
