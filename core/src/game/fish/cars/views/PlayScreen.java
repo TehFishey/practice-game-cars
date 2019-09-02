@@ -32,6 +32,10 @@ import static game.fish.cars.Constants.GRAVITY;
 import static game.fish.cars.Constants.DEFAULT_ZOOM;
 import static game.fish.cars.Constants.PPM;
 
+import static game.fish.cars.Constants.CAR_FWDCAR;
+import static game.fish.cars.Constants.CAR_AWDCAR;
+import static game.fish.cars.Constants.CAR_HOVERCAR;
+
 import static game.fish.cars.KeyBindings.KEY_DRIVE;
 import static game.fish.cars.KeyBindings.KEY_REVERSE;
 import static game.fish.cars.KeyBindings.KEY_LEFT;
@@ -42,8 +46,9 @@ import static game.fish.cars.KeyBindings.KEY_ZOOMOUT;
 import static game.fish.cars.KeyBindings.KEY_MENU;
 
 import static game.fish.cars.entities.CarVehicle.FRONT_WHEEL_DRIVE;
+import static game.fish.cars.entities.CarVehicle.ALL_WHEEL_DRIVE;
 //import static game.fish.cars.entities.CarEntity.REAR_WHEEL_DRIVE;
-//import static game.fish.cars.entities.CarEntity.ALL_WHEEL_DRIVE;
+
 
 public class PlayScreen implements Screen {
 
@@ -69,7 +74,7 @@ public class PlayScreen implements Screen {
 	private final ZoomOutCommand zoomOutCommand = new ZoomOutCommand();
 	private final MenuCommand menuCommand = new MenuCommand();
 	
-	public PlayScreen(CarsGame parent) {
+	public PlayScreen(CarsGame parent, int carChoice, int mapChoice) {
 		this.parent = parent;
 		keyBindings = this.parent.getKeyBindings();
 		batch = new SpriteBatch();
@@ -77,10 +82,23 @@ public class PlayScreen implements Screen {
 		b2debug = new Box2DDebugRenderer();
 		camera = new OrthographicCamera();
 		viewport = new FitViewport(640 / PPM, 480 / PPM, camera);
-		loader = new MapLoader(world);
-		player = new CarVehicle(loader.getPlayer(), world, FRONT_WHEEL_DRIVE);
-		//player = new HoverVehicle(loader.getPlayer(), world);
+		loader = new MapLoader(world, mapChoice);
 		
+		switch (carChoice) {
+		case CAR_FWDCAR:
+			player = new CarVehicle(loader.getPlayer(), world, FRONT_WHEEL_DRIVE);
+			break;
+		case CAR_AWDCAR:
+			player = new CarVehicle(loader.getPlayer(), world, ALL_WHEEL_DRIVE);
+			break;
+		case CAR_HOVERCAR:
+			player = new HoverVehicle(loader.getPlayer(), world);
+			break;
+		default:
+			player = new CarVehicle(loader.getPlayer(), world, FRONT_WHEEL_DRIVE);
+		}
+		
+
 		camera.zoom = DEFAULT_ZOOM;
 	}
 

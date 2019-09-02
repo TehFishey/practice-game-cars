@@ -29,7 +29,16 @@ public class ShapeFactory {
 		body.createFixture(fdef);
 		
 		shape.dispose();
-		return body;
-		
+		return body;	
 	}
+	
+	/*public static Body createPolygon(final Vector2 position, final Vector2 size, final BodyDef.BodyType type, final World world, final float density) {
+		final BodyDef bdef = new BodyDef();
+		bdef.position.set(position.x / PPM, position.y / PPM);
+		bdef.type = type;
+		final Body body = world.createBody(bdef);
+		
+		final PolygonShape shape = new PolygonShape();
+		shape.set(vertices);
+	} */
 }

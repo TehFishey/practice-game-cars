@@ -12,12 +12,10 @@ public class Constants {
 	
 	public static final float PPM = 50f;
 	
-	public static final String MUSIC = "music.ogg";
-	public static final String MAP1 = "map1.tmx";
-	
-	public static final String MAP_WALL = "walls";
-	public static final String MAP_OBSTACLES = "debris";
-	public static final String MAP_PLAYER = "player";
+	public static final String PATH_MUSIC = "music.ogg";
+	public static final String PATH_MAP1 = "map1.tmx";
+	public static final String PATH_MAP2 = "map2.tmx";
+	public static final String PATH_MAP3 = "map3.tmx";
 	
 	public static final int PLAY_SCREEN = 0;
 	public static final int MENU_SCREEN = 1;
@@ -25,5 +23,14 @@ public class Constants {
 	public static final int KEYBINDINGS_SCREEN = 3;
 	public static final int ACHIEVEMENTS_SCREEN = 4;
 	public static final int SETUP_SCREEN = 5;
+	
+	public static final int CAR_FWDCAR = 0;
+	public static final int CAR_AWDCAR = 1;
+	public static final int CAR_HOVERCAR = 3;
+	
+	public static final int MAP_MAP1 = 0;
+	public static final int MAP_MAP2 = 1;
+	public static final int MAP_MAP3 = 2;
+	
 
 }

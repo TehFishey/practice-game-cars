@@ -13,7 +13,7 @@ import game.fish.cars.views.MenuScreen;
 import game.fish.cars.views.PlayScreen;
 import game.fish.cars.views.SettingsScreen;
 
-import static game.fish.cars.Constants.MUSIC;
+import static game.fish.cars.Constants.PATH_MUSIC;
 import static game.fish.cars.Constants.PLAY_SCREEN;
 import static game.fish.cars.Constants.MENU_SCREEN;
 import static game.fish.cars.Constants.SETTINGS_SCREEN;
@@ -42,7 +42,7 @@ public class CarsGame extends Game {
 		settings = new Settings();
 		keyBindings = new KeyBindings();
 		
-		music = Gdx.audio.newMusic(Gdx.files.internal(MUSIC));
+		music = Gdx.audio.newMusic(Gdx.files.internal(PATH_MUSIC));
 		music.setLooping(true);
 		music.setVolume(settings.getMusicVolume());
         if (settings.getMusicEnabled()) music.play();
@@ -51,7 +51,35 @@ public class CarsGame extends Game {
 		setScreen(this.menuScreen);
 		
 	}
-
+	public void changeScreen(int screen, int carChoice, int mapChoice) {
+		switch(screen) {
+		case SETUP_SCREEN:
+			if (setupScreen == null) setupScreen = new SetupScreen(this);
+			this.setScreen(setupScreen);
+			break;
+		case PLAY_SCREEN:
+			if (playScreen == null) playScreen = new PlayScreen(this, carChoice, mapChoice);
+			this.setScreen(playScreen);
+			break;
+		case MENU_SCREEN:
+			if (menuScreen == null) menuScreen = new MenuScreen(this);
+			this.setScreen(menuScreen);
+			break;
+		case SETTINGS_SCREEN:
+			if (settingsScreen == null) settingsScreen = new SettingsScreen(this);
+			this.setScreen(settingsScreen);
+			break;
+		case KEYBINDINGS_SCREEN:
+			if (keyBindingsScreen == null) keyBindingsScreen = new KeyBindingsScreen(this);
+			this.setScreen(keyBindingsScreen);
+			break;
+		case ACHIEVEMENTS_SCREEN:
+			if (achievementsScreen == null) achievementsScreen = new AchievementsScreen(this);
+			this.setScreen(achievementsScreen);
+			break;
+		}
+	}
+	
 	public void changeScreen(int screen) {
 		switch(screen) {
 		case SETUP_SCREEN:
@@ -59,7 +87,7 @@ public class CarsGame extends Game {
 			this.setScreen(setupScreen);
 			break;
 		case PLAY_SCREEN:
-			if (playScreen == null) playScreen = new PlayScreen(this);
+			if (playScreen == null) playScreen = new PlayScreen(this, 0, 0);
 			this.setScreen(playScreen);
 			break;
 		case MENU_SCREEN:

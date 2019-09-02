@@ -5,6 +5,10 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -13,10 +17,17 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import game.fish.cars.CarsGame;
 
-import static game.fish.cars.Constants.SETUP_SCREEN;
 import static game.fish.cars.Constants.PLAY_SCREEN;
 import static game.fish.cars.Constants.SETTINGS_SCREEN;
 import static game.fish.cars.Constants.ACHIEVEMENTS_SCREEN;
+
+import static game.fish.cars.Constants.CAR_FWDCAR;
+import static game.fish.cars.Constants.CAR_AWDCAR;
+import static game.fish.cars.Constants.CAR_HOVERCAR;
+
+import static game.fish.cars.Constants.MAP_MAP1;
+import static game.fish.cars.Constants.MAP_MAP2;
+import static game.fish.cars.Constants.MAP_MAP3;
 
 public class MenuScreen implements Screen {
 	
@@ -56,7 +67,7 @@ public class MenuScreen implements Screen {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				if (parent.getScreenExists(PLAY_SCREEN)) parent.clearScreen(PLAY_SCREEN);
-				parent.changeScreen(PLAY_SCREEN);
+				newGameDialog();	
 			}
 		};
 		resumeListener = new ChangeListener() {
@@ -90,11 +101,64 @@ public class MenuScreen implements Screen {
 		exitButton.addListener(exitListener);
 	}
 	
+	private void newGameDialog() {
+
+		final ButtonGroup<CheckBox> carChoiceButtons = new ButtonGroup<>();
+		final ButtonGroup<CheckBox> mapChoiceButtons = new ButtonGroup<>();
+		
+		final CheckBox fwdButton = new CheckBox("Front-Wheel Drive",skin);
+		final CheckBox awdButton = new CheckBox("Four-Wheel Drive",skin);
+		final CheckBox hovButton = new CheckBox("Hover Car",skin);
+		final CheckBox map1Button = new CheckBox("City",skin);
+		final CheckBox map2Button = new CheckBox("Race Track",skin);
+		
+		fwdButton.setChecked(true);
+		carChoiceButtons.add(fwdButton, awdButton, hovButton);
+		carChoiceButtons.setMaxCheckCount(1);
+		carChoiceButtons.setMinCheckCount(1);
+		carChoiceButtons.setUncheckLast(true);
+		
+		map1Button.setChecked(true);
+		mapChoiceButtons.add(map1Button,map2Button);
+		mapChoiceButtons.setMaxCheckCount(1);
+		mapChoiceButtons.setMinCheckCount(1);
+		mapChoiceButtons.setUncheckLast(true);
+		
+		final Dialog newGameDialog = new Dialog(" ", skin) {
+			
+			int carChoice = 0;
+			int mapChoice = 0;
+			
+			protected void result(Object obj) {
+				if (obj.equals("fwdCar")) {carChoice = CAR_FWDCAR; cancel();}
+				else if (obj.equals("hovCar")) {carChoice = CAR_HOVERCAR; cancel();}
+				else if (obj.equals("awdCar")) {carChoice = CAR_AWDCAR; cancel();}
+				else if (obj.equals("map1")) {mapChoice = MAP_MAP1; cancel();}
+				else if (obj.equals("map2")) {mapChoice = MAP_MAP2; cancel();}
+				else parent.changeScreen(PLAY_SCREEN, carChoice, mapChoice);
+			}
+		};
+		
+		newGameDialog.getButtonTable().add(new Label("Car Type", skin));
+		newGameDialog.getButtonTable().add(new Label("Map", skin));
+		newGameDialog.getButtonTable().row();
+		newGameDialog.button(fwdButton, "fwdCar");
+		newGameDialog.button(map1Button, "map1");
+		newGameDialog.getButtonTable().row();
+		newGameDialog.button(awdButton, "awdCar");
+		newGameDialog.button(map2Button, "map2");
+		newGameDialog.getButtonTable().row();
+		newGameDialog.button(hovButton, "hovCar");
+		newGameDialog.getButtonTable().row();
+		newGameDialog.button("Play!", "play");
+		newGameDialog.show(stage);
+	}
+	
 	@Override
 	public void show() {
 		Table table = new Table();
 		
-		table.setDebug(true);
+		//table.setDebug(true);
 		table.setFillParent(true);
 		table.add(newGameButton).fillX().uniformX();
 		table.row().pad(10,0,10,0);

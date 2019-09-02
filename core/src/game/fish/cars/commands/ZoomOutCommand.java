@@ -7,6 +7,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 public class ZoomOutCommand extends Command {
 	
 	public void execute(OrthographicCamera camera){
-		camera.zoom += ZOOM_STEP;
+		camera.zoom = Math.min(50f, camera.zoom + ZOOM_STEP);
 	}
 }
