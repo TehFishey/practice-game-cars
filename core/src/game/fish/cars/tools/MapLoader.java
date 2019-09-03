@@ -45,19 +45,19 @@ public class MapLoader implements Disposable {
 		
 		final Array<RectangleMapObject> wallRects = map.getLayers().get(MAP_WALLS).getObjects().getByType(RectangleMapObject.class);
 		final Array<PolygonMapObject> wallPolys = map.getLayers().get(MAP_WALLS).getObjects().getByType(PolygonMapObject.class);
+		
 		for (RectangleMapObject rObject: wallRects) {
 			Rectangle rectangle = rObject.getRectangle();
 			ShapeFactory.createRectangle(
 					new Vector2 (rectangle.getX() + rectangle.getWidth()/2, rectangle.getY() + rectangle.getHeight()/2),
 					new Vector2 (rectangle.getWidth()/2, rectangle.getHeight()/2),
 					BodyDef.BodyType.StaticBody, this.world, 1f);
-		/*for (PolygonMapObject pObject: wallPolys) {
-			Polygon polygon = pObject.getPolygon();
-			ShapeFactory.createPolygon(
-					new Vector2 (rectangle.getX() + rectangle.getWidth()/2, rectangle.getY() + rectangle.getHeight()/2),
-					new Vector2 (rectangle.getWidth()/2, rectangle.getHeight()/2),
-					BodyDef.BodyType.StaticBody, this.world, 1f);
-		}*/
+		}
+		
+		for (PolygonMapObject pObject: wallPolys) {
+			//Polygon polygon = pObject.getPolygon();
+			ShapeFactory.createPolygon(pObject, BodyDef.BodyType.StaticBody, this.world, 1f);
+		}
 	}
 		
 	public Body getPlayer() {

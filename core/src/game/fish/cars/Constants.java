@@ -22,7 +22,6 @@ public class Constants {
 	public static final int SETTINGS_SCREEN = 2;
 	public static final int KEYBINDINGS_SCREEN = 3;
 	public static final int ACHIEVEMENTS_SCREEN = 4;
-	public static final int SETUP_SCREEN = 5;
 	
 	public static final int CAR_FWDCAR = 0;
 	public static final int CAR_AWDCAR = 1;

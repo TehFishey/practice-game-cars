@@ -1,5 +1,6 @@
 package game.fish.cars.tools;
 
+import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -32,13 +33,29 @@ public class ShapeFactory {
 		return body;	
 	}
 	
-	/*public static Body createPolygon(final Vector2 position, final Vector2 size, final BodyDef.BodyType type, final World world, final float density) {
+	public static Body createPolygon(final PolygonMapObject polyObject, final BodyDef.BodyType type, final World world, final float density) {		
 		final BodyDef bdef = new BodyDef();
-		bdef.position.set(position.x / PPM, position.y / PPM);
+		//bdef.position.set(position.x / PPM, position.y / PPM);
 		bdef.type = type;
 		final Body body = world.createBody(bdef);
 		
 		final PolygonShape shape = new PolygonShape();
-		shape.set(vertices);
-	} */
+		float[] verticies = polyObject.getPolygon().getTransformedVertices();
+		float[] worldVerticies = new float[verticies.length];
+		
+		for (int i = 0; i < verticies.length; ++i) {
+			worldVerticies[i] = verticies[i] / PPM;
+		}
+		
+		shape.set(worldVerticies);
+		
+		//final FixtureDef fdef = new FixtureDef();
+		//fdef.shape = shape;
+		//fdef.density = density;
+		
+		body.createFixture(shape, density);
+		
+		shape.dispose();
+		return body;
+	}
 }
