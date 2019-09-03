@@ -17,7 +17,7 @@ public class CarVehicle extends VehicleEntity {
 	
 	private static final float WHEEL_POSITION_X = 64f;
     private static final float WHEEL_POSITION_Y = 80f;
-	private static final float WHEEL_LOCK_ANGLE = 30f;
+	private static final float WHEEL_LOCK_ANGLE = 25f;
 
 	private final Array<WheelEntity> frontWheels = new Array<WheelEntity>();
 	private final Array<WheelEntity> rearWheels = new Array<WheelEntity>();
@@ -31,7 +31,22 @@ public class CarVehicle extends VehicleEntity {
 	public CarVehicle(Body body, World world, int drive) {
 		super(body, world);
 		this.drive = drive;
-				
+		
+		ANGULAR_DAMPING = 6f;
+		LINEAR_DAMPING = 0.5f;
+		RESTITUTION = 0.2f;
+		
+		MAX_ACCELERATION = 120f;
+		MAX_REVERSE_ACCELERATION = -60f;
+		ACCELERATION_STEP = 15f;
+		REVERSE_ACCELERATION_STEP = -7.5f;
+		ACCELERATION_DECAY = 45f;
+		BRAKE_STRENGTH = 90f;
+		
+		getBody().setAngularDamping(ANGULAR_DAMPING);
+		getBody().setLinearDamping(LINEAR_DAMPING);
+		getBody().getFixtureList().get(0).setRestitution(RESTITUTION);
+		
 		final WheelEntity wheelFL = new WheelEntity(
 			new Vector2(getBody().getPosition().x * PPM + WHEEL_POSITION_X, getBody().getPosition().y * PPM + WHEEL_POSITION_Y), 
 			new Vector2(16, 32), 
@@ -77,22 +92,6 @@ public class CarVehicle extends VehicleEntity {
 			driveWheels.addAll(rearWheels);
 			break;
 		}
-		
-		ANGULAR_DAMPING = 6f;
-		LINEAR_DAMPING = 0.5f;
-		RESTITUTION = 0.2f;
-		
-		MAX_ACCELERATION = 120f;
-		MAX_REVERSE_ACCELERATION = -60f;
-		ACCELERATION_STEP = 15f;
-		REVERSE_ACCELERATION_STEP = -7.5f;
-		ACCELERATION_DECAY = 45f;
-		BRAKE_STRENGTH = 90f;
-		
-		getBody().setAngularDamping(ANGULAR_DAMPING);
-		getBody().setLinearDamping(LINEAR_DAMPING);
-		getBody().getFixtureList().get(0).setRestitution(RESTITUTION);
-		
 	}
 	
 	private void processInput() {

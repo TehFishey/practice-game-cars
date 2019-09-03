@@ -55,7 +55,6 @@ public class MapLoader implements Disposable {
 		}
 		
 		for (PolygonMapObject pObject: wallPolys) {
-			//Polygon polygon = pObject.getPolygon();
 			ShapeFactory.createPolygon(pObject, BodyDef.BodyType.StaticBody, this.world, 1f);
 		}
 	}
