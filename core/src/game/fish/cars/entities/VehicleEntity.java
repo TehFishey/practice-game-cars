@@ -12,11 +12,10 @@ public class VehicleEntity extends Entity {
 	public static final int TURN_DIRECTION_LEFT = 1;
 	public static final int TURN_DIRECTION_RIGHT = 2;
 	
-	protected static float ANGULAR_DAMPING;
-	protected static float LINEAR_DAMPING;
-	protected static float RESTITUTION;
+	protected static float DEFAULT_ANGULAR_DAMPING;
+	protected static float DEFAULT_LINEAR_DAMPING;
+	protected static float DEFAULT_RESTITUTION;
 	
-	protected static float MAX_SPEED;
 	protected static float MAX_ACCELERATION;
 	protected static float MAX_REVERSE_ACCELERATION;
 	protected static float ACCELERATION_STEP;

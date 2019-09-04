@@ -51,7 +51,7 @@ public class MapLoader implements Disposable {
 			ShapeFactory.createRectangle(
 					new Vector2 (rectangle.getX() + rectangle.getWidth()/2, rectangle.getY() + rectangle.getHeight()/2),
 					new Vector2 (rectangle.getWidth()/2, rectangle.getHeight()/2),
-					BodyDef.BodyType.StaticBody, this.world, 1f);
+					BodyDef.BodyType.StaticBody, this.world, 1f, true);
 		}
 		
 		for (PolygonMapObject pObject: wallPolys) {
@@ -64,7 +64,7 @@ public class MapLoader implements Disposable {
 		return ShapeFactory.createRectangle(
 				new Vector2 (player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2),
 				new Vector2 (player.getWidth()/2, player.getHeight()/2),
-				BodyDef.BodyType.DynamicBody, this.world, 0.4f);
+				BodyDef.BodyType.DynamicBody, this.world, 0.4f, true);
 		}
 	
 	public void dispose() {

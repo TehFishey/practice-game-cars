@@ -13,7 +13,7 @@ public class WheelEntity extends Entity {
 	private final CarVehicle parent;
 	
 	public WheelEntity(Vector2 position, Vector2 size, World world, float density, CarVehicle parent) {
-		super(position, size, BodyDef.BodyType.DynamicBody, world, density);
+		super(position, size, BodyDef.BodyType.DynamicBody, world, density, true);
 		
 		this.parent = parent;
 		getBody().setAngularDamping(ANGULAR_DAMPING);

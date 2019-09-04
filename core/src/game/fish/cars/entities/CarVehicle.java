@@ -17,7 +17,7 @@ public class CarVehicle extends VehicleEntity {
 	
 	private static final float WHEEL_POSITION_X = 64f;
     private static final float WHEEL_POSITION_Y = 80f;
-	private static final float WHEEL_LOCK_ANGLE = 30f; //40f?
+	private static final float WHEEL_LOCK_ANGLE = 40f;
 
 	private final Array<WheelEntity> frontWheels = new Array<WheelEntity>();
 	private final Array<WheelEntity> rearWheels = new Array<WheelEntity>();
@@ -25,6 +25,7 @@ public class CarVehicle extends VehicleEntity {
 	
 	private float WHEEL_TURN_RATE = 2f;
 	private float WHEEL_RESET_RATE = 2f;
+	private float TURN_DAMPING_MOD = 1.5f;
 	
 	private float currentAcceleration = 0f;
 	private float wheelAngle = 0f;
@@ -35,20 +36,20 @@ public class CarVehicle extends VehicleEntity {
 		super(body, world);
 		this.drive = drive;
 		
-		ANGULAR_DAMPING = 6f;
-		LINEAR_DAMPING = 0.5f;
-		RESTITUTION = 0.2f;
+		DEFAULT_ANGULAR_DAMPING = 6f;
+		DEFAULT_LINEAR_DAMPING = 0.5f;
+		DEFAULT_RESTITUTION = 0.05f;
 		
 		MAX_ACCELERATION = 160f;
-		MAX_REVERSE_ACCELERATION = -60f;
+		MAX_REVERSE_ACCELERATION = -45f;
 		ACCELERATION_STEP = 5f;
 		REVERSE_ACCELERATION_STEP = -5f;
-		ACCELERATION_DECAY = 20f;
-		BRAKE_STRENGTH = 90f;
+		ACCELERATION_DECAY = 40f;
+		BRAKE_STRENGTH = 60f;
 		
-		getBody().setAngularDamping(ANGULAR_DAMPING);
-		getBody().setLinearDamping(LINEAR_DAMPING);
-		getBody().getFixtureList().get(0).setRestitution(RESTITUTION);
+		getBody().setAngularDamping(DEFAULT_ANGULAR_DAMPING);
+		getBody().setLinearDamping(DEFAULT_LINEAR_DAMPING);
+		getBody().getFixtureList().get(0).setRestitution(DEFAULT_RESTITUTION);
 		
 		final WheelEntity wheelFL = new WheelEntity(
 			new Vector2(getBody().getPosition().x * PPM + WHEEL_POSITION_X, getBody().getPosition().y * PPM + WHEEL_POSITION_Y), 
@@ -104,16 +105,19 @@ public class CarVehicle extends VehicleEntity {
 		case TURN_DIRECTION_RIGHT:
 			if (wheelAngle > -WHEEL_LOCK_ANGLE) 
 				wheelAngle = Math.max(wheelAngle -= WHEEL_TURN_RATE, -WHEEL_LOCK_ANGLE);
+			getBody().setLinearDamping(DEFAULT_LINEAR_DAMPING + TURN_DAMPING_MOD);
 			break;
 		case TURN_DIRECTION_LEFT:
 			if (wheelAngle < WHEEL_LOCK_ANGLE) 
 				wheelAngle = Math.min(wheelAngle += WHEEL_TURN_RATE, WHEEL_LOCK_ANGLE);
+			getBody().setLinearDamping(DEFAULT_LINEAR_DAMPING + TURN_DAMPING_MOD);
 			break;
 		case TURN_DIRECTION_NONE:
 			if (wheelAngle < 0)
 				wheelAngle += WHEEL_RESET_RATE;
 			else if (wheelAngle > 0)
 				wheelAngle -= WHEEL_RESET_RATE;
+			getBody().setLinearDamping(DEFAULT_LINEAR_DAMPING);
 			break;
 		}
 		for (WheelEntity frontWheel : frontWheels)

@@ -13,7 +13,7 @@ import static game.fish.cars.Constants.PPM;
 public class ShapeFactory {
 	private ShapeFactory () {};
 	
-	public static Body createRectangle(final Vector2 position, final Vector2 size, final BodyDef.BodyType type, final World world, final float density) {
+	public static Body createRectangle(final Vector2 position, final Vector2 size, final BodyDef.BodyType type, final World world, final float density, boolean sensor) {
 		
 		final BodyDef bdef = new BodyDef();
 		bdef.position.set(position.x / PPM, position.y / PPM);
@@ -25,6 +25,7 @@ public class ShapeFactory {
 		
 		final FixtureDef fdef = new FixtureDef();
 		fdef.shape = shape;
+		fdef.isSensor = sensor;
 		fdef.density = density;
 		
 		body.createFixture(fdef);
