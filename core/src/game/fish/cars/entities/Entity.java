@@ -15,14 +15,14 @@ public abstract class Entity {
 	private final Body body;
 	
 	protected static float FRICTION_TOLERANCE = 80f;
-	protected static float FRICTION_MODIFIER = 0.95f;
+	protected static float FRICTION_MODIFIER = 0.90f;
 	
 	public Entity (Body body) {
 		this.body = body;
 	}
 	
-	public Entity (final Vector2 position, final Vector2 size, final BodyDef.BodyType type, final World world, float density) {
-        this.body = ShapeFactory.createRectangle(position, size, type, world, density);
+	public Entity (final Vector2 position, final Vector2 size, final BodyDef.BodyType type, final World world, float density, boolean sensor) {
+        this.body = ShapeFactory.createRectangle(position, size, type, world, density, sensor);
     }
 	
 	public void update() {

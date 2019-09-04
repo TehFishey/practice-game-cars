@@ -98,8 +98,9 @@ public class PlayScreen implements Screen {
 		hud = new Stage();
 		hudSkin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
 		speedDisplay = new Label("Speed: ", hudSkin);
+		speedDisplay.setPosition(0, 460);
 		hud.addActor(speedDisplay);
-
+		
 		switch (carChoice) {
 		case CAR_FWDCAR:
 			player = new CarVehicle(loader.getPlayer(), world, FRONT_WHEEL_DRIVE);

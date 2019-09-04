@@ -19,9 +19,9 @@ public class HoverVehicle extends VehicleEntity {
 		FRICTION_TOLERANCE = 0f;
 		FRICTION_MODIFIER = 0.995f;
 		
-		ANGULAR_DAMPING = 4f;
-		LINEAR_DAMPING = 0.3f;
-		RESTITUTION = 0.3f;
+		DEFAULT_ANGULAR_DAMPING = 4f;
+		DEFAULT_LINEAR_DAMPING = 0.3f;
+		DEFAULT_RESTITUTION = 0.3f;
 		
 		MAX_ACCELERATION = 120f;
 		MAX_REVERSE_ACCELERATION = -60f;
@@ -30,9 +30,9 @@ public class HoverVehicle extends VehicleEntity {
 		ACCELERATION_DECAY = 35f;
 		BRAKE_STRENGTH = 5f;
 		
-		getBody().setAngularDamping(ANGULAR_DAMPING);
-		getBody().setLinearDamping(LINEAR_DAMPING);
-		getBody().getFixtureList().get(0).setRestitution(RESTITUTION);
+		getBody().setAngularDamping(DEFAULT_ANGULAR_DAMPING);
+		getBody().setLinearDamping(DEFAULT_LINEAR_DAMPING);
+		getBody().getFixtureList().get(0).setRestitution(DEFAULT_RESTITUTION);
 		
 	}
 	
@@ -74,12 +74,12 @@ public class HoverVehicle extends VehicleEntity {
 		getBody().applyForceToCenter(getBody().getWorldVector(engineForce), true);
 		
 		if (brakesOn) {
-			getBody().setAngularDamping(BRAKE_STRENGTH);
-			getBody().setLinearDamping(BRAKE_STRENGTH);
+			getBody().setAngularDamping(DEFAULT_ANGULAR_DAMPING + BRAKE_STRENGTH);
+			getBody().setLinearDamping(DEFAULT_LINEAR_DAMPING + BRAKE_STRENGTH);
 		}
 		else {
-			getBody().setAngularDamping(ANGULAR_DAMPING);
-			getBody().setLinearDamping(LINEAR_DAMPING);
+			getBody().setAngularDamping(DEFAULT_ANGULAR_DAMPING);
+			getBody().setLinearDamping(DEFAULT_LINEAR_DAMPING);
 		}
 	}
 	
