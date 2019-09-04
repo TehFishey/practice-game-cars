@@ -14,8 +14,8 @@ public abstract class Entity {
 	
 	private final Body body;
 	
-	protected static float FRICTION_TOLERANCE = 100f;
-	protected static float FRICTION_MODIFIER = 0.01f;
+	protected static float FRICTION_TOLERANCE = 80f;
+	protected static float FRICTION_MODIFIER = 0.95f;
 	
 	public Entity (Body body) {
 		this.body = body;
@@ -41,23 +41,32 @@ public abstract class Entity {
 	}
 	
 	private Vector2 getForwardVelocity() {
-		Vector2 bodyOrientation = this.body.getWorldVector(new Vector2(1,0));
-		Vector2 bodyVelocity = this.body.getLinearVelocity();
-		float normalVelocity = bodyOrientation.dot(bodyVelocity);
-		return bodyOrientation.scl(normalVelocity);
-	}
-	
-	private Vector2 getLateralVelocity() {
 		Vector2 bodyOrientation = this.body.getWorldVector(new Vector2(0,1));
 		Vector2 bodyVelocity = this.body.getLinearVelocity();
 		float normalVelocity = bodyOrientation.dot(bodyVelocity);
-		return bodyOrientation.scl(normalVelocity);
+		//return bodyOrientation.scl(normalVelocity);
+		return mult(bodyOrientation, normalVelocity);
+	}
+	
+	private Vector2 getLateralVelocity() {
+		Vector2 bodyOrientation = this.body.getWorldVector(new Vector2(1,0));
+		Vector2 bodyVelocity = this.body.getLinearVelocity();
+		float normalVelocity = bodyOrientation.dot(bodyVelocity);
+		//return bodyOrientation.scl(normalVelocity);
+		return mult(bodyOrientation, normalVelocity);
 	}
 	
 	private void applyFriction() {
 		if (getAbsoluteSpeed() > FRICTION_TOLERANCE)
 			this.body.setLinearVelocity( forwardSpeed.x + lateralSpeed.x * FRICTION_MODIFIER, forwardSpeed.y + lateralSpeed.y * FRICTION_MODIFIER);
-		else
+			else
 			this.body.setLinearVelocity( forwardSpeed.x, forwardSpeed.y);
 	}
+	
+	public Vector2 mult (Vector2 vector, float scalar) {
+		vector.x *= scalar;
+		vector.y *= scalar;
+		return new Vector2(vector.x,vector.y);
+	}
 }
+

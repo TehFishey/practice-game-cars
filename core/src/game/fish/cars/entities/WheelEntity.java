@@ -7,8 +7,8 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class WheelEntity extends Entity {
 
-	private static final float ANGULAR_DAMPING = 2f;
-	private static final float LINEAR_DAMPING = 2f;
+	private static final float ANGULAR_DAMPING = 0.5f;
+	private static final float LINEAR_DAMPING = 0.5f;
 	
 	private final CarVehicle parent;
 	

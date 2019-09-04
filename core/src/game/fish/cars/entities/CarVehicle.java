@@ -17,11 +17,14 @@ public class CarVehicle extends VehicleEntity {
 	
 	private static final float WHEEL_POSITION_X = 64f;
     private static final float WHEEL_POSITION_Y = 80f;
-	private static final float WHEEL_LOCK_ANGLE = 25f;
+	private static final float WHEEL_LOCK_ANGLE = 30f; //40f?
 
 	private final Array<WheelEntity> frontWheels = new Array<WheelEntity>();
 	private final Array<WheelEntity> rearWheels = new Array<WheelEntity>();
 	private final Array<WheelEntity> driveWheels = new Array<WheelEntity>();
+	
+	private float WHEEL_TURN_RATE = 2f;
+	private float WHEEL_RESET_RATE = 2f;
 	
 	private float currentAcceleration = 0f;
 	private float wheelAngle = 0f;
@@ -36,11 +39,11 @@ public class CarVehicle extends VehicleEntity {
 		LINEAR_DAMPING = 0.5f;
 		RESTITUTION = 0.2f;
 		
-		MAX_ACCELERATION = 120f;
+		MAX_ACCELERATION = 160f;
 		MAX_REVERSE_ACCELERATION = -60f;
-		ACCELERATION_STEP = 15f;
-		REVERSE_ACCELERATION_STEP = -7.5f;
-		ACCELERATION_DECAY = 45f;
+		ACCELERATION_STEP = 5f;
+		REVERSE_ACCELERATION_STEP = -5f;
+		ACCELERATION_DECAY = 20f;
 		BRAKE_STRENGTH = 90f;
 		
 		getBody().setAngularDamping(ANGULAR_DAMPING);
@@ -100,17 +103,17 @@ public class CarVehicle extends VehicleEntity {
 		switch (turnDirection) {
 		case TURN_DIRECTION_RIGHT:
 			if (wheelAngle > -WHEEL_LOCK_ANGLE) 
-				wheelAngle = Math.max(wheelAngle -= 2f, -WHEEL_LOCK_ANGLE);
+				wheelAngle = Math.max(wheelAngle -= WHEEL_TURN_RATE, -WHEEL_LOCK_ANGLE);
 			break;
 		case TURN_DIRECTION_LEFT:
 			if (wheelAngle < WHEEL_LOCK_ANGLE) 
-				wheelAngle = Math.min(wheelAngle += 2f, WHEEL_LOCK_ANGLE);
+				wheelAngle = Math.min(wheelAngle += WHEEL_TURN_RATE, WHEEL_LOCK_ANGLE);
 			break;
 		case TURN_DIRECTION_NONE:
 			if (wheelAngle < 0)
-				wheelAngle += 1f;
+				wheelAngle += WHEEL_RESET_RATE;
 			else if (wheelAngle > 0)
-				wheelAngle -= 1f;
+				wheelAngle -= WHEEL_RESET_RATE;
 			break;
 		}
 		for (WheelEntity frontWheel : frontWheels)

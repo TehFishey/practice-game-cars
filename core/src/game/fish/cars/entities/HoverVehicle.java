@@ -16,6 +16,9 @@ public class HoverVehicle extends VehicleEntity {
 	public HoverVehicle(Body body, World world) {
 		super(body, world);
 		
+		FRICTION_TOLERANCE = 0f;
+		FRICTION_MODIFIER = 0.995f;
+		
 		ANGULAR_DAMPING = 4f;
 		LINEAR_DAMPING = 0.3f;
 		RESTITUTION = 0.3f;
@@ -25,7 +28,7 @@ public class HoverVehicle extends VehicleEntity {
 		ACCELERATION_STEP = 10f;
 		REVERSE_ACCELERATION_STEP = -5f;
 		ACCELERATION_DECAY = 35f;
-		BRAKE_STRENGTH = 60f;
+		BRAKE_STRENGTH = 5f;
 		
 		getBody().setAngularDamping(ANGULAR_DAMPING);
 		getBody().setLinearDamping(LINEAR_DAMPING);
@@ -34,7 +37,7 @@ public class HoverVehicle extends VehicleEntity {
 	}
 	
 	private void processInput() {
-		Vector2 engineForce = new Vector2();
+		Vector2 engineForce = new Vector2(0,0);
 		
 		switch (turnDirection) {
 		case TURN_DIRECTION_RIGHT:

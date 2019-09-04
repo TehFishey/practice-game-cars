@@ -16,6 +16,7 @@ public class VehicleEntity extends Entity {
 	protected static float LINEAR_DAMPING;
 	protected static float RESTITUTION;
 	
+	protected static float MAX_SPEED;
 	protected static float MAX_ACCELERATION;
 	protected static float MAX_REVERSE_ACCELERATION;
 	protected static float ACCELERATION_STEP;
