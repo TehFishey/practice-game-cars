@@ -23,6 +23,7 @@ import static game.fish.cars.Constants.ACHIEVEMENTS_SCREEN;
 
 import static game.fish.cars.Constants.CAR_FWDCAR;
 import static game.fish.cars.Constants.CAR_AWDCAR;
+import static game.fish.cars.Constants.CAR_MOTORCYCLE;
 import static game.fish.cars.Constants.CAR_HOVERCAR;
 
 import static game.fish.cars.Constants.MAP_MAP1;
@@ -108,12 +109,13 @@ public class MenuScreen implements Screen {
 		
 		final CheckBox fwdButton = new CheckBox("Front-Wheel Drive",skin);
 		final CheckBox awdButton = new CheckBox("Four-Wheel Drive",skin);
+		final CheckBox cycButton = new CheckBox("Motorcycle",skin);
 		final CheckBox hovButton = new CheckBox("Hover Car",skin);
 		final CheckBox map1Button = new CheckBox("City",skin);
 		final CheckBox map2Button = new CheckBox("Race Track",skin);
 		
 		fwdButton.setChecked(true);
-		carChoiceButtons.add(fwdButton, awdButton, hovButton);
+		carChoiceButtons.add(fwdButton, awdButton, cycButton, hovButton);
 		carChoiceButtons.setMaxCheckCount(1);
 		carChoiceButtons.setMinCheckCount(1);
 		carChoiceButtons.setUncheckLast(true);
@@ -131,6 +133,7 @@ public class MenuScreen implements Screen {
 			
 			protected void result(Object obj) {
 				if (obj.equals("fwdCar")) {carChoice = CAR_FWDCAR; cancel();}
+				else if (obj.equals("cycCar")) {carChoice = CAR_MOTORCYCLE; cancel();}
 				else if (obj.equals("hovCar")) {carChoice = CAR_HOVERCAR; cancel();}
 				else if (obj.equals("awdCar")) {carChoice = CAR_AWDCAR; cancel();}
 				else if (obj.equals("map1")) {mapChoice = MAP_MAP1; cancel();}
@@ -147,6 +150,8 @@ public class MenuScreen implements Screen {
 		newGameDialog.getButtonTable().row();
 		newGameDialog.button(awdButton, "awdCar");
 		newGameDialog.button(map2Button, "map2");
+		newGameDialog.getButtonTable().row();
+		newGameDialog.button(cycButton, "cycCar");
 		newGameDialog.getButtonTable().row();
 		newGameDialog.button(hovButton, "hovCar");
 		newGameDialog.getButtonTable().row();

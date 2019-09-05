@@ -14,7 +14,7 @@ public abstract class Entity {
 	
 	private final Body body;
 	
-	protected static float FRICTION_TOLERANCE = 80f;
+	protected static float FRICTION_TOLERANCE = 60f;
 	protected static float FRICTION_MODIFIER = 0.90f;
 	
 	public Entity (Body body) {

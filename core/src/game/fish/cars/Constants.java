@@ -25,6 +25,7 @@ public class Constants {
 	
 	public static final int CAR_FWDCAR = 0;
 	public static final int CAR_AWDCAR = 1;
+	public static final int CAR_MOTORCYCLE = 2;
 	public static final int CAR_HOVERCAR = 3;
 	
 	public static final int MAP_MAP1 = 0;

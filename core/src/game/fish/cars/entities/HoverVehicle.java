@@ -7,14 +7,16 @@ import com.badlogic.gdx.physics.box2d.joints.PrismaticJointDef;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.badlogic.gdx.utils.Array;
 
+import game.fish.cars.tools.MapLoader;
+
 import static game.fish.cars.Constants.PPM;
 
 public class HoverVehicle extends VehicleEntity {
 	
 	private float currentAcceleration = 0f;
 	
-	public HoverVehicle(Body body, World world) {
-		super(body, world);
+	public HoverVehicle(World world, MapLoader loader) {
+		super(world, loader);
 		
 		FRICTION_TOLERANCE = 0f;
 		FRICTION_MODIFIER = 0.995f;

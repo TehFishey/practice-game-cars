@@ -32,6 +32,7 @@ import game.fish.cars.commands.ZoomInCommand;
 import game.fish.cars.commands.ZoomOutCommand;
 import game.fish.cars.entities.CarVehicle;
 import game.fish.cars.entities.HoverVehicle;
+import game.fish.cars.entities.MotorcycleVehicle;
 import game.fish.cars.entities.VehicleEntity;
 import game.fish.cars.tools.MapLoader;
 
@@ -41,6 +42,7 @@ import static game.fish.cars.Constants.PPM;
 
 import static game.fish.cars.Constants.CAR_FWDCAR;
 import static game.fish.cars.Constants.CAR_AWDCAR;
+import static game.fish.cars.Constants.CAR_MOTORCYCLE;
 import static game.fish.cars.Constants.CAR_HOVERCAR;
 
 import static game.fish.cars.KeyBindings.KEY_DRIVE;
@@ -103,16 +105,19 @@ public class PlayScreen implements Screen {
 		
 		switch (carChoice) {
 		case CAR_FWDCAR:
-			player = new CarVehicle(loader.getPlayer(), world, FRONT_WHEEL_DRIVE);
+			player = new CarVehicle(world, loader, FRONT_WHEEL_DRIVE);
 			break;
 		case CAR_AWDCAR:
-			player = new CarVehicle(loader.getPlayer(), world, ALL_WHEEL_DRIVE);
+			player = new CarVehicle(world, loader, ALL_WHEEL_DRIVE);
+			break;
+		case CAR_MOTORCYCLE:
+			player = new MotorcycleVehicle(world, loader);
 			break;
 		case CAR_HOVERCAR:
-			player = new HoverVehicle(loader.getPlayer(), world);
+			player = new HoverVehicle(world, loader);
 			break;
 		default:
-			player = new CarVehicle(loader.getPlayer(), world, FRONT_WHEEL_DRIVE);
+			player = new CarVehicle(world, loader, FRONT_WHEEL_DRIVE);
 		}
 		
 		camera.zoom = DEFAULT_ZOOM;

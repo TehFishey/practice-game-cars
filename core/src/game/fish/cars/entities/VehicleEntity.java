@@ -3,6 +3,8 @@ package game.fish.cars.entities;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 
+import game.fish.cars.tools.MapLoader;
+
 public class VehicleEntity extends Entity {
 
 	public static final int DRIVE_DIRECTION_NONE = 0;
@@ -28,10 +30,18 @@ public class VehicleEntity extends Entity {
 	protected boolean brakesOn = false;
 	
 	protected final World world;
+	protected final MapLoader loader;
 	
-	public VehicleEntity(Body body, World world) {
-		super(body);
+	public VehicleEntity(World world, MapLoader loader) {
+		super(loader.getPlayer(0,0));
 		this.world = world;
+		this.loader = loader;
+	}
+	
+	public VehicleEntity(float sizeX, float sizeY, World world, MapLoader loader) {
+		super(loader.getPlayer(sizeX,sizeY));
+		this.world = world;
+		this.loader = loader;
 	}
 	
 	public void inputDriveDirection(int direction) {

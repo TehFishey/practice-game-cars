@@ -11,32 +11,25 @@ import game.fish.cars.tools.MapLoader;
 
 import static game.fish.cars.Constants.PPM;
 
-public class CarVehicle extends VehicleEntity {
+public class MotorcycleVehicle extends VehicleEntity {
 	
-	public static final int FRONT_WHEEL_DRIVE = 0;
-	public static final int REAR_WHEEL_DRIVE = 1;
-	public static final int ALL_WHEEL_DRIVE = 2;
-	
-	private static final float WHEEL_POSITION_X = 64f;
+	private static final float WHEEL_POSITION_X = 0f;
     private static final float WHEEL_POSITION_Y = 80f;
 	private static final float WHEEL_LOCK_ANGLE = 40f;
 
-	private final Array<WheelEntity> frontWheels = new Array<WheelEntity>();
-	private final Array<WheelEntity> rearWheels = new Array<WheelEntity>();
-	private final Array<WheelEntity> driveWheels = new Array<WheelEntity>();
+	private WheelEntity frontWheel;
+	private WheelEntity rearWheel;
+	private Array<WheelEntity> wheels = new Array<>();
 	
-	private float WHEEL_TURN_RATE = 2f;
-	private float WHEEL_RESET_RATE = 2f;
-	private float TURN_DAMPING_MOD = 2f;
+	private float WHEEL_TURN_RATE = 4f;
+	private float WHEEL_RESET_RATE = 4f;
+	private float TURN_DAMPING_MOD = 8f;
 	
 	private float currentAcceleration = 0f;
 	private float wheelAngle = 0f;
-	
-	private final int drive;
-	
-	public CarVehicle(World world, MapLoader loader, int drive) {
-		super(world, loader);
-		this.drive = drive;
+		
+	public MotorcycleVehicle(World world, MapLoader loader) {
+		super(60f, 160f, world, loader);
 		
 		DEFAULT_ANGULAR_DAMPING = 6f;
 		DEFAULT_LINEAR_DAMPING = 0.5f;
@@ -53,51 +46,26 @@ public class CarVehicle extends VehicleEntity {
 		getBody().setLinearDamping(DEFAULT_LINEAR_DAMPING);
 		getBody().getFixtureList().get(0).setRestitution(DEFAULT_RESTITUTION);
 		
-		final WheelEntity wheelFL = new WheelEntity(
+		frontWheel = new WheelEntity(
 			new Vector2(getBody().getPosition().x * PPM + WHEEL_POSITION_X, getBody().getPosition().y * PPM + WHEEL_POSITION_Y), 
-			new Vector2(16, 32), 
+			new Vector2(12, 24), 
 			this.world, 0.4f, this);
-		final WheelEntity wheelFR = new WheelEntity(
-			new Vector2(getBody().getPosition().x * PPM + -WHEEL_POSITION_X, getBody().getPosition().y * PPM + WHEEL_POSITION_Y), 
-			new Vector2(16, 32), 
-			this.world, 0.4f, this);
-		final WheelEntity wheelRL = new WheelEntity(
+		rearWheel = new WheelEntity(
 			new Vector2(getBody().getPosition().x * PPM + WHEEL_POSITION_X, getBody().getPosition().y * PPM + -WHEEL_POSITION_Y), 
-			new Vector2(16, 32), 
-			this.world, 0.4f, this);
-		final WheelEntity wheelRR = new WheelEntity(
-			new Vector2(getBody().getPosition().x * PPM + -WHEEL_POSITION_X, getBody().getPosition().y * PPM + -WHEEL_POSITION_Y), 
-			new Vector2(16, 32), 
+			new Vector2(12, 24), 
 			this.world, 0.4f, this);
 		
-		frontWheels.add(wheelFL, wheelFR);
-		rearWheels.add(wheelRL, wheelRR);
+		wheels.add(frontWheel, rearWheel);
 		
-		for (WheelEntity frontWheel : frontWheels) {
-			final RevoluteJointDef jointDef = new RevoluteJointDef();
-			jointDef.initialize(this.getBody(), frontWheel.getBody(), frontWheel.getBody().getWorldCenter());
-			this.world.createJoint(jointDef);
-		}
-		for (WheelEntity rearWheel : rearWheels) {
-			final PrismaticJointDef jointDef = new PrismaticJointDef();
-            jointDef.initialize(this.getBody(), rearWheel.getBody(), rearWheel.getBody().getWorldCenter(), new Vector2(1, 0));
-            jointDef.enableLimit = true;
-            jointDef.lowerTranslation = jointDef.upperTranslation = 0;
-            this.world.createJoint(jointDef);
-		}
-		
-		switch (drive) {
-		case FRONT_WHEEL_DRIVE:
-			driveWheels.addAll(frontWheels);
-			break;
-		case REAR_WHEEL_DRIVE:
-			driveWheels.addAll(rearWheels);
-			break;
-		case ALL_WHEEL_DRIVE:
-			driveWheels.addAll(frontWheels);
-			driveWheels.addAll(rearWheels);
-			break;
-		}
+		final RevoluteJointDef frontJoint = new RevoluteJointDef();
+		frontJoint.initialize(this.getBody(), frontWheel.getBody(), frontWheel.getBody().getWorldCenter());
+		this.world.createJoint(frontJoint);
+
+		final PrismaticJointDef rearJoint = new PrismaticJointDef();
+        rearJoint.initialize(this.getBody(), rearWheel.getBody(), rearWheel.getBody().getWorldCenter(), new Vector2(1, 0));
+        rearJoint.enableLimit = true;
+        rearJoint.lowerTranslation = rearJoint.upperTranslation = 0;
+        this.world.createJoint(rearJoint);
 	}
 	
 	private void processInput() {
@@ -122,8 +90,7 @@ public class CarVehicle extends VehicleEntity {
 			getBody().setLinearDamping(DEFAULT_LINEAR_DAMPING);
 			break;
 		}
-		for (WheelEntity frontWheel : frontWheels)
-			frontWheel.setAngle(wheelAngle);
+		frontWheel.setAngle(wheelAngle);
 		
 		switch(driveDirection) {
 		case DRIVE_DIRECTION_FORWARD:
@@ -146,11 +113,11 @@ public class CarVehicle extends VehicleEntity {
 			break;
 		}
 		engineForce.set(0, currentAcceleration);
-		for (WheelEntity driveWheel : driveWheels)
-			driveWheel.setForce(engineForce);
+		for (WheelEntity wheel : wheels)
+			wheel.setForce(engineForce);
 		
-		for (WheelEntity driveWheel : driveWheels)
-			driveWheel.setBrakes(brakesOn, BRAKE_STRENGTH);
+		for (WheelEntity wheel : wheels)
+			wheel.setBrakes(brakesOn, BRAKE_STRENGTH);
 	}
 	
 	@Override
