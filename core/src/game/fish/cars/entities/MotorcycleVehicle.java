@@ -123,6 +123,7 @@ public class MotorcycleVehicle extends VehicleEntity {
 	@Override
 	public void update() {
 		super.update();
+		for (WheelEntity wheel : wheels) wheel.update();
 		processInput();
 	}
 	

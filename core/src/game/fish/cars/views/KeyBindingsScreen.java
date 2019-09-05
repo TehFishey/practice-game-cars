@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import game.fish.cars.CarsGame;
@@ -28,7 +29,7 @@ import static game.fish.cars.KeyBindings.KEY_ZOOMIN;
 import static game.fish.cars.KeyBindings.KEY_ZOOMOUT;
 import static game.fish.cars.KeyBindings.KEY_MENU;
 
-public class KeyBindingsScreen implements Screen {
+public class KeyBindingsScreen extends InterfaceScreen {
 	
 	private final CarsGame parent;
 	private final KeyBindings keyBindings;
@@ -67,17 +68,6 @@ public class KeyBindingsScreen implements Screen {
 	private final TextButton menuKeyButton;
 	private final TextButton backButton;
 	
-	private ChangeListener driveKeyListener;
-	private ChangeListener reverseKeyListener;
-	private ChangeListener leftKeyListener;
-	private ChangeListener rightKeyListener;  
-	private ChangeListener brakeKeyListener;  
-	private ChangeListener zoomInKeyListener; 
-	private ChangeListener zoomOutKeyListener;
-	private ChangeListener menuKeyListener;   
-	private ChangeListener backListener;
-	
-	
 	public KeyBindingsScreen(final CarsGame parent) {
 		this.parent = parent;
 		keyBindings = this.parent.getKeyBindings();
@@ -104,155 +94,17 @@ public class KeyBindingsScreen implements Screen {
 		zoomOutKeyCurrent = new Label (Keys.toString(keyBindings.getKeyBinding(KEY_ZOOMOUT)), skin);
 		menuKeyCurrent = new Label (Keys.toString(keyBindings.getKeyBinding(KEY_MENU)), skin);
 		
-		driveKeyButton = new TextButton("Change", skin);
-		reverseKeyButton = new TextButton("Change", skin);
-		leftKeyButton = new TextButton("Change", skin);
-		rightKeyButton = new TextButton("Change", skin);
-		brakeKeyButton = new TextButton("Change", skin);
-		zoomInKeyButton = new TextButton("Change", skin);
-		zoomOutKeyButton = new TextButton("Change", skin);
-		menuKeyButton = new TextButton("Change", skin);
-		backButton = new TextButton("Back", skin);
-		
-		buildControls();
+		driveKeyButton = buildKeyButton("Change", skin, KEY_DRIVE, driveKeyCurrent);
+		reverseKeyButton = buildKeyButton("Change", skin, KEY_REVERSE, reverseKeyCurrent);
+		leftKeyButton = buildKeyButton("Change", skin, KEY_LEFT, leftKeyCurrent);
+		rightKeyButton = buildKeyButton("Change", skin, KEY_RIGHT, rightKeyCurrent);
+		brakeKeyButton = buildKeyButton("Change", skin, KEY_BRAKE, brakeKeyCurrent);
+		zoomInKeyButton = buildKeyButton("Change", skin, KEY_ZOOMIN, zoomInKeyCurrent);
+		zoomOutKeyButton = buildKeyButton("Change", skin, KEY_ZOOMOUT, zoomOutKeyCurrent);
+		menuKeyButton = buildKeyButton("Change", skin, KEY_MENU, menuKeyCurrent);
+		backButton = buildScreenButton("Back", skin, parent, SETTINGS_SCREEN);
 	}
-	
-	private void buildControls() {
-		driveKeyListener = new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				bindingKey = KEY_DRIVE;
-				bindingKeyCurrent = driveKeyCurrent;
-				Gdx.input.setInputProcessor(keyBindingsProcessor);
-			}
-		};
-		reverseKeyListener = new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				bindingKey = KEY_REVERSE;
-				bindingKeyCurrent = reverseKeyCurrent;
-				Gdx.input.setInputProcessor(keyBindingsProcessor);
-			}
-		};
-		leftKeyListener = new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				bindingKey = KEY_LEFT;
-				bindingKeyCurrent = leftKeyCurrent;
-				Gdx.input.setInputProcessor(keyBindingsProcessor);
-			}
-		};
-		rightKeyListener = new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				bindingKey = KEY_RIGHT;
-				bindingKeyCurrent = rightKeyCurrent;
-				Gdx.input.setInputProcessor(keyBindingsProcessor);
-			}
-		};
-		brakeKeyListener = new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				bindingKey = KEY_BRAKE;
-				bindingKeyCurrent = brakeKeyCurrent;
-				Gdx.input.setInputProcessor(keyBindingsProcessor);
-			}
-		};
-		zoomInKeyListener = new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				bindingKey = KEY_ZOOMIN;
-				bindingKeyCurrent = zoomInKeyCurrent;
-				Gdx.input.setInputProcessor(keyBindingsProcessor);
-			}
-		};
-		zoomOutKeyListener = new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				bindingKey = KEY_ZOOMOUT;
-				bindingKeyCurrent = zoomOutKeyCurrent;
-				Gdx.input.setInputProcessor(keyBindingsProcessor);
-			}
-		};
-		menuKeyListener = new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				bindingKey = KEY_MENU;
-				bindingKeyCurrent = menuKeyCurrent;
-				Gdx.input.setInputProcessor(keyBindingsProcessor);
-			}
-		};
-    	backListener = new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				parent.changeScreen(SETTINGS_SCREEN);
-			}
-		};
-    	
-		driveKeyButton.addListener(driveKeyListener);
-		reverseKeyButton.addListener(reverseKeyListener);
-		leftKeyButton.addListener(leftKeyListener);
-		rightKeyButton.addListener(rightKeyListener);
-		brakeKeyButton.addListener(brakeKeyListener);
-		zoomInKeyButton.addListener(zoomInKeyListener);
-		zoomOutKeyButton.addListener(zoomOutKeyListener);
-		menuKeyButton.addListener(menuKeyListener);
-    	backButton.addListener(backListener);
-	}
-	
-	private class KeyBindingsProcessor implements InputProcessor {
 
-		@Override
-		public boolean keyDown(int keycode) {
-		    keyBindings.setKey(bindingKey, keycode);
-		    bindingKeyCurrent.setText(Keys.toString(keycode));
-		    Gdx.input.setInputProcessor(stage);
-		    return true;
-		}
-
-		@Override
-		public boolean keyUp(int keycode) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean keyTyped(char character) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean touchDragged(int screenX, int screenY, int pointer) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean mouseMoved(int screenX, int screenY) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean scrolled(int amount) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-	}
-	
 	@Override
 	public void show() {
 		Table table = new Table();
@@ -332,4 +184,73 @@ public class KeyBindingsScreen implements Screen {
 		stage.dispose();
 	}
 
+	private TextButton buildKeyButton(final String buttonLabel, final Skin skin, final String bindKey, final Label currentKeyLabel) {
+		ChangeListener listener = new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				bindingKey = bindKey;
+				bindingKeyCurrent = currentKeyLabel;
+				Gdx.input.setInputProcessor(keyBindingsProcessor);
+			}
+		};
+		TextButton button = new TextButton(buttonLabel, skin);
+		button.addListener(listener);
+		return button;
+	}
+	
+	private class KeyBindingsProcessor implements InputProcessor {
+
+		@Override
+		public boolean keyDown(int keycode) {
+		    keyBindings.setKey(bindingKey, keycode);
+		    bindingKeyCurrent.setText(Keys.toString(keycode));
+		    Gdx.input.setInputProcessor(stage);
+		    return true;
+		}
+
+		@Override
+		public boolean keyUp(int keycode) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public boolean keyTyped(char character) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public boolean touchDragged(int screenX, int screenY, int pointer) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public boolean mouseMoved(int screenX, int screenY) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public boolean scrolled(int amount) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+	}
+	
 }
+
+

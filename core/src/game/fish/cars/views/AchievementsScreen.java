@@ -4,7 +4,7 @@ import com.badlogic.gdx.Screen;
 
 import game.fish.cars.CarsGame;
 
-public class AchievementsScreen implements Screen {
+public class AchievementsScreen extends InterfaceScreen {
 
 	private CarsGame parent;
 	

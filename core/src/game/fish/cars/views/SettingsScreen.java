@@ -21,7 +21,7 @@ import game.fish.cars.CarsGame;
 import static game.fish.cars.Constants.MENU_SCREEN;
 import static game.fish.cars.Constants.KEYBINDINGS_SCREEN;
 
-public class SettingsScreen implements Screen {
+public class SettingsScreen extends InterfaceScreen {
 	
 	private final CarsGame parent;
 	private final Stage stage;
@@ -36,11 +36,6 @@ public class SettingsScreen implements Screen {
 	private final TextButton backButton;
 	private final TextButton keyBindingsButton;
 	
-	private EventListener musicVolumeListener;
-	private EventListener musicEnableListener;
-	private ChangeListener backListener;
-	private ChangeListener keyBindingsListener;
-	
 	public SettingsScreen(final CarsGame parent) {
 		this.parent = parent;
 		stage = new Stage(new ScreenViewport());
@@ -50,18 +45,7 @@ public class SettingsScreen implements Screen {
 		musicVolumeLabel = new Label ("Music Volume", skin);
 		musicEnableLabel = new Label ("Music Enabled", skin);
 		
-		musicVolumeSlider = new Slider(0f, 1f, 0.1f,false, skin);
-		musicVolumeSlider.setValue(parent.getSettings().getMusicVolume());
-		musicEnableCheckbox = new CheckBox(null, skin);
-		musicEnableCheckbox.setChecked(parent.getSettings().getMusicEnabled());
-		backButton = new TextButton("Back", skin);
-		keyBindingsButton = new TextButton("Key Bindings", skin);
-		
-		buildControls();
-	}
-	
-	private void buildControls() {
-		musicVolumeListener = new EventListener() {
+		EventListener musicVolumeListener = new EventListener() {
     		@Override
     		public boolean handle(Event event) {
     			parent.getSettings().setMusicVolume(musicVolumeSlider.getValue());
@@ -69,7 +53,7 @@ public class SettingsScreen implements Screen {
     			return false;
     		}
     	};
-    	musicEnableListener = new EventListener() {
+    	EventListener musicEnableListener = new EventListener() {
     		@Override
     		public boolean handle(Event event) {
     			parent.getSettings().setMusicEnabled(musicEnableCheckbox.isChecked());
@@ -78,23 +62,15 @@ public class SettingsScreen implements Screen {
     			return false;
     		}
     	};
-    	backListener = new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				parent.changeScreen(MENU_SCREEN);
-			}
-		};
-		keyBindingsListener = new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				parent.changeScreen(KEYBINDINGS_SCREEN);
-			}
-		};
     	
+    	musicVolumeSlider = new Slider(0f, 1f, 0.1f,false, skin);
+		musicVolumeSlider.setValue(parent.getSettings().getMusicVolume());
     	musicVolumeSlider.addListener(musicVolumeListener);
+    	musicEnableCheckbox = new CheckBox(null, skin);
+		musicEnableCheckbox.setChecked(parent.getSettings().getMusicEnabled());
     	musicEnableCheckbox.addListener(musicEnableListener);
-    	backButton.addListener(backListener);
-    	keyBindingsButton.addListener(keyBindingsListener);
+		backButton = buildScreenButton("Back", skin, this.parent, MENU_SCREEN);
+		keyBindingsButton = buildScreenButton("Key Bindings", skin, this.parent, KEYBINDINGS_SCREEN);
 	}
 	
 	@Override

@@ -156,6 +156,8 @@ public class CarVehicle extends VehicleEntity {
 	@Override
 	public void update() {
 		super.update();
+		for (WheelEntity frontWheel : frontWheels) frontWheel.update();
+		for (WheelEntity rearWheel : rearWheels) rearWheel.update();
 		processInput();
 	}
 	

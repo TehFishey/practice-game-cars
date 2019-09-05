@@ -31,12 +31,12 @@ public class VehicleEntity extends Entity {
 	
 	protected final World world;
 	protected final MapLoader loader;
-	
+
 	public VehicleEntity(World world, MapLoader loader) {
 		super(loader.getPlayer(0,0));
 		this.world = world;
 		this.loader = loader;
-	}
+	}	
 	
 	public VehicleEntity(float sizeX, float sizeY, World world, MapLoader loader) {
 		super(loader.getPlayer(sizeX,sizeY));

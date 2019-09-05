@@ -30,7 +30,7 @@ import static game.fish.cars.Constants.MAP_MAP1;
 import static game.fish.cars.Constants.MAP_MAP2;
 import static game.fish.cars.Constants.MAP_MAP3;
 
-public class MenuScreen implements Screen {
+public class MenuScreen extends InterfaceScreen {
 	
 	private final CarsGame parent;
 	private final Stage stage;
@@ -42,64 +42,30 @@ public class MenuScreen implements Screen {
 	private final TextButton achievementsButton;
 	private final TextButton exitButton;
 	
-	private ChangeListener newGameListener;
-	private ChangeListener resumeListener;
-	private ChangeListener settingsListener;
-	private ChangeListener achievementsListener;
-	private ChangeListener exitListener;
-	
 	public MenuScreen(final CarsGame parent) {
 		this.parent = parent;
 		stage = new Stage(new ScreenViewport());
 		skin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
-		
-		newGameButton = new TextButton("New Game", skin);
-		resumeButton = new TextButton("Resume", skin);
-		settingsButton = new TextButton("Settings", skin);
-		achievementsButton = new TextButton("Achievements", skin);
-		exitButton = new TextButton("Quit", skin);
-		
-		buildControls();
-	}
-	
-	private void buildControls() {
-		//Replace with some kind of generic buttonMap loop? Usable on other menus?
-		newGameListener = new ChangeListener() {
+				
+		ChangeListener newGameListener = new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				if (parent.getScreenExists(PLAY_SCREEN)) parent.clearScreen(PLAY_SCREEN);
 				newGameDialog();	
 			}
 		};
-		resumeListener = new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				parent.changeScreen(PLAY_SCREEN);
-			}
-		};
-		settingsListener = new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				parent.changeScreen(SETTINGS_SCREEN);
-			}
-		};
-		achievementsListener = new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				parent.changeScreen(ACHIEVEMENTS_SCREEN);
-			}
-		};
-		exitListener = new ChangeListener() {
+		ChangeListener exitListener = new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				Gdx.app.exit();
 			}
 		};
-		newGameButton.addListener(newGameListener);
-		resumeButton.addListener(resumeListener);
-		settingsButton.addListener(settingsListener);
-		achievementsButton.addListener(achievementsListener);
-		exitButton.addListener(exitListener);
+		
+		resumeButton = buildScreenButton("Resume", skin, this.parent, PLAY_SCREEN);
+		settingsButton = buildScreenButton("Settings", skin, this.parent, SETTINGS_SCREEN);
+		achievementsButton = buildScreenButton("Achievements", skin, this.parent, ACHIEVEMENTS_SCREEN);
+		newGameButton = buildCustomButton("New Game", skin, newGameListener);
+		exitButton = buildCustomButton("Quit", skin, exitListener);		
 	}
 	
 	private void newGameDialog() {
