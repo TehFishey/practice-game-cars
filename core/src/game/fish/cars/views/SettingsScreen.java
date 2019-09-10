@@ -1,9 +1,7 @@
 package game.fish.cars.views;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -13,8 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import java.beans.PropertyChangeSupport;
 
 import game.fish.cars.CarsGame;
 
@@ -22,10 +20,6 @@ import static game.fish.cars.Constants.MENU_SCREEN;
 import static game.fish.cars.Constants.KEYBINDINGS_SCREEN;
 
 public class SettingsScreen extends InterfaceScreen {
-	
-	private final CarsGame parent;
-	private final Stage stage;
-	private final Skin skin;
 	
 	private final Label titleLabel;
 	private final Label musicVolumeLabel;
@@ -37,9 +31,7 @@ public class SettingsScreen extends InterfaceScreen {
 	private final TextButton keyBindingsButton;
 	
 	public SettingsScreen(final CarsGame parent) {
-		this.parent = parent;
-		stage = new Stage(new ScreenViewport());
-		skin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
+		super(parent);
 		
 		titleLabel = new Label ("Settings", skin);
 		musicVolumeLabel = new Label ("Music Volume", skin);
@@ -48,8 +40,10 @@ public class SettingsScreen extends InterfaceScreen {
 		EventListener musicVolumeListener = new EventListener() {
     		@Override
     		public boolean handle(Event event) {
-    			parent.getSettings().setMusicVolume(musicVolumeSlider.getValue());
-    			parent.getMusic().setVolume(musicVolumeSlider.getValue());
+    			float newVolume = musicVolumeSlider.getValue();
+    			parent.getSettings().setMusicVolume(newVolume); 
+    			parent.getMusic().setVolume(newVolume);
+    			achievementPCS.firePropertyChange("musicVolume",null,newVolume);
     			return false;
     		}
     	};
@@ -57,8 +51,14 @@ public class SettingsScreen extends InterfaceScreen {
     		@Override
     		public boolean handle(Event event) {
     			parent.getSettings().setMusicEnabled(musicEnableCheckbox.isChecked());
-    			if (musicEnableCheckbox.isChecked()) parent.getMusic().play();
-    			else parent.getMusic().stop();
+    			if (musicEnableCheckbox.isChecked()) {
+    				parent.getMusic().play();
+    				achievementPCS.firePropertyChange("musicPlaying", null, true);
+    			}
+    			else {
+    				parent.getMusic().stop();
+    				achievementPCS.firePropertyChange("musicPlaying", null, false);
+    			}
     			return false;
     		}
     	};
@@ -93,37 +93,6 @@ public class SettingsScreen extends InterfaceScreen {
 		stage.clear();
 		stage.addActor(table);
 		Gdx.input.setInputProcessor(stage);
-	}
-
-	@Override
-	public void render(float delta) {
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-		stage.draw();
-	}
-
-	@Override
-	public void resize(int width, int height) {
-		stage.getViewport().update(width, height, true);
-	}
-	
-	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void hide() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
