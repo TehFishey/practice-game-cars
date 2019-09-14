@@ -11,8 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
 
 import game.fish.cars.CarsGame;
 import game.fish.cars.KeyBindings;
@@ -164,11 +166,14 @@ public class KeyBindingsScreen extends InterfaceScreen {
 	private class KeyBindingsProcessor implements InputProcessor {
 
 		@Override
-		public boolean keyDown(int keycode) {
-		    keyBindings.setKeyBinding(bindingKey, keycode);
-		    bindingKeyCurrent.setText(Keys.toString(keycode));
+		public boolean keyDown(int keyCode) {
+		    keyBindings.setKeyBinding(bindingKey, keyCode);
+		    bindingKeyCurrent.setText(Keys.toString(keyCode));
 		    Gdx.input.setInputProcessor(stage);
-		    achievementPCS.firePropertyChange("keyChanged",null,bindingKey);
+		    
+		    Array bindingInfo = new Array();
+		    bindingInfo.add(bindingKey, keyCode);
+		    achievementPCS.firePropertyChange("keyChanged",null,bindingInfo);
 		    return true;
 		}
 
@@ -214,7 +219,6 @@ public class KeyBindingsScreen extends InterfaceScreen {
 			return false;
 		}
 	}
-	
 }
 
 

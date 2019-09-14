@@ -24,9 +24,9 @@ import static game.fish.cars.Constants.KEYBINDINGS_SCREEN;
 import static game.fish.cars.Constants.ACHIEVEMENTS_SCREEN;
 
 public class CarsGame extends Game {
-	public Settings settings;
-	public KeyBindings keyBindings;
-	public Achievements achievements;
+	private Settings settings;
+	private KeyBindings keyBindings;
+	private Achievements achievements;
 	private PropertyChangeListener achievementListener;
 	private Music music;
 	
@@ -52,10 +52,10 @@ public class CarsGame extends Game {
 		
 	}
 	
-	public void changeScreen(int screen, int carChoice, int mapChoice) {
+	public void changeScreen(int screen) {
 		switch(screen) {
 		case PLAY_SCREEN:
-			if (playScreen == null) playScreen = new PlayScreen(this, carChoice, mapChoice);
+			if (playScreen == null) playScreen = new PlayScreen(this, 0, 0);
 			this.setScreen(playScreen);
 			break;
 		case MENU_SCREEN:
@@ -77,10 +77,10 @@ public class CarsGame extends Game {
 		}
 	}
 	
-	public void changeScreen(int screen) {
+	public void changeScreen(int screen, int carChoice, int mapChoice) {
 		switch(screen) {
 		case PLAY_SCREEN:
-			if (playScreen == null) playScreen = new PlayScreen(this, 0, 0);
+			if (playScreen == null) playScreen = new PlayScreen(this, carChoice, mapChoice);
 			this.setScreen(playScreen);
 			break;
 		case MENU_SCREEN:

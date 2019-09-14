@@ -22,11 +22,11 @@ public class KeyBindings {
 	
 	public HashMap<String, Integer> keyBindings;
 	private Preferences bindingsFile;
-	private Map<String, ?> savedBindings;
+	private Map<String, ?> bindingsFileIndex;
 	
 	public KeyBindings() {
 		bindingsFile = Gdx.app.getPreferences(PATH_KEYBINDINGS);
-		savedBindings = bindingsFile.get();
+		bindingsFileIndex = bindingsFile.get();
 		keyBindings = new HashMap<String, Integer>();
 		
 		loadKeyBindings();
@@ -47,14 +47,14 @@ public class KeyBindings {
 	}
 	
 	private void loadKeyBindings() {
-		handleKeyBinding("driveForward", Keys.W);
-		handleKeyBinding("driveBackward", Keys.S);
-		handleKeyBinding("turnLeft", Keys.A);
-		handleKeyBinding("turnRight", Keys.D);
-		handleKeyBinding("brake", Keys.SPACE);
-		handleKeyBinding("zoomIn", Keys.EQUALS);
-		handleKeyBinding("zoomOut", Keys.MINUS);
-		handleKeyBinding("menu", Keys.ESCAPE);
+		handleKeyBinding(KEY_DRIVE, Keys.W);
+		handleKeyBinding(KEY_REVERSE, Keys.S);
+		handleKeyBinding(KEY_LEFT, Keys.A);
+		handleKeyBinding(KEY_RIGHT, Keys.D);
+		handleKeyBinding(KEY_BRAKE, Keys.SPACE);
+		handleKeyBinding(KEY_ZOOMIN, Keys.EQUALS);
+		handleKeyBinding(KEY_ZOOMOUT, Keys.MINUS);
+		handleKeyBinding(KEY_MENU, Keys.ESCAPE);
 	}
 	
 	private void saveKeyBindings() {
@@ -63,7 +63,7 @@ public class KeyBindings {
 	}
 	
 	private void handleKeyBinding(String keyString, int defaultKey) {
-		if (savedBindings.containsKey(keyString)) 
+		if (bindingsFileIndex.containsKey(keyString)) 
 			keyBindings.put(keyString, bindingsFile.getInteger(keyString));
 		else 
 			keyBindings.put(keyString, defaultKey);
