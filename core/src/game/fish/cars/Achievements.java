@@ -3,9 +3,8 @@ package game.fish.cars;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 
+import game.fish.cars.achievements.Property;
 import game.fish.cars.achievements.Achievement;
-import game.fish.cars.achievements.BooleanAchievement;
-import game.fish.cars.achievements.MultipleAchievement;
 
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -15,6 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.Array;
 
 import static game.fish.cars.Constants.PATH_ACHIEVEMENTS;
+import static game.fish.cars.Constants.PATH_PROPERTIES;
+
 import static game.fish.cars.Constants.CAR_FWDCAR;
 import static game.fish.cars.Constants.CAR_AWDCAR;
 import static game.fish.cars.Constants.CAR_MOTORCYCLE;
@@ -40,21 +41,40 @@ import java.util.Map.Entry;
 
 public class Achievements {
 
-	public HashMap<String, Achievement>currentAchievements;
+	private HashMap<String, Achievement> achievements;
+	private HashMap<String, Property> properties;
 	private Preferences achievementsFile;
+	private Preferences propertiesFile;
+	
 	private Map<String, ?> achievementsFileIndex;
-	private HashMap<String, Integer> currentProgress;
+	private Map<String, ?> propertiesFileIndex;
 	
 	public Achievements() {
 		achievementsFile = Gdx.app.getPreferences(PATH_ACHIEVEMENTS);
+		propertiesFile = Gdx.app.getPreferences(PATH_PROPERTIES);
 		achievementsFileIndex = achievementsFile.get();
-		currentAchievements = generateAchievementDefaults();
-		currentProgress = new HashMap<String, Integer>();
-		loadAchievementProgress();
+		propertiesFileIndex = achievementsFile.get();
 		
+		properties = generateDefaultProperties();
+		achievements = generateDefaultAchievements();
 	}
 	
-	public void takePropertyChange(String triggerPropertyName, Object newValue) {
+	private HashMap<String, Property> generateDefaultProperties() {
+		HashMap<String, Property> newProperties = new HashMap<String, Property>();
+		
+		newProperties.put("carType", new Property())
+		
+		return newProperties;
+	}
+	
+	private HashMap<String, Achievement> generateDefaultAchievements() {
+		HashMap<String, Achievement> newAchievements = new HashMap<String, Achievement>();
+		
+		
+		return newAchievements;
+	}
+	
+	/*public void takePropertyChange(String triggerPropertyName, Object newValue) {
 		
 		boolean update = false;
 		for (Achievement achievementValue : currentAchievements.values()) {
@@ -213,5 +233,5 @@ public class Achievements {
 		
 		achievementsFile.put(currentProgress);
 		achievementsFile.flush();
-	}
+	}*/
 }

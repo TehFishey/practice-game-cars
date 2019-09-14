@@ -1,50 +1,36 @@
 package game.fish.cars.achievements;
 
-public abstract class Achievement {
-	private String name;
-	private String description;
-	private String triggerPropertyName;
-	protected int progress;
-	protected int progressCap;
+public class Achievement {
+	String name;
+	String description;
+	Property[] properties;
+	boolean complete;
 	
-	public Achievement(String name, String description, String triggerPropertyName) {
+	public Achievement(String name, String desc, Property ...properties) {
 		this.name = name;
-		this.description = description;
-		this.triggerPropertyName = triggerPropertyName;
+		this.description = desc;
+		this.properties = properties;
+		this.complete = false;
 	}
 	
 	public String getName() {
-		return this.name;
+		return name;
 	}
 	
 	public String getDesc() {
-		return this.description;
+		return description;
 	}
 	
-	public String getTriggerProperty() {
-		return this.triggerPropertyName;
+	public boolean isComplete() {
+		return complete;
 	}
 	
-	public boolean isCompleted() {
-		return false;
+	public void update() {
+		if (complete) return;
+		
+		for (Property property : properties) {
+			if (!property.isActive()) return;
+		}
+		complete = true;
 	}
-	
-	public int getProgress() {
-		return progress;
-	}
-	
-	public void setProgress(int progress) {
-		this.progress = progress;
-	}
-	
-	public void addProgress(Object newValue) {	}
-	
-	public void conditionalUpdate(Object newValue) {
-		if (condition(newValue)) addProgress(newValue);
-	}
-	
-	protected boolean condition(Object newValue) {
-		return false;
-	}
-	
 }

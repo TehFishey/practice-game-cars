@@ -13,12 +13,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 import game.fish.cars.Achievements;
 import game.fish.cars.CarsGame;
-import game.fish.cars.achievements.Achievement;
+import game.fish.cars.achievements.Property;
 
 public class AchievementsScreen extends InterfaceScreen {
 	
 	Achievements achievements;
-	HashMap<String, Achievement> achievementHashMap;
+	HashMap<String, Property> achievementHashMap;
 	
 	Label titleLabel;
 	TextButton backButton;
@@ -51,7 +51,7 @@ public class AchievementsScreen extends InterfaceScreen {
 
 		for (Entry achievementEntry : achievementHashMap.entrySet()) {
 			
-			Achievement entry = (Achievement) achievementEntry.getValue();
+			Property entry = (Property) achievementEntry.getValue();
 			String achievementNameText = (String) entry.getName();
 			String achievementDescText = (String) entry.getDesc();
 			boolean achievementComplete = (boolean) entry.isCompleted();

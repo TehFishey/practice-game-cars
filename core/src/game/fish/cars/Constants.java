@@ -19,6 +19,7 @@ public class Constants {
 	public static final String PATH_SETTINGS = "carsSettings";
 	public static final String PATH_KEYBINDINGS = "carsKeyBindings";
 	public static final String PATH_ACHIEVEMENTS = "carsAchievements";
+	public static final String PATH_PROPERTIES = "carsAchievementProperties";
 	
 	public static final int PLAY_SCREEN = 0;
 	public static final int MENU_SCREEN = 1;
