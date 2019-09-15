@@ -168,17 +168,29 @@ public class Achievements {
 			@Override
 			protected boolean[] multiCondition(Object obj) {
 				boolean[] update = values;
+				
 				Array bindingInfo = (Array) obj;
+				String bindCommand = (String) bindingInfo.get(0);
+				int bindKey = (int) bindingInfo.get(1);
 				
-				if (bindingInfo.get(0).equals(KEY_DRIVE) && bindingInfo.get(1).equals(Keys.UP))
-					update[0] = true;
-				else if (bindingInfo.get(0).equals(KEY_REVERSE) && bindingInfo.get(1).equals(Keys.DOWN))
-					update[1] = true;
-				else if (bindingInfo.get(0).equals(KEY_LEFT) && bindingInfo.get(1).equals(Keys.LEFT))
-					update[2] = true;
-				else if (bindingInfo.get(0).equals(KEY_RIGHT) && bindingInfo.get(1).equals(Keys.RIGHT))
-					update[3] = true;
-				
+				switch (bindCommand){
+				case KEY_DRIVE: 
+					if (bindKey == Keys.UP) update[0] = true;
+					else update[0] = false;
+					break;
+				case KEY_REVERSE: 
+					if (bindKey == Keys.DOWN) update[1] = true;
+					else update[1] = false;
+					break;
+				case KEY_LEFT: 
+					if (bindKey == Keys.LEFT) update[2] = true;
+					else update[2] = false;
+					break;
+				case KEY_RIGHT: 
+					if (bindKey == Keys.RIGHT) update[3] = true;
+					else update[3] = false;
+					break;
+				}
 				return update;
 			}
 		});

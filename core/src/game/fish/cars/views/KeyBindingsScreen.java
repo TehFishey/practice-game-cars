@@ -173,7 +173,7 @@ public class KeyBindingsScreen extends InterfaceScreen {
 		    
 		    Array bindingInfo = new Array();
 		    bindingInfo.add(bindingKey, keyCode);
-		    achievementPCS.firePropertyChange("keyChanged",null,bindingInfo);
+		    achievementPCS.firePropertyChange("keyMapped",null,bindingInfo);
 		    return true;
 		}
 

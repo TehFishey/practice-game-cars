@@ -13,6 +13,8 @@ public class IncrementalAchievement extends Achievement {
 	}
 	
 	public void addProgress(int progress) {
+		if (isCompleted()) return;
+		
 		if (progress >= this.progressCap) this.progress = this.progressCap;
 		else this.progress += progress;
 	}

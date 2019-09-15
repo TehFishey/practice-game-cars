@@ -13,6 +13,8 @@ public class BooleanAchievement extends Achievement {
 	}
 	
 	public void addProgress(boolean complete) {
+		if (isCompleted()) return;
+		
 		if (complete) progress = 1;
 		else progress = 0;
 	}

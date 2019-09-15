@@ -6,12 +6,11 @@ public class MultipleAchievement extends Achievement {
 	protected boolean[] values;
 	protected int variableCount;
 	
-	public MultipleAchievement(String name, String description, String triggerPropertyName, int variables) {
+	public MultipleAchievement(String name, String description, String triggerPropertyName, int variableCount) {
 		super(name, description, triggerPropertyName);
-		this.variableCount = variables - 1;
+		this.variableCount = variableCount;
 		this.values = new boolean[variableCount];
 		Arrays.fill(values, false);
-		this.progressCap = (int) mersenneCalculate(variableCount);
 		this.progress = 0;
 	}
 	
@@ -26,6 +25,8 @@ public class MultipleAchievement extends Achievement {
 	}
 	
 	public void addProgress(boolean[] updateArray) {
+		if (isCompleted()) return;
+		
 		values = updateArray;
 		progress = writeProgress(values);
 	}
@@ -38,37 +39,21 @@ public class MultipleAchievement extends Achievement {
 		return new boolean[0];
 	}
 	
-	private boolean[] readProgress(int progress, int arrayLength) {
-		boolean[] values = new boolean[arrayLength];
+	private boolean[] readProgress(int bitProgress, int arrayLen) {
+		boolean[] boolArray = new boolean[arrayLen];
+		for (int i = 0; i < boolArray.length; i++)
+		    if ((bitProgress & 1 << i) != 0)
+		    	boolArray[i] = true;
 		
-		for (int i = 0; i < arrayLength; i++) {
-			int identity = mersenneCalculate(i);
-			if (!isMersenneNumber((progress - identity), arrayLength)) values[i] = true;
-		}
-		
-		return values;
+		return boolArray;
 	}
 	
-	private int writeProgress(boolean[] valuesArray) {
-		int progress = 0;
+	private int writeProgress(boolean[] values) {
+		int bitProgress = 0;
+		for (int i = 0; i < values.length; i++)
+		    if (values[i])
+		        bitProgress |= 1 << i;
 		
-		for (int i = 0; i < valuesArray.length; i++) {
-			if (valuesArray[i]) progress += mersenneCalculate(i);
-		}
-		
-		return progress;
+		return bitProgress;
 	}
-	
-	private boolean isMersenneNumber(int number, int max) {
-		for (int i = 0; ; i++) {
-			if (number == mersenneCalculate(i)) return true;
-			if (i >= max) return false;
-		}
-	}
-	
-	private int mersenneCalculate(int power) {
-		if (power == 0) return 1;
-		else return (int) Math.pow(2, (power)) - 1;
-	}
-
 }
