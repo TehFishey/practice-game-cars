@@ -3,8 +3,9 @@ package game.fish.cars;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 
-import game.fish.cars.achievements.Property;
+import game.fish.cars.achievements.AchievementProperty;
 import game.fish.cars.achievements.Achievement;
+import game.fish.cars.achievements.AchievementCondition;
 
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -12,6 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.Array;
+
+import static game.fish.cars.Constants.DEFAULT_ZOOM;
 
 import static game.fish.cars.Constants.PATH_ACHIEVEMENTS;
 import static game.fish.cars.Constants.PATH_PROPERTIES;
@@ -36,20 +39,24 @@ import static game.fish.cars.KeyBindings.KEY_MENU;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 
 public class Achievements {
 
-	private HashMap<String, Achievement> achievements;
-	private HashMap<String, Property> properties;
+	private HashSet<Achievement> achievements;
+	private HashMap<String, AchievementProperty> properties;
 	private Preferences achievementsFile;
 	private Preferences propertiesFile;
+	private CarsGame parent;
 	
 	private Map<String, ?> achievementsFileIndex;
 	private Map<String, ?> propertiesFileIndex;
 	
-	public Achievements() {
+	public Achievements(CarsGame parent) {
+		parent = parent;
+		
 		achievementsFile = Gdx.app.getPreferences(PATH_ACHIEVEMENTS);
 		propertiesFile = Gdx.app.getPreferences(PATH_PROPERTIES);
 		achievementsFileIndex = achievementsFile.get();
@@ -59,16 +66,66 @@ public class Achievements {
 		achievements = generateDefaultAchievements();
 	}
 	
-	private HashMap<String, Property> generateDefaultProperties() {
-		HashMap<String, Property> newProperties = new HashMap<String, Property>();
+	private HashMap<String, AchievementProperty> generateDefaultProperties() {
+		HashMap<String, AchievementProperty> newProperties = new HashMap<String, AchievementProperty>();
 		
-		newProperties.put("carType", new Property())
+		newProperties.put("carType", new AchievementProperty(0, "carType"));
+		newProperties.put("mapChoice", new AchievementProperty(0, "mapChoice"));
+		newProperties.put("musicPlaying", new AchievementProperty((parent.getSettings().getMusicEnabled()) ? 1 : 0, "musicPlaying"));
+		newProperties.put("musicVolume", new AchievementProperty((int) parent.getSettings().getMusicVolume()*10, "musicVolume"));
+		newProperties.put("playerSpeed", new AchievementProperty(0, "playerSpeed"));
+		newProperties.put("cameraZoom", new AchievementProperty((int) DEFAULT_ZOOM, "cameraZoom"));
+		newProperties.put("keyMapped-" + KEY_DRIVE, new AchievementProperty(parent.getKeyBindings().getKeyBinding(KEY_DRIVE),  "keyMapped-" + KEY_DRIVE));
+		newProperties.put("keyMapped-" + KEY_REVERSE, new AchievementProperty(parent.getKeyBindings().getKeyBinding(KEY_REVERSE), "keyMapped-" + KEY_REVERSE));
+		newProperties.put("keyMapped-" + KEY_LEFT, new AchievementProperty(parent.getKeyBindings().getKeyBinding(KEY_LEFT), "keyMapped-" + KEY_LEFT));
+		newProperties.put("keyMapped-" + KEY_RIGHT, new AchievementProperty(parent.getKeyBindings().getKeyBinding(KEY_RIGHT), "keyMapped-" + KEY_RIGHT));
+		newProperties.put("keyMapped-" + KEY_BRAKE, new AchievementProperty(parent.getKeyBindings().getKeyBinding(KEY_BRAKE), "keyMapped-" + KEY_BRAKE));
+		newProperties.put("keyMapped-" + KEY_ZOOMIN, new AchievementProperty(parent.getKeyBindings().getKeyBinding(KEY_ZOOMIN), "keyMapped-" + KEY_ZOOMIN));
+		newProperties.put("keyMapped-" + KEY_ZOOMOUT, new AchievementProperty(parent.getKeyBindings().getKeyBinding(KEY_ZOOMOUT), "keyMapped-" + KEY_ZOOMOUT));
+		newProperties.put("keyMapped-" + KEY_MENU, new AchievementProperty(parent.getKeyBindings().getKeyBinding(KEY_MENU), "keyMapped-" + KEY_MENU));
 		
 		return newProperties;
 	}
 	
-	private HashMap<String, Achievement> generateDefaultAchievements() {
-		HashMap<String, Achievement> newAchievements = new HashMap<String, Achievement>();
+	private HashSet<Achievement> generateDefaultAchievements() {
+		HashSet<Achievement> newAchievements = new HashSet<Achievement>();
+		
+		newAchievements.add(new Achievement("Not a Classic", "Muted the game's music.", 
+				new AchievementCondition(properties.get("musicPlaying"), "==", 0)
+				));
+		newAchievements.add(new Achievement("A Classical Piece", "Set the game music to maximum volume.", 
+				new AchievementCondition(properties.get("musicVolume"), "==", 10)
+				));
+		newAchievements.add(new Achievement("A Decent Clip", "Drove any vehicle at over 50kpH.", 
+				new AchievementCondition(properties.get("playerSpeed"), ">=", 50)
+				));
+		newAchievements.add(new Achievement("Feeling Wind in my Hair", "Drove any vehicle at over 100kpH.", 
+				new AchievementCondition(properties.get("playerSpeed"), ">=", 100)
+				));
+		newAchievements.add(new Achievement("Unsafe Velocities", "Drove any vehicle at over 150kpH.", 
+				new AchievementCondition(properties.get("playerSpeed"), ">=", 150)
+				));
+		newAchievements.add(new Achievement("Road Runner", "Drove any vehicle at over 150kpH.", 
+				new AchievementCondition(properties.get("playerSpeed"), ">=", 200)
+				));
+		newAchievements.add(new Achievement("Extreme CloseUp", "Zoomed the camera in as close as possible.", 
+				new AchievementCondition(properties.get("cameraZoom"), "<=", 3)
+				));
+		newAchievements.add(new Achievement("Sattelite Imagery", "Zoomed the camera out as far as possible.", 
+				new AchievementCondition(properties.get("cameraZoom"), ">=", 199)
+				));
+		newAchievements.add(new Achievement("Commuter Vehicle", "Drove a front-wheel drive car", 
+				new AchievementCondition(properties.get("carType"), "==", CAR_FWDCAR)
+				));
+		newAchievements.add(new Achievement("They See Me Rollin", "Drove an all-wheel drive car.", 
+				new AchievementCondition(properties.get("carType"), "==", CAR_AWDCAR)
+				));
+		newAchievements.add(new Achievement("Corley Motors", "Drove a motorcycle.", 
+				new AchievementCondition(properties.get("carType"), "==", CAR_MOTORCYCLE)
+				));
+		newAchievements.add(new Achievement("Not a Testla", "Drove a hover car.", 
+				new AchievementCondition(properties.get("carType"), "==", CAR_HOVERCAR)
+				));
 		
 		
 		return newAchievements;

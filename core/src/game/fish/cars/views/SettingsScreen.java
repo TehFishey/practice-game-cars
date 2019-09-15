@@ -43,7 +43,7 @@ public class SettingsScreen extends InterfaceScreen {
     			float newVolume = musicVolumeSlider.getValue();
     			parent.getSettings().setMusicVolume(newVolume); 
     			parent.getMusic().setVolume(newVolume);
-    			achievementPCS.firePropertyChange("musicVolume",null,newVolume);
+    			achievementPCS.firePropertyChange("musicVolume",null,(int)newVolume*10);
     			return false;
     		}
     	};
@@ -53,11 +53,11 @@ public class SettingsScreen extends InterfaceScreen {
     			parent.getSettings().setMusicEnabled(musicEnableCheckbox.isChecked());
     			if (musicEnableCheckbox.isChecked()) {
     				parent.getMusic().play();
-    				achievementPCS.firePropertyChange("musicPlaying", null, true);
+    				achievementPCS.firePropertyChange("musicPlaying", null, 1);
     			}
     			else {
     				parent.getMusic().stop();
-    				achievementPCS.firePropertyChange("musicPlaying", null, false);
+    				achievementPCS.firePropertyChange("musicPlaying", null, 0);
     			}
     			return false;
     		}

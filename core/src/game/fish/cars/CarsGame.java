@@ -39,7 +39,7 @@ public class CarsGame extends Game {
 	public void create() {
 		settings = new Settings();
 		keyBindings = new KeyBindings();
-		achievements = new Achievements();
+		achievements = new Achievements(this);
 		achievementListener = new AchievementListener(achievements);
 		
 		music = Gdx.audio.newMusic(Gdx.files.internal(PATH_MUSIC));
