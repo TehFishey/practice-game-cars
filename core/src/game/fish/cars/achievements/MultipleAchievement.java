@@ -25,14 +25,12 @@ public class MultipleAchievement extends Achievement {
 	}
 	
 	public void addProgress(boolean[] updateArray) {
-		if (isCompleted()) return;
-		
 		values = updateArray;
 		progress = writeProgress(values);
 	}
 	
 	public void conditionalUpdate(Object newValue) {
-		addProgress(multiCondition(newValue));
+		if (!isCompleted()) addProgress(multiCondition(newValue));
 	}
 	
 	protected boolean[] multiCondition(Object newValue) {

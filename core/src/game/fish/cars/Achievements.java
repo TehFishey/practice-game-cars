@@ -33,14 +33,14 @@ import static game.fish.cars.KeyBindings.KEY_ZOOMIN;
 import static game.fish.cars.KeyBindings.KEY_ZOOMOUT;
 import static game.fish.cars.KeyBindings.KEY_MENU;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
 public class Achievements {
 
-	public HashMap<String, Achievement>currentAchievements;
+	private LinkedHashMap<String, Achievement>currentAchievements;
 	private Preferences achievementsFile;
 	private Map<String, ?> achievementsFileIndex;
 	private HashMap<String, Integer> currentProgress;
@@ -68,13 +68,13 @@ public class Achievements {
 		if (update) saveAchievementProgress();
 	}
 	
-	public HashMap<String, Achievement> getAchievements() {
+	public LinkedHashMap<String, Achievement> getAchievements() {
 		return currentAchievements;
 	}
 	
-	private HashMap<String, Achievement> generateAchievementDefaults() {
+	private LinkedHashMap<String, Achievement> generateAchievementDefaults() {
 		
-		HashMap<String, Achievement> newMap = new HashMap<String, Achievement>();
+		LinkedHashMap<String, Achievement> newMap = new LinkedHashMap<String, Achievement>();
 		newMap.put("musicMuted", new BooleanAchievement("Not a Classic", "Muted the game's music.", "musicPlaying") 
 		{
 			@Override
@@ -189,6 +189,53 @@ public class Achievements {
 				case KEY_RIGHT: 
 					if (bindKey == Keys.RIGHT) update[3] = true;
 					else update[3] = false;
+					break;
+				}
+				return update;
+			}
+		});
+		newMap.put("allKeysMapped", new MultipleAchievement("Custom Control Scheme", "Re-bind all keys to non-defaults.", "keyMapped", 8)
+		{
+			@Override
+			protected boolean[] multiCondition(Object obj) {
+				boolean[] update = values;
+				
+				Array bindingInfo = (Array) obj;
+				String bindCommand = (String) bindingInfo.get(0);
+				int bindKey = (int) bindingInfo.get(1);
+				
+				switch (bindCommand){
+				case KEY_DRIVE: 
+					if (bindKey != Keys.W) update[0] = true;
+					else update[0] = false;
+					break;
+				case KEY_REVERSE: 
+					if (bindKey != Keys.S) update[1] = true;
+					else update[1] = false;
+					break;
+				case KEY_LEFT: 
+					if (bindKey != Keys.A) update[2] = true;
+					else update[2] = false;
+					break;
+				case KEY_RIGHT: 
+					if (bindKey != Keys.D) update[3] = true;
+					else update[3] = false;
+					break;
+				case KEY_BRAKE: 
+					if (bindKey != Keys.SPACE) update[4] = true;
+					else update[4] = false;
+					break;
+				case KEY_ZOOMIN: 
+					if (bindKey != Keys.EQUALS) update[5] = true;
+					else update[5] = false;
+					break;
+				case KEY_ZOOMOUT: 
+					if (bindKey != Keys.MINUS) update[6] = true;
+					else update[6] = false;
+					break;
+				case KEY_MENU: 
+					if (bindKey != Keys.ESCAPE) update[7] = true;
+					else update[7] = false;
 					break;
 				}
 				return update;

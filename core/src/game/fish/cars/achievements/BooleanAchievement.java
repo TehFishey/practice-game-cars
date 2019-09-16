@@ -20,6 +20,8 @@ public class BooleanAchievement extends Achievement {
 	}
 	
 	public void conditionalUpdate(Object newValue) {
-		if (condition(newValue)) addProgress(true);
+		if (!isCompleted()) {
+			if (condition(newValue)) addProgress(true);
+		}
 	}
 }
