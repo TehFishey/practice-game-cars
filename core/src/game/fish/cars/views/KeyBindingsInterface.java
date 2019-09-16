@@ -30,7 +30,7 @@ import static game.fish.cars.KeyBindings.KEY_ZOOMIN;
 import static game.fish.cars.KeyBindings.KEY_ZOOMOUT;
 import static game.fish.cars.KeyBindings.KEY_MENU;
 
-public class KeyBindingsScreen extends InterfaceScreen {
+public class KeyBindingsInterface extends InterfaceScreen {
 	
 	private final KeyBindings keyBindings;
 	private final KeyBindingsProcessor keyBindingsProcessor;
@@ -66,7 +66,7 @@ public class KeyBindingsScreen extends InterfaceScreen {
 	private final TextButton menuKeyButton;
 	private final TextButton backButton;
 	
-	public KeyBindingsScreen(final CarsGame parent) {
+	public KeyBindingsInterface(final CarsGame parent) {
 		super(parent);	
 		keyBindings = this.parent.getKeyBindings();
 		keyBindingsProcessor = new KeyBindingsProcessor();

@@ -4,8 +4,8 @@ public abstract class Achievement {
 	private String name;
 	private String description;
 	private String triggerPropertyName;
+	protected boolean completed;
 	protected int progress;
-	protected int progressCap;
 	
 	public Achievement(String name, String description, String triggerPropertyName) {
 		this.name = name;
@@ -25,26 +25,36 @@ public abstract class Achievement {
 		return this.triggerPropertyName;
 	}
 	
-	public boolean isCompleted() {
-		return false;
-	}
-	
 	public int getProgress() {
 		return progress;
 	}
 	
-	public void setProgress(int progress) {
-		this.progress = progress;
+	public boolean getCompleted() {
+		return completed;
 	}
 	
-	public void addProgress(Object newValue) {	}
+	public void loadProgress(int progress) {
+		this.progress = progress;
+		if (checkCompleted()) completed = true;
+	}
 	
-	public void conditionalUpdate(Object newValue) {
+	public void update(Object newValue) {
 		if (condition(newValue)) addProgress(newValue);
 	}
 	
+	protected void addProgress(Object newValue) {	}
+	
 	protected boolean condition(Object newValue) {
 		return false;
+	}
+	
+	protected boolean checkCompleted() {
+		return true;
+	}
+	
+	protected void setCompleted() {
+		completed = true;
+		
 	}
 	
 }

@@ -33,6 +33,7 @@ import static game.fish.cars.KeyBindings.KEY_ZOOMIN;
 import static game.fish.cars.KeyBindings.KEY_ZOOMOUT;
 import static game.fish.cars.KeyBindings.KEY_MENU;
 
+import java.beans.PropertyChangeSupport;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -40,27 +41,29 @@ import java.util.Map.Entry;
 
 public class Achievements {
 
+	private CarsGame parent;
 	private LinkedHashMap<String, Achievement>currentAchievements;
 	private Preferences achievementsFile;
 	private Map<String, ?> achievementsFileIndex;
 	private HashMap<String, Integer> currentProgress;
 	
-	public Achievements() {
+	public Achievements(CarsGame parent) {
+		this.parent = parent;
 		achievementsFile = Gdx.app.getPreferences(PATH_ACHIEVEMENTS);
 		achievementsFileIndex = achievementsFile.get();
 		currentAchievements = generateAchievementDefaults();
 		currentProgress = new HashMap<String, Integer>();
+		
 		loadAchievementProgress();
 		
 	}
 	
 	public void takePropertyChange(String triggerPropertyName, Object newValue) {
-		
 		boolean update = false;
 		for (Achievement achievementValue : currentAchievements.values()) {
-			
-			if (achievementValue.getTriggerProperty() == triggerPropertyName) {
-				achievementValue.conditionalUpdate(newValue);
+			if (achievementValue.getTriggerProperty() == triggerPropertyName && (!achievementValue.getCompleted())) {
+				achievementValue.update(newValue);
+				if (achievementValue.getCompleted()) parent.displayAchievement(achievementValue);
 				update = true;
 			}
 		}
@@ -254,7 +257,7 @@ public class Achievements {
 				if (achievementEntry.getKey().equals(key)) {
 					
 					Achievement achievementValue = (Achievement) achievementEntry.getValue();
-					achievementValue.setProgress(progress);
+					achievementValue.loadProgress(progress);
 				}
 			}
 		}	

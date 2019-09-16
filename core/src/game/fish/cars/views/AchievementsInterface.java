@@ -19,7 +19,7 @@ import game.fish.cars.Achievements;
 import game.fish.cars.CarsGame;
 import game.fish.cars.achievements.Achievement;
 
-public class AchievementsScreen extends InterfaceScreen {
+public class AchievementsInterface extends InterfaceScreen {
 	
 	Achievements achievements;
 	LinkedHashMap<String, Achievement> achievementHashMap;
@@ -30,7 +30,7 @@ public class AchievementsScreen extends InterfaceScreen {
 	TextButton backButton;
 	
 	
-	public AchievementsScreen(CarsGame parent) {
+	public AchievementsInterface(CarsGame parent) {
 		super(parent);
 		achievements = parent.getAchievements();
 		achievementHashMap = achievements.getAchievements();
@@ -62,13 +62,12 @@ public class AchievementsScreen extends InterfaceScreen {
 		table.add(backButton).center();
 
 		internalTable.defaults().left();
-		//internalTable.setFillParent(true);
 		for (Entry achievementEntry : achievementHashMap.entrySet()) {
 			
 			Achievement entry = (Achievement) achievementEntry.getValue();
 			String achievementNameText = (String) entry.getName();
 			String achievementDescText = (String) entry.getDesc();
-			boolean achievementComplete = (boolean) entry.isCompleted();
+			boolean achievementComplete = (boolean) entry.getCompleted();
 			
 			createAchievementCell(internalTable, achievementNameText, achievementDescText, achievementComplete);
 		}
@@ -81,6 +80,8 @@ public class AchievementsScreen extends InterfaceScreen {
 	@Override
 	public void dispose() {
 		stage.dispose();
+		completeImageTexture.dispose();
+		incompleteImageTexture.dispose();
 	}
 	
 	private Table createAchievementCell(Table table, String nameText, String labelText, boolean complete) {

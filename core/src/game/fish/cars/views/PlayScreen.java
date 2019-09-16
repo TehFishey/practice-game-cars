@@ -10,12 +10,15 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import java.beans.PropertyChangeSupport;
 
 import game.fish.cars.CarsGame;
 import game.fish.cars.KeyBindings;
+import game.fish.cars.achievements.Achievement;
 import game.fish.cars.commands.AccelerateBackwardCommand;
 import game.fish.cars.commands.AccelerateForwardCommand;
 import game.fish.cars.commands.AccelerateNoneCommand;
@@ -72,6 +75,8 @@ public class PlayScreen implements Screen {
 	private final Stage hud;
 	private final Skin hudSkin;
 	private Label speedDisplay;
+	
+	private final Stage overlayStage;
 
 	private final AccelerateForwardCommand driveCommand = new AccelerateForwardCommand();
 	private final AccelerateBackwardCommand reverseCommand = new AccelerateBackwardCommand();
@@ -103,6 +108,8 @@ public class PlayScreen implements Screen {
 		speedDisplay.setPosition(0, 460);
 		hud.addActor(speedDisplay);
 		
+		overlayStage = parent.getAchievementOverlay().getStage();
+		
 		switch (carChoice) {
 		case CAR_FWDCAR:
 			player = new CarVehicle(world, loader, FRONT_WHEEL_DRIVE);
@@ -123,13 +130,9 @@ public class PlayScreen implements Screen {
 		camera.zoom = DEFAULT_ZOOM;
 	}
 
-	@Override
 	public void show() {
-		// TODO Auto-generated method stub 
-
 	}
 
-	@Override
 	public void render(float delta) {
 		// screen loop
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -140,6 +143,7 @@ public class PlayScreen implements Screen {
 		updateAchievements();
 		drawWorld();
 		drawHud();
+		overlayStage.draw();
 	}
 		
 	
@@ -187,36 +191,59 @@ public class PlayScreen implements Screen {
 		hud.draw();
 	}
 
-	@Override
 	public void resize(int width, int height) {
 		viewport.update(width, height);
+		hud.getViewport().update(width, height, true);
+		overlayStage.getViewport().update(width, height, true);
 
 	}
 
-	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void hide() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void dispose() {
 		batch.dispose();
 		world.dispose();
 		hud.dispose();
 		b2debug.dispose();
+	}
+	
+	public void displayAchievement(Achievement achievement) {
+		final Window achievementWindow = new Window("", hudSkin);
+		final Timer displayTimer =  new Timer();
+		final Label achievementSplat = new Label("Achievement Get!", hudSkin);
+		final Label achievementInfo = new Label(achievement.getName(), hudSkin);
+		
+		achievementWindow.setPosition(640, 0);
+		achievementWindow.setSize(200, 80);
+		achievementWindow.defaults().left();
+		achievementWindow.add(achievementSplat);
+		achievementWindow.row();
+		achievementWindow.add(achievementInfo);
+		
+		displayTimer.scheduleTask(new Timer.Task() {
+			@Override
+		     public void run() {
+				achievementWindow.remove();
+			}
+		}, 4);
+			
+		hud.addActor(achievementWindow);
+	}
+
+	@Override
+	public void pause() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void resume() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void hide() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

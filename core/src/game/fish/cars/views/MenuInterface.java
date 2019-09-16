@@ -11,7 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import game.fish.cars.CarsGame;
@@ -29,7 +31,7 @@ import static game.fish.cars.Constants.MAP_MAP1;
 import static game.fish.cars.Constants.MAP_MAP2;
 import static game.fish.cars.Constants.MAP_MAP3;
 
-public class MenuScreen extends InterfaceScreen {
+public class MenuInterface extends InterfaceScreen {
 	
 	private final TextButton newGameButton;
 	private final TextButton resumeButton;
@@ -37,7 +39,7 @@ public class MenuScreen extends InterfaceScreen {
 	private final TextButton achievementsButton;
 	private final TextButton exitButton;
 	
-	public MenuScreen(final CarsGame parent) {
+	public MenuInterface(final CarsGame parent) {
 		super(parent);
 		
 		ChangeListener newGameListener = new ChangeListener() {

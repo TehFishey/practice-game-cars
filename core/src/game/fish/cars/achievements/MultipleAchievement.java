@@ -14,27 +14,28 @@ public class MultipleAchievement extends Achievement {
 		this.progress = 0;
 	}
 	
-	public boolean isCompleted() {
-		for (boolean value : values) if (!value) return false;
-		return true;
-	}
-	
-	public void setProgress(int progress) {
+	public void loadProgress(int progress) {
 		this.progress = progress;
 		this.values = readProgress(progress, variableCount);
 	}
 	
-	public void addProgress(boolean[] updateArray) {
-		values = updateArray;
-		progress = writeProgress(values);
+	public void update(Object newValue) {
+		if (!completed) addProgress(multiCondition(newValue));
 	}
 	
-	public void conditionalUpdate(Object newValue) {
-		if (!isCompleted()) addProgress(multiCondition(newValue));
+	protected void addProgress(boolean[] updateArray) {
+		values = updateArray;
+		progress = writeProgress(values);
+		if (checkCompleted()) setCompleted();
 	}
 	
 	protected boolean[] multiCondition(Object newValue) {
 		return new boolean[0];
+	}
+	
+	protected boolean checkCompleted() {
+		for (boolean value : values) if (!value) return false;
+		return true;
 	}
 	
 	private boolean[] readProgress(int bitProgress, int arrayLen) {

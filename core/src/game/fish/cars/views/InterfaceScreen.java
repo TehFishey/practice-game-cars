@@ -7,23 +7,29 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import game.fish.cars.CarsGame;
+import game.fish.cars.achievements.Achievement;
 
 public abstract class InterfaceScreen implements Screen {
 
 	protected final CarsGame parent;
 	protected final Stage stage;
+	protected final Stage overlayStage;
 	protected final Skin skin;
 	protected final PropertyChangeSupport achievementPCS;
 	
 	public InterfaceScreen(CarsGame parent) {
 		this.parent = parent;
 		stage = new Stage(new ScreenViewport());
+		overlayStage = parent.getAchievementOverlay().getStage();
 		skin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
 		achievementPCS = new PropertyChangeSupport(this);
 		achievementPCS.addPropertyChangeListener(parent.getAchievementListener());
@@ -41,11 +47,13 @@ public abstract class InterfaceScreen implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 		stage.draw();
+		overlayStage.draw();
 	}
 
 	@Override
 	public void resize(int width, int height) {
 		stage.getViewport().update(width, height, true);
+		overlayStage.getViewport().update(width, height, true);
 	}
 
 	@Override
@@ -89,5 +97,4 @@ public abstract class InterfaceScreen implements Screen {
 		button.addListener(listener);
 		return button;
 	}
-
 }

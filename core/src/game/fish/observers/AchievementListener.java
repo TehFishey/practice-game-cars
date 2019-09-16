@@ -3,27 +3,26 @@ package game.fish.observers;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import game.fish.cars.Achievements;
+import com.badlogic.gdx.Screen;
 
-import static game.fish.cars.Constants.CAR_FWDCAR;
-import static game.fish.cars.Constants.CAR_AWDCAR;
-import static game.fish.cars.Constants.CAR_MOTORCYCLE;
-import static game.fish.cars.Constants.CAR_HOVERCAR;
-import static game.fish.cars.Constants.MAP_MAP1;
-import static game.fish.cars.Constants.MAP_MAP2;
-import static game.fish.cars.Constants.MAP_MAP3;
+import game.fish.cars.Achievements;
 
 public class AchievementListener implements PropertyChangeListener {
 	Achievements achievements;
+	Screen activeScreen;
 	
 	public AchievementListener(Achievements achievements) {
 		this.achievements = achievements;
 	}
 	
+	public void trackScreen(Screen screen) {
+		activeScreen = screen;
+	}
+	
     public void propertyChange(PropertyChangeEvent event) {
         String propertyName = event.getPropertyName();
         Object propertyValue = event.getNewValue();
-        
+      
         achievements.takePropertyChange(propertyName,propertyValue);
     }
 }

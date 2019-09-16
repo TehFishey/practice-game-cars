@@ -4,24 +4,25 @@ public class BooleanAchievement extends Achievement {
 	
 	public BooleanAchievement(String name, String description, String triggerPropertyName) {
 		super(name, description, triggerPropertyName);
-		this.progressCap = 1;
 		this.progress = 0;
 	}
 	
-	public boolean isCompleted() {
-		return (progress == 1);
-	}
-	
-	public void addProgress(boolean complete) {
-		if (isCompleted()) return;
-		
-		if (complete) progress = 1;
-		else progress = 0;
-	}
-	
-	public void conditionalUpdate(Object newValue) {
-		if (!isCompleted()) {
+	public void update(Object newValue) {
+		if (!completed) {
 			if (condition(newValue)) addProgress(true);
 		}
+	}
+	
+	protected void addProgress(boolean update) {
+		if (update) {
+			this.progress = 1;
+			this.setCompleted();
+		}
+		
+		else this.progress = 0;
+	}
+	
+	protected boolean checkCompleted() {
+		return (progress == 1);
 	}
 }

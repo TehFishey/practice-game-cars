@@ -19,7 +19,7 @@ import game.fish.cars.CarsGame;
 import static game.fish.cars.Constants.MENU_SCREEN;
 import static game.fish.cars.Constants.KEYBINDINGS_SCREEN;
 
-public class SettingsScreen extends InterfaceScreen {
+public class SettingsInterface extends InterfaceScreen {
 	
 	private final Label titleLabel;
 	private final Label musicVolumeLabel;
@@ -30,7 +30,7 @@ public class SettingsScreen extends InterfaceScreen {
 	private final TextButton backButton;
 	private final TextButton keyBindingsButton;
 	
-	public SettingsScreen(final CarsGame parent) {
+	public SettingsInterface(final CarsGame parent) {
 		super(parent);
 		
 		titleLabel = new Label ("Settings", skin);
