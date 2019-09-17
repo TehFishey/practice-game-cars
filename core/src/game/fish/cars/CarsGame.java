@@ -2,11 +2,7 @@ package game.fish.cars;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.Audio;
 
 import game.fish.cars.achievements.Achievement;
 import game.fish.cars.views.AchievementsInterface;
@@ -207,5 +203,10 @@ public class CarsGame extends Game {
 		super.dispose();
 		music.dispose();
 		achievementOverlay.dispose();
+		if (playScreen != null) playScreen.dispose();
+		if (menuScreen != null) menuScreen.dispose();
+		if (settingsScreen != null) settingsScreen.dispose();
+		if (keyBindingsScreen != null) keyBindingsScreen.dispose();
+		if (achievementsScreen != null) achievementsScreen.dispose();
 	}
 }

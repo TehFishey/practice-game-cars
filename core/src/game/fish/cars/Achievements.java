@@ -5,13 +5,10 @@ import com.badlogic.gdx.Preferences;
 
 import game.fish.cars.achievements.Achievement;
 import game.fish.cars.achievements.BooleanAchievement;
+import game.fish.cars.achievements.IncrementalAchievement;
 import game.fish.cars.achievements.MultipleAchievement;
 
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.Array;
 
 import static game.fish.cars.Constants.PATH_ACHIEVEMENTS;
@@ -33,7 +30,6 @@ import static game.fish.cars.KeyBindings.KEY_ZOOMIN;
 import static game.fish.cars.KeyBindings.KEY_ZOOMOUT;
 import static game.fish.cars.KeyBindings.KEY_MENU;
 
-import java.beans.PropertyChangeSupport;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -58,6 +54,10 @@ public class Achievements {
 		
 	}
 	
+	public LinkedHashMap<String, Achievement> getAchievements() {
+		return currentAchievements;
+	}
+	
 	public void takePropertyChange(String triggerPropertyName, Object newValue) {
 		boolean update = false;
 		for (Achievement achievementValue : currentAchievements.values()) {
@@ -71,13 +71,17 @@ public class Achievements {
 		if (update) saveAchievementProgress();
 	}
 	
-	public LinkedHashMap<String, Achievement> getAchievements() {
-		return currentAchievements;
-	}
-	
 	private LinkedHashMap<String, Achievement> generateAchievementDefaults() {
 		
 		LinkedHashMap<String, Achievement> newMap = new LinkedHashMap<String, Achievement>();
+		newMap.put("musicVolumeMaxed", new BooleanAchievement("It's a Classic", "Set the game music to maximum volume.", "musicVolume") 
+		{
+			@Override
+			protected boolean condition(Object newValue) {
+				float musicVolume = (float) newValue;
+				return (musicVolume == 1);
+			}
+		});
 		newMap.put("musicMuted", new BooleanAchievement("Not a Classic", "Muted the game's music.", "musicPlaying") 
 		{
 			@Override
@@ -86,15 +90,7 @@ public class Achievements {
 				return !musicPlaying;
 			}
     	});
-		newMap.put("musicVolumeMaxed", new BooleanAchievement("That's my Jam!", "Set the game music to maximum volume.", "musicVolume") 
-		{
-			@Override
-			protected boolean condition(Object newValue) {
-				float musicVolume = (float) newValue;
-				return (musicVolume == 1);
-			}
-		});
-		newMap.put("playerDrivingFast", new BooleanAchievement("Speeding", "Drive your vehicle at high speed.", "playerSpeed") 
+		newMap.put("playerDrivingFast", new BooleanAchievement("Speeder", "Drive your vehicle at high speed.", "playerSpeed") 
 		{
 			@Override
 			protected boolean condition(Object newValue) {
@@ -118,7 +114,7 @@ public class Achievements {
 				return (cameraZoom >= 50f);
 			}
 		});
-		newMap.put("fwdCarDriven", new BooleanAchievement("Boring and Reliable", "Start a game driving a front-wheel drive car.", "carType") 
+		newMap.put("fwdCarDriven", new BooleanAchievement("Commuter", "Start a game driving a front-wheel drive car.", "carType") 
 		{
 			@Override
 			protected boolean condition(Object newValue) {
@@ -126,7 +122,7 @@ public class Achievements {
 				return (carType == CAR_FWDCAR);
 			}
 		});
-		newMap.put("awdCarDriven", new BooleanAchievement("Like a Rock", "Start a game driving an all-wheel drive car.", "carType") 
+		newMap.put("awdCarDriven", new BooleanAchievement("Offroader", "Start a game driving an all-wheel drive car.", "carType") 
 		{
 			@Override
 			protected boolean condition(Object newValue) {
@@ -134,7 +130,7 @@ public class Achievements {
 				return (carType == CAR_AWDCAR);
 			}
 		});
-		newMap.put("motorcycleDriven", new BooleanAchievement("Look at My Bike", "Start a game driving a motorcycle.", "carType") 
+		newMap.put("motorcycleDriven", new BooleanAchievement("Biker", "Start a game driving a motorcycle.", "carType") 
 		{
 			@Override
 			protected boolean condition(Object newValue) {
@@ -158,7 +154,7 @@ public class Achievements {
 				return (carType == MAP_MAP1);
 			}
 		});
-		newMap.put("trackMapPlayed", new BooleanAchievement("Floor it!", "Start a game on the racetrack map", "mapChoice") 
+		newMap.put("trackMapPlayed", new BooleanAchievement("Jockey", "Start a game on the racetrack map", "mapChoice") 
 		{
 			@Override
 			protected boolean condition(Object newValue) {
@@ -166,10 +162,10 @@ public class Achievements {
 				return (carType == MAP_MAP2);
 		}
 		});
-		newMap.put("arrowKeysMapped", new MultipleAchievement("I Prefer Arrows", "Re-bind movement keys to arrow keys", "keyMapped", 4)
+		newMap.put("arrowKeysMapped", new MultipleAchievement("Arrows are Superior", "Re-bind movement keys to arrow keys", "keyMapped", 4)
 		{
 			@Override
-			protected boolean[] multiCondition(Object obj) {
+			protected boolean[] multipleCondition(Object obj) {
 				boolean[] update = values;
 				
 				Array bindingInfo = (Array) obj;
@@ -200,7 +196,7 @@ public class Achievements {
 		newMap.put("allKeysMapped", new MultipleAchievement("Custom Control Scheme", "Re-bind all keys to non-defaults.", "keyMapped", 8)
 		{
 			@Override
-			protected boolean[] multiCondition(Object obj) {
+			protected boolean[] multipleCondition(Object obj) {
 				boolean[] update = values;
 				
 				Array bindingInfo = (Array) obj;
@@ -244,6 +240,13 @@ public class Achievements {
 				return update;
 			}
 		});
+		newMap.put("crashedOnce", new IncrementalAchievement("Fender Bender", "Crashed a vehicle.", "contactEvent", 1)
+		{
+			@Override
+			protected int incrementalCondition(Object newValue) {
+				return 1;
+		}
+		});
 		
 		return newMap;
 	}
@@ -253,10 +256,10 @@ public class Achievements {
 	
 			int progress = achievementsFile.getInteger(key);
 
-			for (Entry achievementEntry : currentAchievements.entrySet()) {
+			for (Entry<String, Achievement> achievementEntry : currentAchievements.entrySet()) {
 				if (achievementEntry.getKey().equals(key)) {
 					
-					Achievement achievementValue = (Achievement) achievementEntry.getValue();
+					Achievement achievementValue = achievementEntry.getValue();
 					achievementValue.loadProgress(progress);
 				}
 			}
@@ -264,10 +267,10 @@ public class Achievements {
 	}
 		
 	private void saveAchievementProgress() {
-		for (Entry achievementEntry : currentAchievements.entrySet()) {
+		for (Entry<String, Achievement> achievementEntry : currentAchievements.entrySet()) {
 			
-			String achievementKey = (String) achievementEntry.getKey();
-			Achievement achievementValue = (Achievement) achievementEntry.getValue();
+			String achievementKey = achievementEntry.getKey();
+			Achievement achievementValue = achievementEntry.getValue();
 			int progress = achievementValue.getProgress();
 
 			currentProgress.put(achievementKey, progress);

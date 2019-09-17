@@ -20,7 +20,7 @@ public class MultipleAchievement extends Achievement {
 	}
 	
 	public void update(Object newValue) {
-		if (!completed) addProgress(multiCondition(newValue));
+		if (!completed) addProgress(multipleCondition(newValue));
 	}
 	
 	protected void addProgress(boolean[] updateArray) {
@@ -29,7 +29,7 @@ public class MultipleAchievement extends Achievement {
 		if (checkCompleted()) setCompleted();
 	}
 	
-	protected boolean[] multiCondition(Object newValue) {
+	protected boolean[] multipleCondition(Object newValue) {
 		return new boolean[0];
 	}
 	

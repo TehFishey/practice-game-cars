@@ -45,7 +45,7 @@ public abstract class Achievement {
 	protected void addProgress(Object newValue) {	}
 	
 	protected boolean condition(Object newValue) {
-		return false;
+		return true;
 	}
 	
 	protected boolean checkCompleted() {

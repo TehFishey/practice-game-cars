@@ -22,6 +22,10 @@ public class BooleanAchievement extends Achievement {
 		else this.progress = 0;
 	}
 	
+	protected boolean condition(Object newValue) {
+		return true;
+	}
+	
 	protected boolean checkCompleted() {
 		return (progress == 1);
 	}

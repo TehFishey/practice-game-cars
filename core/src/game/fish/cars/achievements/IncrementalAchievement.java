@@ -11,7 +11,7 @@ public class IncrementalAchievement extends Achievement {
 	
 	public void update(Object newValue) {
 		if (!completed) {
-			if (condition(newValue)) addProgress(newValue);
+			addProgress(incrementalCondition(newValue));
 		}
 	}
 	
@@ -21,6 +21,10 @@ public class IncrementalAchievement extends Achievement {
 			this.setCompleted();
 		}
 		else this.progress += progress;
+	}
+	
+	protected int incrementalCondition(Object newValue) {
+		return 1;
 	}
 
 	protected boolean checkCompleted() {

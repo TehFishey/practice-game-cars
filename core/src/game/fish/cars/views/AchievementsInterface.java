@@ -62,12 +62,12 @@ public class AchievementsInterface extends InterfaceScreen {
 		table.add(backButton).center();
 
 		internalTable.defaults().left();
-		for (Entry achievementEntry : achievementHashMap.entrySet()) {
+		for (Entry<String, Achievement> achievementEntry : achievementHashMap.entrySet()) {
 			
-			Achievement entry = (Achievement) achievementEntry.getValue();
-			String achievementNameText = (String) entry.getName();
-			String achievementDescText = (String) entry.getDesc();
-			boolean achievementComplete = (boolean) entry.getCompleted();
+			Achievement entry = achievementEntry.getValue();
+			String achievementNameText = entry.getName();
+			String achievementDescText = entry.getDesc();
+			boolean achievementComplete = entry.getCompleted();
 			
 			createAchievementCell(internalTable, achievementNameText, achievementDescText, achievementComplete);
 		}
@@ -91,7 +91,7 @@ public class AchievementsInterface extends InterfaceScreen {
 		Table inline = new Table(); 
 		
 		if (!complete) {
-			achievementDescLabel.setText("");
+			achievementDescLabel.setText("Achievement Locked!");
 			achievementImage = new Image(incompleteImageTexture);
 		}
 		

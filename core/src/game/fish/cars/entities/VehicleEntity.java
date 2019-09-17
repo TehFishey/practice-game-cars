@@ -1,6 +1,5 @@
 package game.fish.cars.entities;
 
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 
 import game.fish.cars.tools.MapLoader;

@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -35,6 +37,7 @@ import game.fish.cars.entities.HoverVehicle;
 import game.fish.cars.entities.MotorcycleVehicle;
 import game.fish.cars.entities.VehicleEntity;
 import game.fish.cars.tools.MapLoader;
+import game.fish.observers.AchievementContactListener;
 
 import static game.fish.cars.Constants.GRAVITY;
 import static game.fish.cars.Constants.DEFAULT_ZOOM;
@@ -68,9 +71,11 @@ public class PlayScreen implements Screen {
 	private final Box2DDebugRenderer b2debug;
 	private final OrthographicCamera camera;
 	private final Viewport viewport;
-	private final VehicleEntity player;
 	private final MapLoader loader;
 	private final PropertyChangeSupport achievementPCS;
+	private final AchievementContactListener contactListener;
+	private final VehicleEntity player;
+	private final Fixture playerFixture;
 	
 	private final Stage hud;
 	private final Skin hudSkin;
@@ -127,6 +132,9 @@ public class PlayScreen implements Screen {
 			player = new CarVehicle(world, loader, FRONT_WHEEL_DRIVE);
 		}
 		
+		playerFixture = player.getBody().getFixtureList().first();
+		contactListener = new AchievementContactListener(parent, this, playerFixture);
+		world.setContactListener(contactListener);
 		camera.zoom = DEFAULT_ZOOM;
 	}
 
@@ -203,29 +211,6 @@ public class PlayScreen implements Screen {
 		world.dispose();
 		hud.dispose();
 		b2debug.dispose();
-	}
-	
-	public void displayAchievement(Achievement achievement) {
-		final Window achievementWindow = new Window("", hudSkin);
-		final Timer displayTimer =  new Timer();
-		final Label achievementSplat = new Label("Achievement Get!", hudSkin);
-		final Label achievementInfo = new Label(achievement.getName(), hudSkin);
-		
-		achievementWindow.setPosition(640, 0);
-		achievementWindow.setSize(200, 80);
-		achievementWindow.defaults().left();
-		achievementWindow.add(achievementSplat);
-		achievementWindow.row();
-		achievementWindow.add(achievementInfo);
-		
-		displayTimer.scheduleTask(new Timer.Task() {
-			@Override
-		     public void run() {
-				achievementWindow.remove();
-			}
-		}, 4);
-			
-		hud.addActor(achievementWindow);
 	}
 
 	@Override
