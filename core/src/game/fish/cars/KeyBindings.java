@@ -7,6 +7,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Preferences;
 
+import static game.fish.cars.Constants.PATH_KEYBINDINGS;
+
 public class KeyBindings {
 
 	public static final String KEY_DRIVE = "driveForward";
@@ -18,16 +20,14 @@ public class KeyBindings {
 	public static final String KEY_ZOOMOUT = "zoomOut";
 	public static final String KEY_MENU = "menu";
 	
-	private static final String KEYBINDINGS_FILE = "carsKeyBindings";
-	
 	public HashMap<String, Integer> keyBindings;
 	private Preferences bindingsFile;
-	private Map<String, ?> savedBindings;
+	private Map<String, ?> bindingsFileIndex;
 	
 	public KeyBindings() {
+		bindingsFile = Gdx.app.getPreferences(PATH_KEYBINDINGS);
+		bindingsFileIndex = bindingsFile.get();
 		keyBindings = new HashMap<String, Integer>();
-		bindingsFile = Gdx.app.getPreferences(KEYBINDINGS_FILE);
-		savedBindings = bindingsFile.get();
 		
 		loadKeyBindings();
 		saveKeyBindings();
@@ -37,24 +37,24 @@ public class KeyBindings {
 		return keyBindings.get(keyString);
 	}
 	
-	public void setKey(String keyString, int keyBinding) {
+	public void setKeyBinding(String keyString, int keyBinding) {
 		keyBindings.put(keyString,keyBinding);
 		saveKeyBindings();
 	}
 	
-	public boolean checkKeyBinding(String keyString) {
+	public boolean isKeyBindingPressed(String keyString) {
 		return Gdx.input.isKeyPressed(getKeyBinding(keyString));
 	}
 	
 	private void loadKeyBindings() {
-		handleBinding("driveForward", Keys.W);
-		handleBinding("driveBackward", Keys.S);
-		handleBinding("turnLeft", Keys.A);
-		handleBinding("turnRight", Keys.D);
-		handleBinding("brake", Keys.SPACE);
-		handleBinding("zoomIn", Keys.EQUALS);
-		handleBinding("zoomOut", Keys.MINUS);
-		handleBinding("menu", Keys.ESCAPE);
+		handleKeyBinding(KEY_DRIVE, Keys.W);
+		handleKeyBinding(KEY_REVERSE, Keys.S);
+		handleKeyBinding(KEY_LEFT, Keys.A);
+		handleKeyBinding(KEY_RIGHT, Keys.D);
+		handleKeyBinding(KEY_BRAKE, Keys.SPACE);
+		handleKeyBinding(KEY_ZOOMIN, Keys.EQUALS);
+		handleKeyBinding(KEY_ZOOMOUT, Keys.MINUS);
+		handleKeyBinding(KEY_MENU, Keys.ESCAPE);
 	}
 	
 	private void saveKeyBindings() {
@@ -62,11 +62,10 @@ public class KeyBindings {
 		bindingsFile.flush();
 	}
 	
-	private void handleBinding(String keyString, int defaultKey) {
-		if (savedBindings.containsKey(keyString)) {
+	private void handleKeyBinding(String keyString, int defaultKey) {
+		if (bindingsFileIndex.containsKey(keyString)) 
 			keyBindings.put(keyString, bindingsFile.getInteger(keyString));
-		}
-		else
+		else 
 			keyBindings.put(keyString, defaultKey);
 	}
 	

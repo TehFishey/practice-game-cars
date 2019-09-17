@@ -16,6 +16,11 @@ public class Constants {
 	public static final String PATH_MAP1 = "map1.tmx";
 	public static final String PATH_MAP2 = "map2.tmx";
 	public static final String PATH_MAP3 = "map3.tmx";
+	public static final String PATH_ACHIEVEMENT_FALSE = "ico-x.png";
+	public static final String PATH_ACHIEVEMENT_TRUE = "ico-check.png";
+	public static final String PATH_SETTINGS = "carsSettings";
+	public static final String PATH_KEYBINDINGS = "carsKeyBindings";
+	public static final String PATH_ACHIEVEMENTS = "carsAchievements";
 	
 	public static final int PLAY_SCREEN = 0;
 	public static final int MENU_SCREEN = 1;

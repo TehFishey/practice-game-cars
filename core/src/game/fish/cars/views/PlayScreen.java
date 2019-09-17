@@ -4,21 +4,23 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import java.beans.PropertyChangeSupport;
 
 import game.fish.cars.CarsGame;
 import game.fish.cars.KeyBindings;
+import game.fish.cars.achievements.Achievement;
 import game.fish.cars.commands.AccelerateBackwardCommand;
 import game.fish.cars.commands.AccelerateForwardCommand;
 import game.fish.cars.commands.AccelerateNoneCommand;
@@ -35,6 +37,7 @@ import game.fish.cars.entities.HoverVehicle;
 import game.fish.cars.entities.MotorcycleVehicle;
 import game.fish.cars.entities.VehicleEntity;
 import game.fish.cars.tools.MapLoader;
+import game.fish.observers.AchievementContactListener;
 
 import static game.fish.cars.Constants.GRAVITY;
 import static game.fish.cars.Constants.DEFAULT_ZOOM;
@@ -68,12 +71,17 @@ public class PlayScreen implements Screen {
 	private final Box2DDebugRenderer b2debug;
 	private final OrthographicCamera camera;
 	private final Viewport viewport;
-	private final VehicleEntity player;
 	private final MapLoader loader;
+	private final PropertyChangeSupport achievementPCS;
+	private final AchievementContactListener contactListener;
+	private final VehicleEntity player;
+	private final Fixture playerFixture;
 	
 	private final Stage hud;
 	private final Skin hudSkin;
 	private Label speedDisplay;
+	
+	private final Stage overlayStage;
 
 	private final AccelerateForwardCommand driveCommand = new AccelerateForwardCommand();
 	private final AccelerateBackwardCommand reverseCommand = new AccelerateBackwardCommand();
@@ -96,12 +104,16 @@ public class PlayScreen implements Screen {
 		camera = new OrthographicCamera();
 		viewport = new FitViewport(640 / PPM, 480 / PPM, camera);
 		loader = new MapLoader(world, mapChoice);
+		achievementPCS = new PropertyChangeSupport(this);
+		achievementPCS.addPropertyChangeListener(parent.getAchievementListener());
 		
 		hud = new Stage();
 		hudSkin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
 		speedDisplay = new Label("Speed: ", hudSkin);
 		speedDisplay.setPosition(0, 460);
 		hud.addActor(speedDisplay);
+		
+		overlayStage = parent.getAchievementOverlay().getStage();
 		
 		switch (carChoice) {
 		case CAR_FWDCAR:
@@ -120,16 +132,15 @@ public class PlayScreen implements Screen {
 			player = new CarVehicle(world, loader, FRONT_WHEEL_DRIVE);
 		}
 		
+		playerFixture = player.getBody().getFixtureList().first();
+		contactListener = new AchievementContactListener(parent, this, playerFixture);
+		world.setContactListener(contactListener);
 		camera.zoom = DEFAULT_ZOOM;
 	}
 
-	@Override
 	public void show() {
-		// TODO Auto-generated method stub 
-
 	}
 
-	@Override
 	public void render(float delta) {
 		// screen loop
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -137,27 +148,29 @@ public class PlayScreen implements Screen {
 		takeInput();
 		player.update();
 		update(delta);
+		updateAchievements();
 		drawWorld();
 		drawHud();
+		overlayStage.draw();
 	}
 		
 	
 	private void takeInput() {
-		if (keyBindings.checkKeyBinding(KEY_DRIVE)) driveCommand.execute(player);
-		else if (keyBindings.checkKeyBinding(KEY_REVERSE)) reverseCommand.execute(player);
+		if (keyBindings.isKeyBindingPressed(KEY_DRIVE)) driveCommand.execute(player);
+		else if (keyBindings.isKeyBindingPressed(KEY_REVERSE)) reverseCommand.execute(player);
 		else stopCommand.execute(player);
 		
-		if (keyBindings.checkKeyBinding(KEY_LEFT)) leftCommand.execute(player);
-		else if (keyBindings.checkKeyBinding(KEY_RIGHT)) rightCommand.execute(player);
+		if (keyBindings.isKeyBindingPressed(KEY_LEFT)) leftCommand.execute(player);
+		else if (keyBindings.isKeyBindingPressed(KEY_RIGHT)) rightCommand.execute(player);
 		else straightCommand.execute(player);
 		
-		if (keyBindings.checkKeyBinding(KEY_BRAKE)) brakeCommand.execute(player);
+		if (keyBindings.isKeyBindingPressed(KEY_BRAKE)) brakeCommand.execute(player);
 		else unbrakeCommand.execute(player);
 		
-		if (keyBindings.checkKeyBinding(KEY_MENU)) menuCommand.execute(parent);
+		if (keyBindings.isKeyBindingPressed(KEY_MENU)) menuCommand.execute(parent);
 		
-		if (keyBindings.checkKeyBinding(KEY_ZOOMIN)) zoomInCommand.execute(camera);
-		else if (keyBindings.checkKeyBinding(KEY_ZOOMOUT)) zoomOutCommand.execute(camera);
+		if (keyBindings.isKeyBindingPressed(KEY_ZOOMIN)) zoomInCommand.execute(camera);
+		else if (keyBindings.isKeyBindingPressed(KEY_ZOOMOUT)) zoomOutCommand.execute(camera);
 	}
 	
 	private void update(final float delta) {		
@@ -165,6 +178,11 @@ public class PlayScreen implements Screen {
 		camera.update();
 		
 		world.step(delta, 6, 2);
+	}
+	
+	private void updateAchievements() {
+		if (camera.zoom == 50f || camera.zoom == 2f) achievementPCS.firePropertyChange("cameraZoom",null,camera.zoom);
+		if (player.getAbsoluteSpeed() >= 100f) achievementPCS.firePropertyChange("playerSpeed",null,player.getAbsoluteSpeed());
 	}
 	
 	private void drawWorld() {
@@ -181,35 +199,36 @@ public class PlayScreen implements Screen {
 		hud.draw();
 	}
 
-	@Override
 	public void resize(int width, int height) {
 		viewport.update(width, height);
+		hud.getViewport().update(width, height, true);
+		overlayStage.getViewport().update(width, height, true);
 
+	}
+
+	public void dispose() {
+		batch.dispose();
+		world.dispose();
+		hud.dispose();
+		b2debug.dispose();
 	}
 
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
 	public void resume() {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void dispose() {
-		batch.dispose();
-		world.dispose();
-		b2debug.dispose();
+		
 	}
 
 }

@@ -1,7 +1,6 @@
 package game.fish.cars.views;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
@@ -12,8 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
 
 import game.fish.cars.CarsGame;
 import game.fish.cars.KeyBindings;
@@ -29,13 +30,10 @@ import static game.fish.cars.KeyBindings.KEY_ZOOMIN;
 import static game.fish.cars.KeyBindings.KEY_ZOOMOUT;
 import static game.fish.cars.KeyBindings.KEY_MENU;
 
-public class KeyBindingsScreen extends InterfaceScreen {
+public class KeyBindingsInterface extends InterfaceScreen {
 	
-	private final CarsGame parent;
 	private final KeyBindings keyBindings;
 	private final KeyBindingsProcessor keyBindingsProcessor;
-	private final Stage stage;
-	private final Skin skin;
 	private String bindingKey;
 	private Label bindingKeyCurrent;
 	
@@ -68,12 +66,10 @@ public class KeyBindingsScreen extends InterfaceScreen {
 	private final TextButton menuKeyButton;
 	private final TextButton backButton;
 	
-	public KeyBindingsScreen(final CarsGame parent) {
-		this.parent = parent;
+	public KeyBindingsInterface(final CarsGame parent) {
+		super(parent);	
 		keyBindings = this.parent.getKeyBindings();
 		keyBindingsProcessor = new KeyBindingsProcessor();
-		stage = new Stage(new ScreenViewport());
-		skin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
 		
 		titleLabel = new Label ("Key Bindings", skin);
 		driveKeyLabel = new Label ("Accelerate", skin);
@@ -149,37 +145,6 @@ public class KeyBindingsScreen extends InterfaceScreen {
 	}
 
 	@Override
-	public void render(float delta) {
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-		stage.draw();
-	}
-
-	@Override
-	public void resize(int width, int height) {
-		stage.getViewport().update(width, height, true);
-	}
-	
-	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void hide() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void dispose() {
 		stage.dispose();
 	}
@@ -201,10 +166,14 @@ public class KeyBindingsScreen extends InterfaceScreen {
 	private class KeyBindingsProcessor implements InputProcessor {
 
 		@Override
-		public boolean keyDown(int keycode) {
-		    keyBindings.setKey(bindingKey, keycode);
-		    bindingKeyCurrent.setText(Keys.toString(keycode));
+		public boolean keyDown(int keyCode) {
+		    keyBindings.setKeyBinding(bindingKey, keyCode);
+		    bindingKeyCurrent.setText(Keys.toString(keyCode));
 		    Gdx.input.setInputProcessor(stage);
+		    
+		    Array bindingInfo = new Array();
+		    bindingInfo.add(bindingKey, keyCode);
+		    achievementPCS.firePropertyChange("keyMapped",null,bindingInfo);
 		    return true;
 		}
 
@@ -250,7 +219,6 @@ public class KeyBindingsScreen extends InterfaceScreen {
 			return false;
 		}
 	}
-	
 }
 
 

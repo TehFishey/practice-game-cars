@@ -1,19 +1,14 @@
 package game.fish.cars.views;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import game.fish.cars.CarsGame;
 
@@ -30,11 +25,7 @@ import static game.fish.cars.Constants.MAP_MAP1;
 import static game.fish.cars.Constants.MAP_MAP2;
 import static game.fish.cars.Constants.MAP_MAP3;
 
-public class MenuScreen extends InterfaceScreen {
-	
-	private final CarsGame parent;
-	private final Stage stage;
-	private final Skin skin;
+public class MenuInterface extends InterfaceScreen {
 	
 	private final TextButton newGameButton;
 	private final TextButton resumeButton;
@@ -42,11 +33,9 @@ public class MenuScreen extends InterfaceScreen {
 	private final TextButton achievementsButton;
 	private final TextButton exitButton;
 	
-	public MenuScreen(final CarsGame parent) {
-		this.parent = parent;
-		stage = new Stage(new ScreenViewport());
-		skin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
-				
+	public MenuInterface(final CarsGame parent) {
+		super(parent);
+		
 		ChangeListener newGameListener = new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -104,7 +93,11 @@ public class MenuScreen extends InterfaceScreen {
 				else if (obj.equals("awdCar")) {carChoice = CAR_AWDCAR; cancel();}
 				else if (obj.equals("map1")) {mapChoice = MAP_MAP1; cancel();}
 				else if (obj.equals("map2")) {mapChoice = MAP_MAP2; cancel();}
-				else parent.changeScreen(PLAY_SCREEN, carChoice, mapChoice);
+				else {
+					achievementPCS.firePropertyChange("carType",null,carChoice);
+					achievementPCS.firePropertyChange("mapChoice",null,mapChoice);
+					parent.changeScreen(PLAY_SCREEN, carChoice, mapChoice);
+				}
 			}
 		};
 		
@@ -147,37 +140,6 @@ public class MenuScreen extends InterfaceScreen {
 		stage.clear();
 		stage.addActor(table);
 		Gdx.input.setInputProcessor(stage);
-	}
-
-	@Override
-	public void render(float delta) {
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-		stage.draw();
-	}
-
-	@Override
-	public void resize(int width, int height) {
-		stage.getViewport().update(width, height, true);
-	}
-	
-	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void hide() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

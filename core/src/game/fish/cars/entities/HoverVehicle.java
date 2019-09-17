@@ -1,15 +1,9 @@
 package game.fish.cars.entities;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.physics.box2d.joints.PrismaticJointDef;
-import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
-import com.badlogic.gdx.utils.Array;
 
 import game.fish.cars.tools.MapLoader;
-
-import static game.fish.cars.Constants.PPM;
 
 public class HoverVehicle extends VehicleEntity {
 	
