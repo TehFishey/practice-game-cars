@@ -1,9 +1,5 @@
 package game.fish.cars.views;
 
-import static game.fish.cars.Constants.MENU_SCREEN;
-import static game.fish.cars.Constants.PATH_ACHIEVEMENT_TRUE;
-import static game.fish.cars.Constants.PATH_ACHIEVEMENT_FALSE;
-
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
@@ -14,6 +10,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+
+import static game.fish.cars.Constants.PLAY_SCREEN;
+import static game.fish.cars.Constants.MENU_SCREEN;
+import static game.fish.cars.Constants.SETTINGS_SCREEN;
+import static game.fish.cars.Constants.KEYBINDINGS_SCREEN;
+import static game.fish.cars.Constants.ACHIEVEMENTS_SCREEN;
+import static game.fish.cars.Constants.PATH_ACHIEVEMENT_TRUE;
+import static game.fish.cars.Constants.PATH_ACHIEVEMENT_FALSE;
 
 import game.fish.cars.Achievements;
 import game.fish.cars.CarsGame;

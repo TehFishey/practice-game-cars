@@ -1,22 +1,18 @@
 package game.fish.cars.views;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import java.beans.PropertyChangeSupport;
 
 import game.fish.cars.CarsGame;
 
 import static game.fish.cars.Constants.MENU_SCREEN;
+import static game.fish.cars.Constants.SETTINGS_SCREEN;
 import static game.fish.cars.Constants.KEYBINDINGS_SCREEN;
 
 public class SettingsInterface extends InterfaceScreen {

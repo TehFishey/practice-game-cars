@@ -12,13 +12,14 @@ import game.fish.cars.views.PlayScreen;
 import game.fish.cars.views.SettingsInterface;
 import game.fish.observers.AchievementListener;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+
 import static game.fish.cars.Constants.PATH_MUSIC;
+
 import static game.fish.cars.Constants.PLAY_SCREEN;
 import static game.fish.cars.Constants.MENU_SCREEN;
 import static game.fish.cars.Constants.SETTINGS_SCREEN;
-
-import java.beans.PropertyChangeListener;
-
 import static game.fish.cars.Constants.KEYBINDINGS_SCREEN;
 import static game.fish.cars.Constants.ACHIEVEMENTS_SCREEN;
 
@@ -28,6 +29,7 @@ public class CarsGame extends Game {
 	private Achievements achievements;
 	private AchievementListener achievementListener;
 	private AchievementOverlay achievementOverlay;
+	private PropertyChangeSupport achievementPCS;
 	private Music music;
 	
 	private PlayScreen playScreen;
@@ -42,6 +44,8 @@ public class CarsGame extends Game {
 		achievements = new Achievements(this);
 		achievementListener = new AchievementListener(achievements);
 		achievementOverlay = new AchievementOverlay();
+		achievementPCS = new PropertyChangeSupport(this);
+		achievementPCS.addPropertyChangeListener(getAchievementListener());
 		
 		music = Gdx.audio.newMusic(Gdx.files.internal(PATH_MUSIC));
 		music.setLooping(true);
@@ -50,7 +54,7 @@ public class CarsGame extends Game {
 		
 		menuScreen = new MenuInterface(this);
 		setScreen(this.menuScreen);
-		
+		achievementPCS.firePropertyChange("gameStart",null,true);
 	}
 	
 	public void changeScreen(int screen) {
@@ -58,29 +62,25 @@ public class CarsGame extends Game {
 		case PLAY_SCREEN:
 			if (playScreen == null) playScreen = new PlayScreen(this, 0, 0);
 			this.setScreen(playScreen);
-			achievementListener.trackScreen(playScreen);
 			break;
 		case MENU_SCREEN:
 			if (menuScreen == null) menuScreen = new MenuInterface(this);
 			this.setScreen(menuScreen);
-			achievementListener.trackScreen(menuScreen);
 			break;
 		case SETTINGS_SCREEN:
 			if (settingsScreen == null) settingsScreen = new SettingsInterface(this);
 			this.setScreen(settingsScreen);
-			achievementListener.trackScreen(settingsScreen);
 			break;
 		case KEYBINDINGS_SCREEN:
 			if (keyBindingsScreen == null) keyBindingsScreen = new KeyBindingsInterface(this);
 			this.setScreen(keyBindingsScreen);
-			achievementListener.trackScreen(keyBindingsScreen);
 			break;
 		case ACHIEVEMENTS_SCREEN:
 			if (achievementsScreen == null) achievementsScreen = new AchievementsInterface(this);
 			this.setScreen(achievementsScreen);
-			achievementListener.trackScreen(achievementsScreen);
 			break;
 		}
+		achievementPCS.firePropertyChange("screenChange",null,screen);
 	}
 	
 	public void changeScreen(int screen, int carChoice, int mapChoice) {
@@ -88,29 +88,25 @@ public class CarsGame extends Game {
 		case PLAY_SCREEN:
 			if (playScreen == null) playScreen = new PlayScreen(this, carChoice, mapChoice);
 			this.setScreen(playScreen);
-			achievementListener.trackScreen(playScreen);
 			break;
 		case MENU_SCREEN:
 			if (menuScreen == null) menuScreen = new MenuInterface(this);
 			this.setScreen(menuScreen);
-			achievementListener.trackScreen(menuScreen);
 			break;
 		case SETTINGS_SCREEN:
 			if (settingsScreen == null) settingsScreen = new SettingsInterface(this);
 			this.setScreen(settingsScreen);
-			achievementListener.trackScreen(settingsScreen);
 			break;
 		case KEYBINDINGS_SCREEN:
 			if (keyBindingsScreen == null) keyBindingsScreen = new KeyBindingsInterface(this);
 			this.setScreen(keyBindingsScreen);
-			achievementListener.trackScreen(keyBindingsScreen);
 			break;
 		case ACHIEVEMENTS_SCREEN:
 			if (achievementsScreen == null) achievementsScreen = new AchievementsInterface(this);
 			this.setScreen(achievementsScreen);
-			achievementListener.trackScreen(achievementsScreen);
 			break;
 		}
+		achievementPCS.firePropertyChange("screenChange",null,screen);
 	}
 	
 	public void clearScreen(int screen) {

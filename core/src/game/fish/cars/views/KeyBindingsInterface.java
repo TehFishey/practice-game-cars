@@ -3,22 +3,19 @@ package game.fish.cars.views;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import java.beans.PropertyChangeSupport;
-import java.util.ArrayList;
 
 import game.fish.cars.CarsGame;
 import game.fish.cars.KeyBindings;
 
+import static game.fish.cars.Constants.ACHIEVEMENTS_SCREEN;
+import static game.fish.cars.Constants.KEYBINDINGS_SCREEN;
 import static game.fish.cars.Constants.SETTINGS_SCREEN;
 
 import static game.fish.cars.KeyBindings.KEY_DRIVE;

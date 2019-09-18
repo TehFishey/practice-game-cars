@@ -46,6 +46,7 @@ public class MenuInterface extends InterfaceScreen {
 		ChangeListener exitListener = new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+				achievementPCS.firePropertyChange("gameEnd",null,true);
 				Gdx.app.exit();
 			}
 		};

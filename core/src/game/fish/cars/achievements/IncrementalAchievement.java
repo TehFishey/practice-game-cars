@@ -16,7 +16,7 @@ public class IncrementalAchievement extends Achievement {
 	}
 	
 	protected void addProgress(int progress) {
-		if (progress >= this.progressCap) { 
+		if ((this.progress + progress) >= this.progressCap) { 
 			this.progress = this.progressCap;
 			this.setCompleted();
 		}

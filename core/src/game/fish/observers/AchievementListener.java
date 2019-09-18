@@ -15,10 +15,6 @@ public class AchievementListener implements PropertyChangeListener {
 		this.achievements = achievements;
 	}
 	
-	public void trackScreen(Screen screen) {
-		activeScreen = screen;
-	}
-	
     public void propertyChange(PropertyChangeEvent event) {
         String propertyName = event.getPropertyName();
         Object propertyValue = event.getNewValue();

@@ -18,14 +18,14 @@ public abstract class InterfaceScreen implements Screen {
 
 	protected final CarsGame parent;
 	protected final Stage stage;
-	protected final Stage overlayStage;
+	protected final Stage achievementOverlay;
 	protected final Skin skin;
 	protected final PropertyChangeSupport achievementPCS;
 	
 	public InterfaceScreen(CarsGame parent) {
 		this.parent = parent;
 		stage = new Stage(new ScreenViewport());
-		overlayStage = parent.getAchievementOverlay().getStage();
+		achievementOverlay = parent.getAchievementOverlay().getStage();
 		skin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
 		achievementPCS = new PropertyChangeSupport(this);
 		achievementPCS.addPropertyChangeListener(parent.getAchievementListener());
@@ -43,13 +43,13 @@ public abstract class InterfaceScreen implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 		stage.draw();
-		overlayStage.draw();
+		achievementOverlay.draw();
 	}
 
 	@Override
 	public void resize(int width, int height) {
 		stage.getViewport().update(width, height, true);
-		overlayStage.getViewport().update(width, height, true);
+		achievementOverlay.getViewport().update(width, height, true);
 	}
 
 	@Override

@@ -7,20 +7,16 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
-import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import java.beans.PropertyChangeSupport;
 
 import game.fish.cars.CarsGame;
 import game.fish.cars.KeyBindings;
-import game.fish.cars.achievements.Achievement;
 import game.fish.cars.commands.AccelerateBackwardCommand;
 import game.fish.cars.commands.AccelerateForwardCommand;
 import game.fish.cars.commands.AccelerateNoneCommand;
@@ -40,6 +36,7 @@ import game.fish.cars.tools.MapLoader;
 import game.fish.observers.AchievementContactListener;
 
 import static game.fish.cars.Constants.GRAVITY;
+import static game.fish.cars.Constants.PLAY_SCREEN;
 import static game.fish.cars.Constants.DEFAULT_ZOOM;
 import static game.fish.cars.Constants.PPM;
 
@@ -81,7 +78,7 @@ public class PlayScreen implements Screen {
 	private final Skin hudSkin;
 	private Label speedDisplay;
 	
-	private final Stage overlayStage;
+	private final Stage achievementOverlay;
 
 	private final AccelerateForwardCommand driveCommand = new AccelerateForwardCommand();
 	private final AccelerateBackwardCommand reverseCommand = new AccelerateBackwardCommand();
@@ -113,7 +110,7 @@ public class PlayScreen implements Screen {
 		speedDisplay.setPosition(0, 460);
 		hud.addActor(speedDisplay);
 		
-		overlayStage = parent.getAchievementOverlay().getStage();
+		achievementOverlay = parent.getAchievementOverlay().getStage();
 		
 		switch (carChoice) {
 		case CAR_FWDCAR:
@@ -133,7 +130,7 @@ public class PlayScreen implements Screen {
 		}
 		
 		playerFixture = player.getBody().getFixtureList().first();
-		contactListener = new AchievementContactListener(parent, this, playerFixture);
+		contactListener = new AchievementContactListener(parent.getAchievements(), this, playerFixture);
 		world.setContactListener(contactListener);
 		camera.zoom = DEFAULT_ZOOM;
 	}
@@ -151,7 +148,7 @@ public class PlayScreen implements Screen {
 		updateAchievements();
 		drawWorld();
 		drawHud();
-		overlayStage.draw();
+		achievementOverlay.draw();
 	}
 		
 	
@@ -202,7 +199,7 @@ public class PlayScreen implements Screen {
 	public void resize(int width, int height) {
 		viewport.update(width, height);
 		hud.getViewport().update(width, height, true);
-		overlayStage.getViewport().update(width, height, true);
+		achievementOverlay.getViewport().update(width, height, true);
 
 	}
 

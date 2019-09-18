@@ -6,17 +6,17 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
-import game.fish.cars.CarsGame;
+import game.fish.cars.Achievements;
 import game.fish.cars.views.PlayScreen;
 
 public class AchievementContactListener implements ContactListener {
 
-	CarsGame game;
+	Achievements achievements;
 	PlayScreen parent;
 	Fixture player;
 	
-	public AchievementContactListener(CarsGame game, PlayScreen parent, Fixture player) {
-		this.game = game;
+	public AchievementContactListener(Achievements achievements, PlayScreen parent, Fixture player) {
+		this.achievements = achievements;
 		this.parent = parent;
 		this.player = player;
 	}
@@ -25,17 +25,13 @@ public class AchievementContactListener implements ContactListener {
 	public void beginContact(Contact contact) {
 		Fixture fixtureA = contact.getFixtureA();
         Fixture fixtureB = contact.getFixtureB();
-        //System.out.print("beginContact between " + fixtureA.toString() + " and " + fixtureB.toString()+"\n");
 
-        if (fixtureA.equals(player)) game.getAchievements().takePropertyChange("contactEvent", fixtureB);
-        else if (fixtureB.equals(player)) game.getAchievements().takePropertyChange("contactEvent", fixtureA);       
+        if (fixtureA.equals(player)) achievements.takePropertyChange("contactEvent", fixtureB);
+        else if (fixtureB.equals(player)) achievements.takePropertyChange("contactEvent", fixtureA);       
 	}
 
 	@Override
 	public void endContact(Contact contact) {
-		Fixture fixtureA = contact.getFixtureA();
-        Fixture fixtureB = contact.getFixtureB();
-        return;
 	}
 
 	@Override
