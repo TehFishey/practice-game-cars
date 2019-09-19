@@ -69,6 +69,7 @@ public class MenuInterface extends InterfaceScreen {
 		final CheckBox hovButton = new CheckBox("Hover Car",skin);
 		final CheckBox map1Button = new CheckBox("City",skin);
 		final CheckBox map2Button = new CheckBox("Race Track",skin);
+		final CheckBox map3Button = new CheckBox("Parking Lot",skin);
 		
 		fwdButton.setChecked(true);
 		carChoiceButtons.add(fwdButton, awdButton, cycButton, hovButton);
@@ -77,7 +78,7 @@ public class MenuInterface extends InterfaceScreen {
 		carChoiceButtons.setUncheckLast(true);
 		
 		map1Button.setChecked(true);
-		mapChoiceButtons.add(map1Button,map2Button);
+		mapChoiceButtons.add(map1Button,map2Button, map3Button);
 		mapChoiceButtons.setMaxCheckCount(1);
 		mapChoiceButtons.setMinCheckCount(1);
 		mapChoiceButtons.setUncheckLast(true);
@@ -94,6 +95,7 @@ public class MenuInterface extends InterfaceScreen {
 				else if (obj.equals("awdCar")) {carChoice = CAR_AWDCAR; cancel();}
 				else if (obj.equals("map1")) {mapChoice = MAP_MAP1; cancel();}
 				else if (obj.equals("map2")) {mapChoice = MAP_MAP2; cancel();}
+				else if (obj.equals("map3")) {mapChoice = MAP_MAP3; cancel();}
 				else {
 					achievementPCS.firePropertyChange("carType",null,carChoice);
 					achievementPCS.firePropertyChange("mapChoice",null,mapChoice);
@@ -112,6 +114,7 @@ public class MenuInterface extends InterfaceScreen {
 		newGameDialog.button(map2Button, "map2");
 		newGameDialog.getButtonTable().row();
 		newGameDialog.button(cycButton, "cycCar");
+		newGameDialog.button(map3Button, "map3");
 		newGameDialog.getButtonTable().row();
 		newGameDialog.button(hovButton, "hovCar");
 		newGameDialog.getButtonTable().row();

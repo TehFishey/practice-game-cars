@@ -10,7 +10,7 @@ import game.fish.cars.views.KeyBindingsInterface;
 import game.fish.cars.views.MenuInterface;
 import game.fish.cars.views.PlayScreen;
 import game.fish.cars.views.SettingsInterface;
-import game.fish.observers.AchievementListener;
+import game.fish.listeners.AchievementListener;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;

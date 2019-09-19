@@ -2,6 +2,7 @@ package game.fish.cars;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.physics.box2d.Fixture;
 
 import game.fish.cars.achievements.Achievement;
 import game.fish.cars.achievements.BooleanAchievement;
@@ -9,6 +10,7 @@ import game.fish.cars.achievements.IncrementalAchievement;
 import game.fish.cars.achievements.MultipleAchievement;
 
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 import static game.fish.cars.Constants.PATH_ACHIEVEMENTS;
@@ -116,14 +118,14 @@ public class Achievements {
 				return ((int) newValue == SETTINGS_SCREEN);
 			}
     	});
-		newMap.put("viewAcheivements", new BooleanAchievement("Achievements Viewer", "Navigated to the achievements screen.", "screenChange") 
+		newMap.put("viewAcheivements", new BooleanAchievement("Progress Viewer", "Navigated to the achievements screen.", "screenChange") 
 		{
 			@Override
 			protected boolean condition(Object newValue) {
 				return ((int) newValue == ACHIEVEMENTS_SCREEN);
 			}
     	});
-		newMap.put("viewKeyBindings", new BooleanAchievement("Key V", "Navigated to the key bindings screen.", "screenChange") 
+		newMap.put("viewKeyBindings", new BooleanAchievement("Key Viewer", "Navigated to the key bindings screen.", "screenChange") 
 		{
 			@Override
 			protected boolean condition(Object newValue) {
@@ -137,77 +139,49 @@ public class Achievements {
 				return ((int) newValue == PLAY_SCREEN);
 			}
     	});
-		newMap.put("oneAchieve", new IncrementalAchievement("One Achievement", "Earned an Achievement.", "achieveEvent", 1)
+		newMap.put("played30s", new IncrementalAchievement("Played 30 Seconds", "Spent 30 seconds playing any map", "timeElapsed", 30)
 		{
 			@Override
 			protected int incrementalCondition(Object newValue) {
 				return 1;
 		}
 		});
-		newMap.put("10Achieve", new IncrementalAchievement("10 Achievements", "Earned 10 Achievements.", "achieveEvent", 10)
+		newMap.put("played60s", new IncrementalAchievement("Played 1 Minute", "Spent 1 minute playing any map", "timeElapsed", 60)
 		{
 			@Override
 			protected int incrementalCondition(Object newValue) {
 				return 1;
 		}
 		});
-		newMap.put("20Achieve", new IncrementalAchievement("20 Achievements", "Earned 20 Achievements.", "achieveEvent", 20)
+		newMap.put("played180s", new IncrementalAchievement("Played 3 Minutes", "Spent 3 minutes playing any map", "timeElapsed", 180)
 		{
 			@Override
 			protected int incrementalCondition(Object newValue) {
 				return 1;
 		}
 		});
-		newMap.put("30Achieve", new IncrementalAchievement("30 Achievements", "Earned 30 Achievements.", "achieveEvent", 30)
+		newMap.put("played300s", new IncrementalAchievement("Played 5 Minutes", "Spent 5 minutes playing any map", "timeElapsed", 300)
 		{
 			@Override
 			protected int incrementalCondition(Object newValue) {
 				return 1;
 		}
 		});
-		newMap.put("40Achieve", new IncrementalAchievement("40 Achievements", "Earned 40 Achievements.", "achieveEvent", 40)
+		newMap.put("oneAchieve", new IncrementalAchievement("Beginner", "Earned an Achievement.", "achieveEvent", 1)
 		{
 			@Override
 			protected int incrementalCondition(Object newValue) {
 				return 1;
 		}
 		});
-		newMap.put("50Achieve", new IncrementalAchievement("50 Achievements", "Earned 50 Achievements.", "achieveEvent", 50)
+		newMap.put("HalfAchieve", new IncrementalAchievement("Halfway", "Earned half of the game's achievements.", "achieveEvent", 18)
 		{
 			@Override
 			protected int incrementalCondition(Object newValue) {
 				return 1;
 		}
 		});
-		newMap.put("60Achieve", new IncrementalAchievement("60 Achievements", "Earned 60 Achievements.", "achieveEvent", 60)
-		{
-			@Override
-			protected int incrementalCondition(Object newValue) {
-				return 1;
-		}
-		});
-		newMap.put("70Achieve", new IncrementalAchievement("70 Achievements", "Earned 70 Achievements.", "achieveEvent", 70)
-		{
-			@Override
-			protected int incrementalCondition(Object newValue) {
-				return 1;
-		}
-		});
-		newMap.put("80Achieve", new IncrementalAchievement("80 Achievements", "Earned 80 Achievements.", "achieveEvent", 80)
-		{
-			@Override
-			protected int incrementalCondition(Object newValue) {
-				return 1;
-		}
-		});
-		newMap.put("90Achieve", new IncrementalAchievement("90 Achievements", "Earned 90 Achievements.", "achieveEvent", 90)
-		{
-			@Override
-			protected int incrementalCondition(Object newValue) {
-				return 1;
-		}
-		});
-		newMap.put("100Achieve", new IncrementalAchievement("100 Achievements", "Earned 100 Achievements.", "achieveEvent", 100)
+		newMap.put("AllAchieve", new IncrementalAchievement("Completionist", "Earned all other achievements.", "achieveEvent", 35)
 		{
 			@Override
 			protected int incrementalCondition(Object newValue) {
@@ -286,20 +260,73 @@ public class Achievements {
 				return (carType == CAR_HOVERCAR);
 			}
 		});
+		newMap.put("allCarsDriven", new MultipleAchievement("Car Collector", "Started a game driving each car.", "carType", 4)
+		{
+			@Override
+			protected boolean[] multipleCondition(Object newValue) {
+				boolean[] update = values;
+				int carType = (int) newValue;
+				
+				switch (carType){
+				case CAR_FWDCAR: 
+					update[0] = true;
+					break;
+				case CAR_AWDCAR: 
+					update[1] = true;
+					break;
+				case CAR_MOTORCYCLE: 
+					update[2] = true;
+					break;
+				case CAR_HOVERCAR: 
+					update[3] = true;
+					break;
+				}
+				return update;
+		}
+		});
 		newMap.put("cityMapPlayed", new BooleanAchievement("City Rat", "Started a game on the city map.", "mapChoice") 
 		{
 			@Override
 			protected boolean condition(Object newValue) {
-				float carType = (int) newValue;
-				return (carType == MAP_MAP1);
+				float mapType = (int) newValue;
+				return (mapType == MAP_MAP1);
 			}
 		});
 		newMap.put("trackMapPlayed", new BooleanAchievement("Jockey", "Started a game on the racetrack map.", "mapChoice") 
 		{
 			@Override
 			protected boolean condition(Object newValue) {
-				float carType = (int) newValue;
-				return (carType == MAP_MAP2);
+				float mapType = (int) newValue;
+				return (mapType == MAP_MAP2);
+		}
+		});
+		newMap.put("parkingMapPlayed", new BooleanAchievement("Shopper", "Started a game on the parking lot map.", "mapChoice") 
+		{
+			@Override
+			protected boolean condition(Object newValue) {
+				float mapType = (int) newValue;
+				return (mapType == MAP_MAP3);
+		}
+		});
+		newMap.put("allMapPlayed", new MultipleAchievement("Traveller", "Started a game on each map.", "mapChoice", 3)
+		{
+			@Override
+			protected boolean[] multipleCondition(Object newValue) {
+				boolean[] update = values;
+				int mapType = (int) newValue;
+				
+				switch (mapType){
+				case MAP_MAP1: 
+					update[0] = true;
+					break;
+				case MAP_MAP2: 
+					update[1] = true;
+					break;
+				case MAP_MAP3: 
+					update[2] = true;
+					break;
+				}
+				return update;
 		}
 		});
 		newMap.put("anyKeyMapped", new BooleanAchievement("Key Binder", "Re-Bound a key.", "keyMapped") 
@@ -415,7 +442,19 @@ public class Achievements {
 				return 1;
 		}
 		});
-		
+		newMap.put("speedCrash", new BooleanAchievement("High-Speed Impact", "Crashed a vehicle at high speed.", "contactEvent")
+		{
+			@Override
+			protected boolean condition(Object newValue) {
+				Array contactInfo = (Array) newValue;
+				Fixture player = (Fixture) contactInfo.get(0);
+				Vector2 velocity = player.getBody().getLinearVelocity();
+				float speed = Math.abs(velocity.x) + Math.abs(velocity.y);
+				if (speed >= 100) return true;
+				return false;
+		}
+		});
+
 		return newMap;
 	}
 

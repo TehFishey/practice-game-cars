@@ -14,9 +14,11 @@ import com.badlogic.gdx.utils.Disposable;
 
 import static game.fish.cars.Constants.MAP_MAP1;
 import static game.fish.cars.Constants.MAP_MAP2;
+import static game.fish.cars.Constants.MAP_MAP3;
 
 import static game.fish.cars.Constants.PATH_MAP1;
 import static game.fish.cars.Constants.PATH_MAP2;
+import static game.fish.cars.Constants.PATH_MAP3;
 
 public class MapLoader implements Disposable {
 
@@ -37,6 +39,9 @@ public class MapLoader implements Disposable {
 			break;
 		case MAP_MAP2:
 			this.map = new TmxMapLoader().load(PATH_MAP2);
+			break;
+		case MAP_MAP3:
+			this.map = new TmxMapLoader().load(PATH_MAP3);
 			break;
 		default:
 			this.map = new TmxMapLoader().load(PATH_MAP1);

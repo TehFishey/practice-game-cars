@@ -1,4 +1,4 @@
-package game.fish.observers;
+package game.fish.listeners;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;

@@ -1,7 +1,7 @@
 package game.fish.cars.achievements;
 
 public class IncrementalAchievement extends Achievement {
-	private int progressCap;
+	protected int progressCap;
 	
 	public IncrementalAchievement(String name, String description, String triggerPropertyName, int progressionCap) {
 		super(name, description, triggerPropertyName);

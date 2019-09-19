@@ -14,7 +14,6 @@ public class Settings {
 	
 	public Settings() {
 		settingsFile = Gdx.app.getPreferences(PATH_SETTINGS);
-		
 		getMusicVolume();
 		getMusicEnabled();
 	}

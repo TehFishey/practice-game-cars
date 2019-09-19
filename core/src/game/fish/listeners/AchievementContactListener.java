@@ -1,10 +1,11 @@
-package game.fish.observers;
+package game.fish.listeners;
 
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.badlogic.gdx.utils.Array;
 
 import game.fish.cars.Achievements;
 import game.fish.cars.views.PlayScreen;
@@ -25,9 +26,17 @@ public class AchievementContactListener implements ContactListener {
 	public void beginContact(Contact contact) {
 		Fixture fixtureA = contact.getFixtureA();
         Fixture fixtureB = contact.getFixtureB();
+        
+        Array contactInfo = new Array();
 
-        if (fixtureA.equals(player)) achievements.takePropertyChange("contactEvent", fixtureB);
-        else if (fixtureB.equals(player)) achievements.takePropertyChange("contactEvent", fixtureA);       
+        if (fixtureA.equals(player)) {
+        	contactInfo.add(fixtureA, fixtureB);
+        	achievements.takePropertyChange("contactEvent", contactInfo);
+        }
+        else if (fixtureB.equals(player)) {
+        	contactInfo.add(fixtureB, fixtureA);
+        	achievements.takePropertyChange("contactEvent", contactInfo);       
+        }
 	}
 
 	@Override

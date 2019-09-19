@@ -33,7 +33,7 @@ import game.fish.cars.entities.HoverVehicle;
 import game.fish.cars.entities.MotorcycleVehicle;
 import game.fish.cars.entities.VehicleEntity;
 import game.fish.cars.tools.MapLoader;
-import game.fish.observers.AchievementContactListener;
+import game.fish.listeners.AchievementContactListener;
 
 import static game.fish.cars.Constants.GRAVITY;
 import static game.fish.cars.Constants.PLAY_SCREEN;
@@ -77,7 +77,11 @@ public class PlayScreen implements Screen {
 	private final Stage hud;
 	private final Skin hudSkin;
 	private Label speedDisplay;
+	private Label timeDisplay;
+	private int speedTracker;
+	private int timeTracker;
 	
+	private final long startTime;
 	private final Stage achievementOverlay;
 
 	private final AccelerateForwardCommand driveCommand = new AccelerateForwardCommand();
@@ -108,8 +112,12 @@ public class PlayScreen implements Screen {
 		hudSkin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
 		speedDisplay = new Label("Speed: ", hudSkin);
 		speedDisplay.setPosition(0, 460);
+		timeDisplay = new Label("Time: ", hudSkin);
+		timeDisplay.setPosition(0, 440);
 		hud.addActor(speedDisplay);
+		hud.addActor(timeDisplay);
 		
+		startTime = System.currentTimeMillis();
 		achievementOverlay = parent.getAchievementOverlay().getStage();
 		
 		switch (carChoice) {
@@ -145,7 +153,7 @@ public class PlayScreen implements Screen {
 		takeInput();
 		player.update();
 		update(delta);
-		updateAchievements();
+		updateTrackers();
 		drawWorld();
 		drawHud();
 		achievementOverlay.draw();
@@ -177,9 +185,18 @@ public class PlayScreen implements Screen {
 		world.step(delta, 6, 2);
 	}
 	
-	private void updateAchievements() {
+	private void updateTrackers() {
+		speedTracker = Math.round(player.getAbsoluteSpeed());
+		if (speedTracker >= 100f) achievementPCS.firePropertyChange("playerSpeed",null,speedTracker);
+		
+		long timeMillis = System.currentTimeMillis() - startTime;
+		int timeSecs = (int) Math.round((float) timeMillis * 0.001);
+		if ((timeSecs > timeTracker)) { 
+			timeTracker = timeSecs;
+			achievementPCS.firePropertyChange("timeElapsed",null,timeTracker);
+		}
+		
 		if (camera.zoom == 50f || camera.zoom == 2f) achievementPCS.firePropertyChange("cameraZoom",null,camera.zoom);
-		if (player.getAbsoluteSpeed() >= 100f) achievementPCS.firePropertyChange("playerSpeed",null,player.getAbsoluteSpeed());
 	}
 	
 	private void drawWorld() {
@@ -188,8 +205,10 @@ public class PlayScreen implements Screen {
 	}
 		
 	private void drawHud() {
-		String currentSpeed = "Speed : " + Math.round(player.getAbsoluteSpeed()); 
+		String currentSpeed = "Speed : " + String.valueOf(speedTracker);
 		speedDisplay.setText(currentSpeed);
+		String currentTime = "Time : " + String.valueOf(timeTracker); 
+		timeDisplay.setText(currentTime);
 
 		hud.getViewport().apply();
 		hud.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
