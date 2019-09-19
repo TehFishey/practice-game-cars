@@ -208,7 +208,7 @@ public class Achievements {
 		{
 			@Override
 			protected boolean condition(Object newValue) {
-				float playerSpeed = (float) newValue;
+				int playerSpeed = (int) newValue;
 				return (playerSpeed >= 100f);
 			}
 		});
