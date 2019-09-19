@@ -5,12 +5,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 
 import game.fish.cars.achievements.Achievement;
+import game.fish.cars.listeners.AchievementListener;
 import game.fish.cars.views.AchievementsInterface;
 import game.fish.cars.views.KeyBindingsInterface;
 import game.fish.cars.views.MenuInterface;
 import game.fish.cars.views.PlayScreen;
 import game.fish.cars.views.SettingsInterface;
-import game.fish.listeners.AchievementListener;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
