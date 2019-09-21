@@ -74,7 +74,7 @@ set _SKIP=2
 :win9xME_args_slurp
 if "x%~1" == "x" goto execute
 
-set CMD_LINE_ARGS=eclipse
+set CMD_LINE_ARGS=%*
 
 :execute
 @rem Setup the command line
