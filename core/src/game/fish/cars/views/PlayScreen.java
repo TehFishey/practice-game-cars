@@ -36,14 +36,12 @@ import game.fish.cars.listeners.AchievementContactListener;
 import game.fish.cars.tools.MapLoader;
 
 import static game.fish.cars.Constants.GRAVITY;
-import static game.fish.cars.Constants.PLAY_SCREEN;
 import static game.fish.cars.Constants.DEFAULT_ZOOM;
 import static game.fish.cars.Constants.PPM;
 
-import static game.fish.cars.Constants.CAR_FWDCAR;
-import static game.fish.cars.Constants.CAR_AWDCAR;
-import static game.fish.cars.Constants.CAR_MOTORCYCLE;
-import static game.fish.cars.Constants.CAR_HOVERCAR;
+import static game.fish.cars.Constants.SCREEN;
+import static game.fish.cars.Constants.CAR;
+import static game.fish.cars.Constants.MAP;
 
 import static game.fish.cars.KeyBindings.KEY_DRIVE;
 import static game.fish.cars.KeyBindings.KEY_REVERSE;
@@ -96,7 +94,7 @@ public class PlayScreen implements Screen {
 	private final ZoomOutCommand zoomOutCommand = new ZoomOutCommand();
 	private final MenuCommand menuCommand = new MenuCommand();
 	
-	public PlayScreen(CarsGame parent, int carChoice, int mapChoice) {
+	public PlayScreen(CarsGame parent, CAR carChoice, MAP mapChoice) {
 		this.parent = parent;
 		keyBindings = this.parent.getKeyBindings();
 		batch = new SpriteBatch();
@@ -121,16 +119,16 @@ public class PlayScreen implements Screen {
 		achievementOverlay = parent.getAchievementOverlay().getStage();
 		
 		switch (carChoice) {
-		case CAR_FWDCAR:
+		case FWDCAR:
 			player = new CarVehicle(world, loader, FRONT_WHEEL_DRIVE);
 			break;
-		case CAR_AWDCAR:
+		case AWDCAR:
 			player = new CarVehicle(world, loader, ALL_WHEEL_DRIVE);
 			break;
-		case CAR_MOTORCYCLE:
+		case MOTORCYCLE:
 			player = new MotorcycleVehicle(world, loader);
 			break;
-		case CAR_HOVERCAR:
+		case HOVERCAR:
 			player = new HoverVehicle(world, loader);
 			break;
 		default:

@@ -22,20 +22,24 @@ public class Constants {
 	public static final String PATH_KEYBINDINGS = "carsKeyBindings";
 	public static final String PATH_ACHIEVEMENTS = "carsAchievements";
 	
-	public static final int PLAY_SCREEN = 0;
-	public static final int MENU_SCREEN = 1;
-	public static final int SETTINGS_SCREEN = 2;
-	public static final int KEYBINDINGS_SCREEN = 3;
-	public static final int ACHIEVEMENTS_SCREEN = 4;
+	public static enum SCREEN {
+		PLAY_SCREEN, 
+		MENU_SCREEN,
+		SETTINGS_SCREEN,
+		KEYBINDINGS_SCREEN,
+		ACHIEVEMENTS_SCREEN
+	}
 	
-	public static final int CAR_FWDCAR = 0;
-	public static final int CAR_AWDCAR = 1;
-	public static final int CAR_MOTORCYCLE = 2;
-	public static final int CAR_HOVERCAR = 3;
+	public static enum CAR {
+		FWDCAR, 
+		AWDCAR,
+		MOTORCYCLE,
+		HOVERCAR
+	}
 	
-	public static final int MAP_MAP1 = 0;
-	public static final int MAP_MAP2 = 1;
-	public static final int MAP_MAP3 = 2;
-	
-
+	public static enum MAP {
+		MAP1, 
+		MAP2,
+		MAP3,
+	}
 }

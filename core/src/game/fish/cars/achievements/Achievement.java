@@ -42,19 +42,28 @@ public abstract class Achievement {
 		if (condition(newValue)) addProgress(newValue);
 	}
 	
-	protected void addProgress(Object newValue) {	}
-	
-	protected boolean condition(Object newValue) {
-		return true;
-	}
-	
-	protected boolean checkCompleted() {
-		return true;
-	}
-	
 	protected void setCompleted() {
 		completed = true;
-		
 	}
+	
+	protected void addProgress(Object newValue) {}
+	
+	protected boolean checkCompleted() {
+		return false;
+	}
+	
+	protected boolean condition(Object newValue) {
+		return false;
+	}
+	
+	protected int incrementalCondition(Object newValue) {
+		return 0;
+	}
+	
+	protected boolean[] multipleCondition(Object newValue) {
+		return new boolean[0];
+	}
+	
+	
 	
 }

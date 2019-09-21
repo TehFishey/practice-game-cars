@@ -14,9 +14,7 @@ import com.badlogic.gdx.utils.Array;
 import game.fish.cars.CarsGame;
 import game.fish.cars.KeyBindings;
 
-import static game.fish.cars.Constants.ACHIEVEMENTS_SCREEN;
-import static game.fish.cars.Constants.KEYBINDINGS_SCREEN;
-import static game.fish.cars.Constants.SETTINGS_SCREEN;
+import static game.fish.cars.Constants.SCREEN;
 
 import static game.fish.cars.KeyBindings.KEY_DRIVE;
 import static game.fish.cars.KeyBindings.KEY_REVERSE;
@@ -95,7 +93,7 @@ public class KeyBindingsInterface extends InterfaceScreen {
 		zoomInKeyButton = buildKeyButton("Change", skin, KEY_ZOOMIN, zoomInKeyCurrent);
 		zoomOutKeyButton = buildKeyButton("Change", skin, KEY_ZOOMOUT, zoomOutKeyCurrent);
 		menuKeyButton = buildKeyButton("Change", skin, KEY_MENU, menuKeyCurrent);
-		backButton = buildScreenButton("Back", skin, parent, SETTINGS_SCREEN);
+		backButton = buildScreenButton("Back", skin, parent, SCREEN.SETTINGS_SCREEN);
 	}
 
 	@Override

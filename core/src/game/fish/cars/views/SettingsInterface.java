@@ -11,9 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 import game.fish.cars.CarsGame;
 
-import static game.fish.cars.Constants.MENU_SCREEN;
-import static game.fish.cars.Constants.SETTINGS_SCREEN;
-import static game.fish.cars.Constants.KEYBINDINGS_SCREEN;
+import static game.fish.cars.Constants.SCREEN;
 
 public class SettingsInterface extends InterfaceScreen {
 	
@@ -65,8 +63,8 @@ public class SettingsInterface extends InterfaceScreen {
     	musicEnableCheckbox = new CheckBox(null, skin);
 		musicEnableCheckbox.setChecked(parent.getSettings().getMusicEnabled());
     	musicEnableCheckbox.addListener(musicEnableListener);
-		backButton = buildScreenButton("Back", skin, this.parent, MENU_SCREEN);
-		keyBindingsButton = buildScreenButton("Key Bindings", skin, this.parent, KEYBINDINGS_SCREEN);
+		backButton = buildScreenButton("Back", skin, this.parent, SCREEN.MENU_SCREEN);
+		keyBindingsButton = buildScreenButton("Key Bindings", skin, this.parent, SCREEN.KEYBINDINGS_SCREEN);
 	}
 	
 	@Override

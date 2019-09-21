@@ -2,6 +2,7 @@ package game.fish.cars;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 
 import game.fish.cars.achievements.Achievement;
@@ -14,14 +15,12 @@ import game.fish.cars.views.SettingsInterface;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.HashMap;
 
 import static game.fish.cars.Constants.PATH_MUSIC;
-
-import static game.fish.cars.Constants.PLAY_SCREEN;
-import static game.fish.cars.Constants.MENU_SCREEN;
-import static game.fish.cars.Constants.SETTINGS_SCREEN;
-import static game.fish.cars.Constants.KEYBINDINGS_SCREEN;
-import static game.fish.cars.Constants.ACHIEVEMENTS_SCREEN;
+import static game.fish.cars.Constants.SCREEN;
+import static game.fish.cars.Constants.CAR;
+import static game.fish.cars.Constants.MAP;
 
 public class CarsGame extends Game {
 	private Settings settings;
@@ -37,6 +36,7 @@ public class CarsGame extends Game {
 	private SettingsInterface settingsScreen;
 	private KeyBindingsInterface keyBindingsScreen;
 	private AchievementsInterface achievementsScreen;
+	private HashMap<SCREEN, Screen> screensMap;
 	
 	public void create() {
 		settings = new Settings();
@@ -47,123 +47,58 @@ public class CarsGame extends Game {
 		achievementPCS = new PropertyChangeSupport(this);
 		achievementPCS.addPropertyChangeListener(getAchievementListener());
 		
+		screensMap = new HashMap<SCREEN, Screen>() {
+        	{
+        		put(SCREEN.PLAY_SCREEN, playScreen);
+        		put(SCREEN.MENU_SCREEN, menuScreen);
+        		put(SCREEN.SETTINGS_SCREEN, settingsScreen);
+        		put(SCREEN.KEYBINDINGS_SCREEN, keyBindingsScreen);
+        		put(SCREEN.ACHIEVEMENTS_SCREEN, achievementsScreen);
+        		
+        	}
+        };
+		
 		music = Gdx.audio.newMusic(Gdx.files.internal(PATH_MUSIC));
 		music.setLooping(true);
 		music.setVolume(settings.getMusicVolume());
         if (settings.getMusicEnabled()) music.play();
-		
+        
 		menuScreen = new MenuInterface(this);
 		setScreen(this.menuScreen);
 		achievementPCS.firePropertyChange("gameStart",null,true);
 	}
 	
-	public void changeScreen(int screen) {
-		switch(screen) {
-		case PLAY_SCREEN:
-			if (playScreen == null) playScreen = new PlayScreen(this, 0, 0);
-			this.setScreen(playScreen);
-			break;
-		case MENU_SCREEN:
-			if (menuScreen == null) menuScreen = new MenuInterface(this);
-			this.setScreen(menuScreen);
-			break;
-		case SETTINGS_SCREEN:
-			if (settingsScreen == null) settingsScreen = new SettingsInterface(this);
-			this.setScreen(settingsScreen);
-			break;
-		case KEYBINDINGS_SCREEN:
-			if (keyBindingsScreen == null) keyBindingsScreen = new KeyBindingsInterface(this);
-			this.setScreen(keyBindingsScreen);
-			break;
-		case ACHIEVEMENTS_SCREEN:
-			if (achievementsScreen == null) achievementsScreen = new AchievementsInterface(this);
-			this.setScreen(achievementsScreen);
-			break;
-		}
+	public void changeScreen(SCREEN screen) {
+		Screen s = screensMap.get(screen);
+		if (s == null) s = createScreen(screen, CAR.FWDCAR, MAP.MAP1);
+		this.setScreen(s);
 		achievementPCS.firePropertyChange("screenChange",null,screen);
 	}
 	
-	public void changeScreen(int screen, int carChoice, int mapChoice) {
-		switch(screen) {
-		case PLAY_SCREEN:
-			if (playScreen == null) playScreen = new PlayScreen(this, carChoice, mapChoice);
-			this.setScreen(playScreen);
-			break;
-		case MENU_SCREEN:
-			if (menuScreen == null) menuScreen = new MenuInterface(this);
-			this.setScreen(menuScreen);
-			break;
-		case SETTINGS_SCREEN:
-			if (settingsScreen == null) settingsScreen = new SettingsInterface(this);
-			this.setScreen(settingsScreen);
-			break;
-		case KEYBINDINGS_SCREEN:
-			if (keyBindingsScreen == null) keyBindingsScreen = new KeyBindingsInterface(this);
-			this.setScreen(keyBindingsScreen);
-			break;
-		case ACHIEVEMENTS_SCREEN:
-			if (achievementsScreen == null) achievementsScreen = new AchievementsInterface(this);
-			this.setScreen(achievementsScreen);
-			break;
-		}
+	public void changeScreen(SCREEN screen, CAR carChoice, MAP mapChoice) {
+		Screen s = screensMap.get(screen);
+		if (s == null) s = createScreen(screen, carChoice, mapChoice);
+		this.setScreen(s);
 		achievementPCS.firePropertyChange("screenChange",null,screen);
 	}
 	
-	public void clearScreen(int screen) {
-		switch(screen) {
-		case PLAY_SCREEN:
-			if (playScreen != null) {
-				playScreen.dispose();
-				playScreen = null;
-			}
-			break;
-		case MENU_SCREEN:
-			if (menuScreen != null) {
-				menuScreen.dispose();
-				menuScreen = null;
-			}
-			break;
-		case SETTINGS_SCREEN:
-			if (settingsScreen != null) {
-				settingsScreen.dispose();
-				settingsScreen = null;
-			}
-			break;
-		case KEYBINDINGS_SCREEN:
-			if (keyBindingsScreen != null) {
-				keyBindingsScreen.dispose();
-				keyBindingsScreen = null;
-			}
-			break;
-		case ACHIEVEMENTS_SCREEN:
-			if (achievementsScreen != null) {
-				achievementsScreen.dispose();
-				achievementsScreen = null;
-			}
-			break;
+	public void clearScreen(SCREEN screen) {
+		Screen s = screensMap.get(screen);
+		if (s != null) {
+			s.dispose();
+			screensMap.remove(s);
 		}
 	}
 
+	public boolean getScreenExists(SCREEN screen) {
+		Screen s = screensMap.get(screen);
+		return (s != null);
+	}
+	
 	public void displayAchievement(Achievement achievement) {
 		achievementOverlay.displayAchievement(achievement);
 	}
 	
-	public boolean getScreenExists(int screen) {
-		switch(screen) {
-		case PLAY_SCREEN:
-			return (playScreen != null);
-		case MENU_SCREEN:
-			return (menuScreen != null);
-		case SETTINGS_SCREEN:
-			return (settingsScreen != null);
-		case KEYBINDINGS_SCREEN:
-			return (keyBindingsScreen != null);
-		case ACHIEVEMENTS_SCREEN:
-			return (achievementsScreen != null);
-		default:
-			return false;
-		}
-	}
 	
 	public Settings getSettings() {
 		return settings;
@@ -204,5 +139,22 @@ public class CarsGame extends Game {
 		if (settingsScreen != null) settingsScreen.dispose();
 		if (keyBindingsScreen != null) keyBindingsScreen.dispose();
 		if (achievementsScreen != null) achievementsScreen.dispose();
+	}
+	
+	private Screen createScreen(SCREEN type, CAR carChoice, MAP mapChoice) {
+		switch(type) {
+		case PLAY_SCREEN:
+			return new PlayScreen(this, carChoice, mapChoice);
+		case MENU_SCREEN:
+			return new MenuInterface(this);
+		case SETTINGS_SCREEN:
+			return new SettingsInterface(this);
+		case KEYBINDINGS_SCREEN:
+			return new KeyBindingsInterface(this);
+		case ACHIEVEMENTS_SCREEN:
+			return new AchievementsInterface(this);
+		default:
+			return new MenuInterface(this);
+		}
 	}
 }

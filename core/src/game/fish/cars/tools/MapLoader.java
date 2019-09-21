@@ -12,9 +12,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
-import static game.fish.cars.Constants.MAP_MAP1;
-import static game.fish.cars.Constants.MAP_MAP2;
-import static game.fish.cars.Constants.MAP_MAP3;
+import game.fish.cars.Constants.MAP;
 
 import static game.fish.cars.Constants.PATH_MAP1;
 import static game.fish.cars.Constants.PATH_MAP2;
@@ -30,17 +28,17 @@ public class MapLoader implements Disposable {
 	private TiledMap map;
 	
 	
-	public MapLoader(World world, int mapChoice) {
+	public MapLoader(World world, MAP mapChoice) {
 		this.world = world;
 		
 		switch (mapChoice) {
-		case MAP_MAP1:
+		case MAP1:
 			this.map = new TmxMapLoader().load(PATH_MAP1);
 			break;
-		case MAP_MAP2:
+		case MAP2:
 			this.map = new TmxMapLoader().load(PATH_MAP2);
 			break;
-		case MAP_MAP3:
+		case MAP3:
 			this.map = new TmxMapLoader().load(PATH_MAP3);
 			break;
 		default:

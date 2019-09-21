@@ -12,18 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import game.fish.cars.CarsGame;
 
-import static game.fish.cars.Constants.PLAY_SCREEN;
-import static game.fish.cars.Constants.SETTINGS_SCREEN;
-import static game.fish.cars.Constants.ACHIEVEMENTS_SCREEN;
-
-import static game.fish.cars.Constants.CAR_FWDCAR;
-import static game.fish.cars.Constants.CAR_AWDCAR;
-import static game.fish.cars.Constants.CAR_MOTORCYCLE;
-import static game.fish.cars.Constants.CAR_HOVERCAR;
-
-import static game.fish.cars.Constants.MAP_MAP1;
-import static game.fish.cars.Constants.MAP_MAP2;
-import static game.fish.cars.Constants.MAP_MAP3;
+import static game.fish.cars.Constants.SCREEN;
+import static game.fish.cars.Constants.CAR;
+import static game.fish.cars.Constants.MAP;
 
 public class MenuInterface extends InterfaceScreen {
 	
@@ -39,7 +30,7 @@ public class MenuInterface extends InterfaceScreen {
 		ChangeListener newGameListener = new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				if (parent.getScreenExists(PLAY_SCREEN)) parent.clearScreen(PLAY_SCREEN);
+				if (parent.getScreenExists(SCREEN.PLAY_SCREEN)) parent.clearScreen(SCREEN.PLAY_SCREEN);
 				newGameDialog();	
 			}
 		};
@@ -51,9 +42,9 @@ public class MenuInterface extends InterfaceScreen {
 			}
 		};
 		
-		resumeButton = buildScreenButton("Resume", skin, this.parent, PLAY_SCREEN);
-		settingsButton = buildScreenButton("Settings", skin, this.parent, SETTINGS_SCREEN);
-		achievementsButton = buildScreenButton("Achievements", skin, this.parent, ACHIEVEMENTS_SCREEN);
+		resumeButton = buildScreenButton("Resume", skin, this.parent, SCREEN.PLAY_SCREEN);
+		settingsButton = buildScreenButton("Settings", skin, this.parent, SCREEN.SETTINGS_SCREEN);
+		achievementsButton = buildScreenButton("Achievements", skin, this.parent, SCREEN.ACHIEVEMENTS_SCREEN);
 		newGameButton = buildCustomButton("New Game", skin, newGameListener);
 		exitButton = buildCustomButton("Quit", skin, exitListener);		
 	}
@@ -85,21 +76,21 @@ public class MenuInterface extends InterfaceScreen {
 		
 		final Dialog newGameDialog = new Dialog(" ", skin) {
 			
-			int carChoice = 0;
-			int mapChoice = 0;
+			CAR carChoice = CAR.FWDCAR;
+			MAP mapChoice = MAP.MAP1;
 			
 			protected void result(Object obj) {
-				if (obj.equals("fwdCar")) {carChoice = CAR_FWDCAR; cancel();}
-				else if (obj.equals("cycCar")) {carChoice = CAR_MOTORCYCLE; cancel();}
-				else if (obj.equals("hovCar")) {carChoice = CAR_HOVERCAR; cancel();}
-				else if (obj.equals("awdCar")) {carChoice = CAR_AWDCAR; cancel();}
-				else if (obj.equals("map1")) {mapChoice = MAP_MAP1; cancel();}
-				else if (obj.equals("map2")) {mapChoice = MAP_MAP2; cancel();}
-				else if (obj.equals("map3")) {mapChoice = MAP_MAP3; cancel();}
+				if (obj.equals("fwdCar")) {carChoice = CAR.FWDCAR; cancel();}
+				else if (obj.equals("cycCar")) {carChoice = CAR.MOTORCYCLE; cancel();}
+				else if (obj.equals("hovCar")) {carChoice = CAR.HOVERCAR; cancel();}
+				else if (obj.equals("awdCar")) {carChoice = CAR.AWDCAR; cancel();}
+				else if (obj.equals("map1")) {mapChoice = MAP.MAP1; cancel();}
+				else if (obj.equals("map2")) {mapChoice = MAP.MAP2; cancel();}
+				else if (obj.equals("map3")) {mapChoice = MAP.MAP3; cancel();}
 				else {
 					achievementPCS.firePropertyChange("carType",null,carChoice);
 					achievementPCS.firePropertyChange("mapChoice",null,mapChoice);
-					parent.changeScreen(PLAY_SCREEN, carChoice, mapChoice);
+					parent.changeScreen(SCREEN.PLAY_SCREEN, carChoice, mapChoice);
 				}
 			}
 		};
@@ -130,7 +121,7 @@ public class MenuInterface extends InterfaceScreen {
 		table.setFillParent(true);
 		table.add(newGameButton).fillX().uniformX();
 		table.row().pad(10,0,10,0);
-		if (parent.getScreenExists(PLAY_SCREEN)) {
+		if (parent.getScreenExists(SCREEN.PLAY_SCREEN)) {
 			table.add(resumeButton).fillX().uniformX();
 			table.row().pad(10,0,10,0);
 		}

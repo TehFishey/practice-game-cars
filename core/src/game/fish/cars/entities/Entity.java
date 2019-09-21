@@ -63,6 +63,8 @@ public abstract class Entity {
 			this.body.setLinearVelocity( forwardSpeed.x, forwardSpeed.y);
 	}
 	
+	// For some reason, libGdx's in-built .scl method isn't working properly here.
+	// After some testing and failed attempts at fixing the problem, I just implemented my own scalar * Vector method.
 	public Vector2 mult (Vector2 vector, float scalar) {
 		vector.x *= scalar;
 		vector.y *= scalar;

@@ -14,20 +14,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 import static game.fish.cars.Constants.PATH_ACHIEVEMENTS;
-import static game.fish.cars.Constants.CAR_FWDCAR;
-import static game.fish.cars.Constants.CAR_AWDCAR;
-import static game.fish.cars.Constants.CAR_MOTORCYCLE;
-import static game.fish.cars.Constants.CAR_HOVERCAR;
-
-import static game.fish.cars.Constants.PLAY_SCREEN;
-import static game.fish.cars.Constants.MENU_SCREEN;
-import static game.fish.cars.Constants.SETTINGS_SCREEN;
-import static game.fish.cars.Constants.KEYBINDINGS_SCREEN;
-import static game.fish.cars.Constants.ACHIEVEMENTS_SCREEN;
-
-import static game.fish.cars.Constants.MAP_MAP1;
-import static game.fish.cars.Constants.MAP_MAP2;
-import static game.fish.cars.Constants.MAP_MAP3;
+import static game.fish.cars.Constants.CAR;
+import static game.fish.cars.Constants.SCREEN;
+import static game.fish.cars.Constants.MAP;
 
 import static game.fish.cars.KeyBindings.KEY_DRIVE;
 import static game.fish.cars.KeyBindings.KEY_REVERSE;
@@ -108,35 +97,35 @@ public class Achievements {
 		{
 			@Override
 			protected boolean condition(Object newValue) {
-				return ((int) newValue == MENU_SCREEN);
+				return ((SCREEN) newValue == SCREEN.MENU_SCREEN);
 			}
     	});
 		newMap.put("viewSettings", new BooleanAchievement("Settings Viewer", "Navigated to the settings screen.", "screenChange") 
 		{
 			@Override
 			protected boolean condition(Object newValue) {
-				return ((int) newValue == SETTINGS_SCREEN);
+				return ((SCREEN) newValue == SCREEN.SETTINGS_SCREEN);
 			}
     	});
 		newMap.put("viewAcheivements", new BooleanAchievement("Progress Viewer", "Navigated to the achievements screen.", "screenChange") 
 		{
 			@Override
 			protected boolean condition(Object newValue) {
-				return ((int) newValue == ACHIEVEMENTS_SCREEN);
+				return ((SCREEN) newValue == SCREEN.ACHIEVEMENTS_SCREEN);
 			}
     	});
 		newMap.put("viewKeyBindings", new BooleanAchievement("Key Viewer", "Navigated to the key bindings screen.", "screenChange") 
 		{
 			@Override
 			protected boolean condition(Object newValue) {
-				return ((int) newValue == KEYBINDINGS_SCREEN);
+				return ((SCREEN) newValue == SCREEN.KEYBINDINGS_SCREEN);
 			}
     	});
 		newMap.put("viewPlay", new BooleanAchievement("Game Player", "Started a game.", "screenChange") 
 		{
 			@Override
 			protected boolean condition(Object newValue) {
-				return ((int) newValue == PLAY_SCREEN);
+				return ((SCREEN) newValue == SCREEN.PLAY_SCREEN);
 			}
     	});
 		newMap.put("played30s", new IncrementalAchievement("Played 30 Seconds", "Spent 30 seconds playing any map", "timeElapsed", 30)
@@ -232,32 +221,32 @@ public class Achievements {
 		{
 			@Override
 			protected boolean condition(Object newValue) {
-				float carType = (int) newValue;
-				return (carType == CAR_FWDCAR);
+				CAR carType = (CAR) newValue;
+				return (carType == CAR.FWDCAR);
 			}
 		});
 		newMap.put("awdCarDriven", new BooleanAchievement("Offroader", "Started a game driving an all-wheel drive car.", "carType") 
 		{
 			@Override
 			protected boolean condition(Object newValue) {
-				float carType = (int) newValue;
-				return (carType == CAR_AWDCAR);
+				CAR carType = (CAR) newValue;
+				return (carType == CAR.AWDCAR);
 			}
 		});
 		newMap.put("motorcycleDriven", new BooleanAchievement("Biker", "Started a game driving a motorcycle.", "carType") 
 		{
 			@Override
 			protected boolean condition(Object newValue) {
-				float carType = (int) newValue;
-				return (carType == CAR_MOTORCYCLE);
+				CAR carType = (CAR) newValue;
+				return (carType == CAR.MOTORCYCLE);
 			}
 		});
 		newMap.put("hoverCarDriven", new BooleanAchievement("Not a Testla", "Started a game driving a hover car.", "carType") 
 		{
 			@Override
 			protected boolean condition(Object newValue) {
-				float carType = (int) newValue;
-				return (carType == CAR_HOVERCAR);
+				CAR carType = (CAR) newValue;
+				return (carType == CAR.HOVERCAR);
 			}
 		});
 		newMap.put("allCarsDriven", new MultipleAchievement("Car Collector", "Started a game driving each car.", "carType", 4)
@@ -265,19 +254,19 @@ public class Achievements {
 			@Override
 			protected boolean[] multipleCondition(Object newValue) {
 				boolean[] update = values;
-				int carType = (int) newValue;
+				CAR carType = (CAR) newValue;
 				
 				switch (carType){
-				case CAR_FWDCAR: 
+				case FWDCAR: 
 					update[0] = true;
 					break;
-				case CAR_AWDCAR: 
+				case AWDCAR: 
 					update[1] = true;
 					break;
-				case CAR_MOTORCYCLE: 
+				case MOTORCYCLE: 
 					update[2] = true;
 					break;
-				case CAR_HOVERCAR: 
+				case HOVERCAR: 
 					update[3] = true;
 					break;
 				}
@@ -288,24 +277,24 @@ public class Achievements {
 		{
 			@Override
 			protected boolean condition(Object newValue) {
-				float mapType = (int) newValue;
-				return (mapType == MAP_MAP1);
+				MAP mapType = (MAP) newValue;
+				return (mapType == MAP.MAP1);
 			}
 		});
 		newMap.put("trackMapPlayed", new BooleanAchievement("Jockey", "Started a game on the racetrack map.", "mapChoice") 
 		{
 			@Override
 			protected boolean condition(Object newValue) {
-				float mapType = (int) newValue;
-				return (mapType == MAP_MAP2);
+				MAP mapType = (MAP) newValue;
+				return (mapType == MAP.MAP2);
 		}
 		});
 		newMap.put("parkingMapPlayed", new BooleanAchievement("Shopper", "Started a game on the parking lot map.", "mapChoice") 
 		{
 			@Override
 			protected boolean condition(Object newValue) {
-				float mapType = (int) newValue;
-				return (mapType == MAP_MAP3);
+				MAP mapType = (MAP) newValue;
+				return (mapType == MAP.MAP3);
 		}
 		});
 		newMap.put("allMapPlayed", new MultipleAchievement("Traveller", "Started a game on each map.", "mapChoice", 3)
@@ -313,16 +302,16 @@ public class Achievements {
 			@Override
 			protected boolean[] multipleCondition(Object newValue) {
 				boolean[] update = values;
-				int mapType = (int) newValue;
+				MAP mapType = (MAP) newValue;
 				
 				switch (mapType){
-				case MAP_MAP1: 
+				case MAP1: 
 					update[0] = true;
 					break;
-				case MAP_MAP2: 
+				case MAP2: 
 					update[1] = true;
 					break;
-				case MAP_MAP3: 
+				case MAP3: 
 					update[2] = true;
 					break;
 				}

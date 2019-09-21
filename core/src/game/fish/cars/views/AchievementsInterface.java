@@ -11,11 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
-import static game.fish.cars.Constants.PLAY_SCREEN;
-import static game.fish.cars.Constants.MENU_SCREEN;
-import static game.fish.cars.Constants.SETTINGS_SCREEN;
-import static game.fish.cars.Constants.KEYBINDINGS_SCREEN;
-import static game.fish.cars.Constants.ACHIEVEMENTS_SCREEN;
+import static game.fish.cars.Constants.SCREEN;
 import static game.fish.cars.Constants.PATH_ACHIEVEMENT_TRUE;
 import static game.fish.cars.Constants.PATH_ACHIEVEMENT_FALSE;
 
@@ -45,7 +41,7 @@ public class AchievementsInterface extends InterfaceScreen {
 		titleLabel = new Label ("Achievements", skin);
 		titleLabel.setFontScale(3);
 		
-		backButton = buildScreenButton("Back", skin, parent, MENU_SCREEN);
+		backButton = buildScreenButton("Back", skin, parent, SCREEN.MENU_SCREEN);
 	}
 	
 	

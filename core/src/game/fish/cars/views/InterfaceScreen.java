@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import game.fish.cars.CarsGame;
+import game.fish.cars.Constants.SCREEN;
 
 public abstract class InterfaceScreen implements Screen {
 
@@ -76,7 +77,7 @@ public abstract class InterfaceScreen implements Screen {
 		
 	}
 	
-	protected TextButton buildScreenButton(final String buttonLabel, final Skin skin, final CarsGame game, final int screen) {
+	protected TextButton buildScreenButton(final String buttonLabel, final Skin skin, final CarsGame game, final SCREEN screen) {
 		ChangeListener listener = new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
