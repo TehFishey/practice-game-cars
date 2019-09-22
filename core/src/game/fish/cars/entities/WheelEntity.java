@@ -5,6 +5,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 
+// Sub-entity for wheels. Each individual wheel handles its own movement and brakes.
+
 public class WheelEntity extends Entity {
 
 	private static final float ANGULAR_DAMPING = 0.5f;

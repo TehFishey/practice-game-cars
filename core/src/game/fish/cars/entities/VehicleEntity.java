@@ -4,14 +4,25 @@ import com.badlogic.gdx.physics.box2d.World;
 
 import game.fish.cars.tools.MapLoader;
 
+// Vehicle handles all of the vehicle-specific stuff, such as control 'states' (not really states), and stats.
+// In generation, Vehicle expects a region that's been declared as a 'Player' on whatever map you are loading to create a body from,
+// So it requires both an already-existing box2d World and a MapLoader instance.
+
+// Separating VehicleEntity out like this allows us to easily add a wide variety of very different kinds of vehicles to the game.
+
 public class VehicleEntity extends Entity {
 
-	public static final int DRIVE_DIRECTION_NONE = 0;
-	public static final int DRIVE_DIRECTION_FORWARD = 1;
-	public static final int DRIVE_DIRECTION_BACKWARD = 2;
-	public static final int TURN_DIRECTION_NONE = 0;
-	public static final int TURN_DIRECTION_LEFT = 1;
-	public static final int TURN_DIRECTION_RIGHT = 2;
+	public static enum DRIVE_DIRECTION {
+		NONE,
+		FORWARD,
+		BACKWARD
+	}
+	
+	public static enum TURN_DIRECTION {
+		NONE,
+		LEFT,
+		RIGHT
+	}
 	
 	protected static float DEFAULT_ANGULAR_DAMPING;
 	protected static float DEFAULT_LINEAR_DAMPING;
@@ -24,8 +35,8 @@ public class VehicleEntity extends Entity {
 	protected static float ACCELERATION_DECAY;
 	protected static float BRAKE_STRENGTH;
 	
-	protected int driveDirection = DRIVE_DIRECTION_NONE;
-	protected int turnDirection = TURN_DIRECTION_NONE;
+	protected DRIVE_DIRECTION driveDirection = DRIVE_DIRECTION.NONE;
+	protected TURN_DIRECTION turnDirection = TURN_DIRECTION.NONE;
 	protected boolean brakesOn = false;
 	
 	protected final World world;
@@ -43,11 +54,11 @@ public class VehicleEntity extends Entity {
 		this.loader = loader;
 	}
 	
-	public void inputDriveDirection(int direction) {
+	public void inputDriveDirection(DRIVE_DIRECTION direction) {
 		this.driveDirection = direction;
 	}
 	
-	public void inputTurnDirection(int direction) {
+	public void inputTurnDirection(TURN_DIRECTION direction) {
 		this.turnDirection = direction;
 	}
 	

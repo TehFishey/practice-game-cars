@@ -15,6 +15,8 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import game.fish.cars.CarsGame;
 import game.fish.cars.Constants.SCREEN;
 
+// InterfaceScreen class contains a couple of shared methods to help build the various menu screens.
+
 public abstract class InterfaceScreen implements Screen {
 
 	protected final CarsGame parent;

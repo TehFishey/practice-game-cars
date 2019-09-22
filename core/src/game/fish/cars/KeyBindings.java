@@ -11,6 +11,8 @@ import static game.fish.cars.Constants.PATH_KEYBINDINGS;
 
 public class KeyBindings {
 
+	// I use a set of mapped strings instead of an enum here to simplify saving/loading from file 
+	// (the strings work as both identifiers and keys for the saved/loaded map)
 	public static final String KEY_DRIVE = "driveForward";
 	public static final String KEY_REVERSE = "driveBackward";
 	public static final String KEY_LEFT = "turnLeft";

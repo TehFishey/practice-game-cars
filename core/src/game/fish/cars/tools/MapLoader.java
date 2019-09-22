@@ -18,6 +18,8 @@ import static game.fish.cars.Constants.PATH_MAP1;
 import static game.fish.cars.Constants.PATH_MAP2;
 import static game.fish.cars.Constants.PATH_MAP3;
 
+// Initially inspired by a tutorial, I tried to work out the maploader to be easily extensible/scalable to newly added maps.
+
 public class MapLoader implements Disposable {
 
 	public static final String MAP_WALLS = "walls";

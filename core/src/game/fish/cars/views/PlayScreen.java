@@ -39,9 +39,9 @@ import static game.fish.cars.Constants.GRAVITY;
 import static game.fish.cars.Constants.DEFAULT_ZOOM;
 import static game.fish.cars.Constants.PPM;
 
-import static game.fish.cars.Constants.SCREEN;
 import static game.fish.cars.Constants.CAR;
 import static game.fish.cars.Constants.MAP;
+import static game.fish.cars.entities.CarVehicle.DRIVE;
 
 import static game.fish.cars.KeyBindings.KEY_DRIVE;
 import static game.fish.cars.KeyBindings.KEY_REVERSE;
@@ -52,10 +52,8 @@ import static game.fish.cars.KeyBindings.KEY_ZOOMIN;
 import static game.fish.cars.KeyBindings.KEY_ZOOMOUT;
 import static game.fish.cars.KeyBindings.KEY_MENU;
 
-import static game.fish.cars.entities.CarVehicle.FRONT_WHEEL_DRIVE;
-import static game.fish.cars.entities.CarVehicle.ALL_WHEEL_DRIVE;
-//import static game.fish.cars.entities.CarEntity.REAR_WHEEL_DRIVE;
 
+// The main game/game-loop is run from this screen (in .render()).
 
 public class PlayScreen implements Screen {
 
@@ -120,10 +118,10 @@ public class PlayScreen implements Screen {
 		
 		switch (carChoice) {
 		case FWDCAR:
-			player = new CarVehicle(world, loader, FRONT_WHEEL_DRIVE);
+			player = new CarVehicle(world, loader, DRIVE.FRONT_WHEEL);
 			break;
 		case AWDCAR:
-			player = new CarVehicle(world, loader, ALL_WHEEL_DRIVE);
+			player = new CarVehicle(world, loader, DRIVE.ALL_WHEEL);
 			break;
 		case MOTORCYCLE:
 			player = new MotorcycleVehicle(world, loader);
@@ -132,7 +130,7 @@ public class PlayScreen implements Screen {
 			player = new HoverVehicle(world, loader);
 			break;
 		default:
-			player = new CarVehicle(world, loader, FRONT_WHEEL_DRIVE);
+			player = new CarVehicle(world, loader, DRIVE.FRONT_WHEEL);
 		}
 		
 		playerFixture = player.getBody().getFixtureList().first();
@@ -145,7 +143,10 @@ public class PlayScreen implements Screen {
 	}
 
 	public void render(float delta) {
-		// screen loop
+		// The game-loop runs here (via world.step in the update method)
+		// I run various other updates through a pile of small method calls. 
+		// Is there a cleaner way to do this?
+		
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		takeInput();
@@ -159,6 +160,9 @@ public class PlayScreen implements Screen {
 		
 	
 	private void takeInput() {
+		// Controls are all handled via polling.
+		// I would prefer an event-based implementation, but this works fine on a project of this scale.
+		
 		if (keyBindings.isKeyBindingPressed(KEY_DRIVE)) driveCommand.execute(player);
 		else if (keyBindings.isKeyBindingPressed(KEY_REVERSE)) reverseCommand.execute(player);
 		else stopCommand.execute(player);
@@ -184,6 +188,11 @@ public class PlayScreen implements Screen {
 	}
 	
 	private void updateTrackers() {
+		// There is some spillover here in event-tracking here from the achievement conditions;
+		// tracking net time spent on PlayScreen across multiple sessions without adding any bloat was trickier than I thought.
+		// Right now, it still has the issue that it tracks time so long as the PlayScreen *exists*, even if viewing the menu.
+		// If I had more time, I would try to add a clean way of pausing screens when they are not in use; and a better method for tracking time too.
+		
 		speedTracker = Math.round(player.getAbsoluteSpeed());
 		if (speedTracker >= 100f) achievementPCS.firePropertyChange("playerSpeed",null,speedTracker);
 		

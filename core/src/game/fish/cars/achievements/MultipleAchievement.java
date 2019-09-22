@@ -2,6 +2,9 @@ package game.fish.cars.achievements;
 
 import java.util.Arrays;
 
+// Achievement class for achievements that require multiple completion flags. 
+// Flags can be variably updated (or ignored) in the customized multipleCondition methods for each object.
+
 public class MultipleAchievement extends Achievement {
 	protected boolean[] values;
 	protected int variableCount;
@@ -37,6 +40,9 @@ public class MultipleAchievement extends Achievement {
 		for (boolean value : values) if (!value) return false;
 		return true;
 	}
+	
+	
+	// Saving multiple booleans as a single integer allowed me to simplify the save/load methods in the Achievements class.
 	
 	private boolean[] readProgress(int bitProgress, int arrayLen) {
 		boolean[] boolArray = new boolean[arrayLen];

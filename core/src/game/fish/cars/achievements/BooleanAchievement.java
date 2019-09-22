@@ -1,5 +1,7 @@
 package game.fish.cars.achievements;
 
+// The simplest achievement class, for tracking achievements that require only one true/false flag.
+
 public class BooleanAchievement extends Achievement {
 	
 	public BooleanAchievement(String name, String description, String triggerPropertyName) {

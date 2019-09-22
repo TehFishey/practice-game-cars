@@ -10,6 +10,8 @@ import com.badlogic.gdx.physics.box2d.World;
 
 import static game.fish.cars.Constants.PPM;
 
+// My first attempt at implementing the Factory pattern.
+
 public class ShapeFactory {
 	private ShapeFactory () {};
 	
@@ -35,8 +37,10 @@ public class ShapeFactory {
 	}
 	
 	public static Body createPolygon(final PolygonMapObject polyObject, final BodyDef.BodyType type, final World world, final float density) {		
+		// Converting Tiled polygon objects to complex shapes in Box2d doesn't seem to work very well,
+		// but I think it's a limitation of the engine rather than an error here. I try to stick with rectangles in the maps.
+		
 		final BodyDef bdef = new BodyDef();
-		//bdef.position.set(position.x / PPM, position.y / PPM);
 		bdef.type = type;
 		final Body body = world.createBody(bdef);
 		
@@ -48,12 +52,7 @@ public class ShapeFactory {
 			worldVerticies[i] = verticies[i] / PPM;
 		}
 		
-		shape.set(worldVerticies);
-		
-		//final FixtureDef fdef = new FixtureDef();
-		//fdef.shape = shape;
-		//fdef.density = density;
-		
+		shape.set(worldVerticies);	
 		body.createFixture(shape, density);
 		
 		shape.dispose();

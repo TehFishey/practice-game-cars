@@ -11,11 +11,16 @@ import game.fish.cars.tools.MapLoader;
 
 import static game.fish.cars.Constants.PPM;
 
+// The 'Standard' vehicle type. Vehicle is pushed/stopped by attached wheel entities which are controlled via turn commands.
+// Technically supports all three drive types (FWD, RWD, 4WD), but the latter two don't work right due to how physics is handled right now.
+
 public class CarVehicle extends VehicleEntity {
 	
-	public static final int FRONT_WHEEL_DRIVE = 0;
-	public static final int REAR_WHEEL_DRIVE = 1;
-	public static final int ALL_WHEEL_DRIVE = 2;
+	public static enum DRIVE {
+		FRONT_WHEEL,
+		REAR_WHEEL,
+		ALL_WHEEL
+	}
 	
 	private static final float WHEEL_POSITION_X = 64f;
     private static final float WHEEL_POSITION_Y = 80f;
@@ -27,14 +32,16 @@ public class CarVehicle extends VehicleEntity {
 	
 	private float WHEEL_TURN_RATE = 2f;
 	private float WHEEL_RESET_RATE = 2f;
+	
+	// Added a temporary increase to vehicle damping when turning, to make up for shoddy physics. It kinda works. 
 	private float TURN_DAMPING_MOD = 2f;
 	
 	private float currentAcceleration = 0f;
 	private float wheelAngle = 0f;
 	
-	private final int drive;
+	private final DRIVE drive;
 	
-	public CarVehicle(World world, MapLoader loader, int drive) {
+	public CarVehicle(World world, MapLoader loader, DRIVE drive) {
 		super(world, loader);
 		this.drive = drive;
 		
@@ -87,13 +94,13 @@ public class CarVehicle extends VehicleEntity {
 		}
 		
 		switch (drive) {
-		case FRONT_WHEEL_DRIVE:
+		case FRONT_WHEEL:
 			driveWheels.addAll(frontWheels);
 			break;
-		case REAR_WHEEL_DRIVE:
+		case REAR_WHEEL:
 			driveWheels.addAll(rearWheels);
 			break;
-		case ALL_WHEEL_DRIVE:
+		case ALL_WHEEL:
 			driveWheels.addAll(frontWheels);
 			driveWheels.addAll(rearWheels);
 			break;
@@ -104,17 +111,17 @@ public class CarVehicle extends VehicleEntity {
 		Vector2 engineForce = new Vector2();
 		
 		switch (turnDirection) {
-		case TURN_DIRECTION_RIGHT:
+		case RIGHT:
 			if (wheelAngle > -WHEEL_LOCK_ANGLE) 
 				wheelAngle = Math.max(wheelAngle -= WHEEL_TURN_RATE, -WHEEL_LOCK_ANGLE);
 			getBody().setLinearDamping(DEFAULT_LINEAR_DAMPING + TURN_DAMPING_MOD);
 			break;
-		case TURN_DIRECTION_LEFT:
+		case LEFT:
 			if (wheelAngle < WHEEL_LOCK_ANGLE) 
 				wheelAngle = Math.min(wheelAngle += WHEEL_TURN_RATE, WHEEL_LOCK_ANGLE);
 			getBody().setLinearDamping(DEFAULT_LINEAR_DAMPING + TURN_DAMPING_MOD);
 			break;
-		case TURN_DIRECTION_NONE:
+		case NONE:
 			if (wheelAngle < 0)
 				wheelAngle += WHEEL_RESET_RATE;
 			else if (wheelAngle > 0)
@@ -126,19 +133,19 @@ public class CarVehicle extends VehicleEntity {
 			frontWheel.setAngle(wheelAngle);
 		
 		switch(driveDirection) {
-		case DRIVE_DIRECTION_FORWARD:
+		case FORWARD:
 			if (currentAcceleration < 0)
 				currentAcceleration = Math.min(currentAcceleration + ACCELERATION_DECAY, 0);
 			if (currentAcceleration < MAX_ACCELERATION)
 				currentAcceleration = Math.min(currentAcceleration + ACCELERATION_STEP, MAX_ACCELERATION);
 			break;
-		case DRIVE_DIRECTION_BACKWARD:
+		case BACKWARD:
 			if (currentAcceleration > 0)
 				currentAcceleration = Math.max(currentAcceleration - ACCELERATION_DECAY, 0);
 			if (currentAcceleration > MAX_REVERSE_ACCELERATION)
 				currentAcceleration = Math.max(currentAcceleration + REVERSE_ACCELERATION_STEP , MAX_REVERSE_ACCELERATION);	
 			break;
-		case DRIVE_DIRECTION_NONE:
+		case NONE:
 			if (currentAcceleration > 0)
 				currentAcceleration = Math.max(currentAcceleration - ACCELERATION_DECAY, 0);
 			else if (currentAcceleration < 0)

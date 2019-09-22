@@ -71,7 +71,6 @@ public class SettingsInterface extends InterfaceScreen {
 	public void show() {
 		Table table = new Table();
 
-		//table.setDebug(true);
 		table.setFillParent(true);
 		table.add(titleLabel);
 		table.row();

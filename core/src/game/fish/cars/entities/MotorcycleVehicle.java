@@ -10,6 +10,10 @@ import game.fish.cars.tools.MapLoader;
 
 import static game.fish.cars.Constants.PPM;
 
+// Test case for adding new, different vehicle types to the game. Motorcycle functions like a car, but with two wheels and a custom-sized body.
+// Handling and control are very strange/bad because of how physics and movement is handled in Entity. 
+// I mostly added this just to see if I could.
+
 public class MotorcycleVehicle extends VehicleEntity {
 	
 	private static final float WHEEL_POSITION_X = 0f;
@@ -71,17 +75,17 @@ public class MotorcycleVehicle extends VehicleEntity {
 		Vector2 engineForce = new Vector2();
 		
 		switch (turnDirection) {
-		case TURN_DIRECTION_RIGHT:
+		case RIGHT:
 			if (wheelAngle > -WHEEL_LOCK_ANGLE) 
 				wheelAngle = Math.max(wheelAngle -= WHEEL_TURN_RATE, -WHEEL_LOCK_ANGLE);
 			getBody().setLinearDamping(DEFAULT_LINEAR_DAMPING + TURN_DAMPING_MOD);
 			break;
-		case TURN_DIRECTION_LEFT:
+		case LEFT:
 			if (wheelAngle < WHEEL_LOCK_ANGLE) 
 				wheelAngle = Math.min(wheelAngle += WHEEL_TURN_RATE, WHEEL_LOCK_ANGLE);
 			getBody().setLinearDamping(DEFAULT_LINEAR_DAMPING + TURN_DAMPING_MOD);
 			break;
-		case TURN_DIRECTION_NONE:
+		case NONE:
 			if (wheelAngle < 0)
 				wheelAngle += WHEEL_RESET_RATE;
 			else if (wheelAngle > 0)
@@ -92,19 +96,19 @@ public class MotorcycleVehicle extends VehicleEntity {
 		frontWheel.setAngle(wheelAngle);
 		
 		switch(driveDirection) {
-		case DRIVE_DIRECTION_FORWARD:
+		case FORWARD:
 			if (currentAcceleration < 0)
 				currentAcceleration = Math.min(currentAcceleration + ACCELERATION_DECAY, 0);
 			if (currentAcceleration < MAX_ACCELERATION)
 				currentAcceleration = Math.min(currentAcceleration + ACCELERATION_STEP, MAX_ACCELERATION);
 			break;
-		case DRIVE_DIRECTION_BACKWARD:
+		case BACKWARD:
 			if (currentAcceleration > 0)
 				currentAcceleration = Math.max(currentAcceleration - ACCELERATION_DECAY, 0);
 			if (currentAcceleration > MAX_REVERSE_ACCELERATION)
 				currentAcceleration = Math.max(currentAcceleration + REVERSE_ACCELERATION_STEP , MAX_REVERSE_ACCELERATION);	
 			break;
-		case DRIVE_DIRECTION_NONE:
+		case NONE:
 			if (currentAcceleration > 0)
 				currentAcceleration = Math.max(currentAcceleration - ACCELERATION_DECAY, 0);
 			else if (currentAcceleration < 0)

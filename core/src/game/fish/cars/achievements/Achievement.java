@@ -1,5 +1,9 @@
 package game.fish.cars.achievements;
 
+// Rough abstract class for the various achievement types.
+// I feel like there must be ways that I can simplify the number of methods in each class more,
+// but I can't think of them.
+
 public abstract class Achievement {
 	private String name;
 	private String description;
@@ -38,32 +42,15 @@ public abstract class Achievement {
 		if (checkCompleted()) completed = true;
 	}
 	
-	public void update(Object newValue) {
-		if (condition(newValue)) addProgress(newValue);
-	}
-	
 	protected void setCompleted() {
 		completed = true;
 	}
 	
+	// Kinda an abstract class, but it takes different types depending on subclass.
+	// Is there a better way to do this?
 	protected void addProgress(Object newValue) {}
 	
-	protected boolean checkCompleted() {
-		return false;
-	}
+	abstract protected boolean checkCompleted();
 	
-	protected boolean condition(Object newValue) {
-		return false;
-	}
-	
-	protected int incrementalCondition(Object newValue) {
-		return 0;
-	}
-	
-	protected boolean[] multipleCondition(Object newValue) {
-		return new boolean[0];
-	}
-	
-	
-	
+	abstract public void update(Object newValue);
 }

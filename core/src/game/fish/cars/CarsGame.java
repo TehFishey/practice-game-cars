@@ -39,9 +39,14 @@ public class CarsGame extends Game {
 	private HashMap<SCREEN, Screen> screensMap;
 	
 	public void create() {
+		// Establish a single instance of each of Settings, KeyBindings, and Achievements, which load data from file.
+		// Would a more standard Singleton pattern (with a private constructor and static getter) be a better way to handle these?
+		// We only ever use one of each anyway, and most screens/things that get them do so via parent.get methods...
+		
 		settings = new Settings();
 		keyBindings = new KeyBindings();
 		achievements = new Achievements(this);
+		
 		achievementListener = new AchievementListener(achievements);
 		achievementOverlay = new AchievementOverlay();
 		achievementPCS = new PropertyChangeSupport(this);

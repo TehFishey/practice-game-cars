@@ -29,7 +29,6 @@ public class AchievementsInterface extends InterfaceScreen {
 	Label titleLabel;
 	TextButton backButton;
 	
-	
 	public AchievementsInterface(CarsGame parent) {
 		super(parent);
 		achievements = parent.getAchievements();
@@ -52,7 +51,6 @@ public class AchievementsInterface extends InterfaceScreen {
 		ScrollPane scrollPane = new ScrollPane(internalTable, skin);
 		scrollPane.setFadeScrollBars(false);
 
-		//table.setDebug(true);
 		table.defaults().left();
 		table.setFillParent(true);
 		table.add(titleLabel);

@@ -1,5 +1,7 @@
 package game.fish.cars.achievements;
 
+// Achievement class for tracking achievements that track progress as an incrementable integer.
+
 public class IncrementalAchievement extends Achievement {
 	protected int progressCap;
 	

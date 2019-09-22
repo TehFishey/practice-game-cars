@@ -33,6 +33,20 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+// The achievements are the wonkiest part of this project, and the part that I spent the most time on.
+// The code is a mess of unsafe typecasts scattered across a dozen different classes (all the classes registered to the observer/listener)
+// Individual achievements override anonymous 'Condition' classes to specify their specific conditional logic, using whatever values &
+// types that are fed to them by the listeners.
+
+// If I had to do it again, I'm not 100% sure I could get a system much better than this with my current knowledge. Achievements are weird
+// and require all sorts of arbitrary information from all sorts of places, and so are kinda hooked into everything.
+
+// One thing that might be an improvement would be if all of the achievement listeners fed info to a single "properties" class somewhere,
+// which tracked various game-states/variables while the game was loaded. Individual achievements could then call upon information from that
+// class/spreadsheet using safely-typed methods and mix/match variables as their conditional logic requires. This also has the benefit of 
+// allowing for more complex achievements, as they could hypothetically draw upon more information than can be easily fed into them from a
+// single listener trigger.
+
 public class Achievements {
 
 	private final CarsGame parent;
@@ -41,6 +55,10 @@ public class Achievements {
 	private LinkedHashMap<String, Achievement> currentAchievements;
 	private Map<String, ?> achievementsFileIndex;
 	private HashMap<String, Integer> currentProgress;
+	
+	// Achievements themselves are relatively complex "Achievement" classes, however their data is saved only
+	// as single integers ('progress' values) for each achievement. Ints are pulled from the map of the data file and
+	// added to Achievement objects during runtime.
 	
 	public Achievements(CarsGame parent) {
 		this.parent = parent;
@@ -77,6 +95,9 @@ public class Achievements {
 	}
 	
 	private LinkedHashMap<String, Achievement> generateAchievementDefaults() {
+		
+		// Declare most of the data for the achievements here. Maybe there is some way to move this into a modifiable 
+		// data file, rather than hardcoding it?
 		
 		LinkedHashMap<String, Achievement> newMap = new LinkedHashMap<String, Achievement>();
 		newMap.put("gameStart", new BooleanAchievement("Player", "Started the game", "gameStart") 

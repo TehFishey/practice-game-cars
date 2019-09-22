@@ -7,6 +7,12 @@ import com.badlogic.gdx.physics.box2d.World;
 
 import game.fish.cars.tools.ShapeFactory;
 
+// Entity handles the basic physics maths that we use for all objects in-game
+// Most of the physics is handled by Box2d, (Impulse-based movement, collisions, density/linear dampening).
+// These methods mostly relate to making cars behave like cars (like killing most of the lateral drift).
+// As a game, CarsGame can use a complete overhaul of its physics into something more nuanced/better feeling.
+// But that is outside of the scope of this project - Right now, I'm just trying to learn basic design.
+
 public abstract class Entity {
 	
 	private Vector2 forwardSpeed;

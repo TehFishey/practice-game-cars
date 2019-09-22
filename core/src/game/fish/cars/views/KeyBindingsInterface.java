@@ -25,6 +25,11 @@ import static game.fish.cars.KeyBindings.KEY_ZOOMIN;
 import static game.fish.cars.KeyBindings.KEY_ZOOMOUT;
 import static game.fish.cars.KeyBindings.KEY_MENU;
 
+// KeyBindings screen contains a very large number of class variables for labels, buttons, etc.
+// If I did it again, I might consider using some kind of multi-dimensional map to handle all of them, or even a sub-class.
+// I'd also consider adjusting the show() method to generate a menu via a loop (like achievements do), for easier scalability
+// in case I'd want to add more keys.
+
 public class KeyBindingsInterface extends InterfaceScreen {
 	
 	private final KeyBindings keyBindings;
@@ -100,7 +105,6 @@ public class KeyBindingsInterface extends InterfaceScreen {
 	public void show() {
 		Table table = new Table();
 
-		//table.setDebug(true);
 		table.setFillParent(true);
 		table.add(titleLabel);
 		table.row();

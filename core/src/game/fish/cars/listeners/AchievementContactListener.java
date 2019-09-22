@@ -10,6 +10,9 @@ import com.badlogic.gdx.utils.Array;
 import game.fish.cars.Achievements;
 import game.fish.cars.views.PlayScreen;
 
+// ContactListener is a different kind of observer than runs through LibGDX.
+// It tracks collisions and triggers an event for each one.
+
 public class AchievementContactListener implements ContactListener {
 
 	Achievements achievements;

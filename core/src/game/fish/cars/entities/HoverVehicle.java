@@ -5,6 +5,9 @@ import com.badlogic.gdx.physics.box2d.World;
 
 import game.fish.cars.tools.MapLoader;
 
+// HoverVehicles are glorified WheelEntities with VehicleEntity methods and very low friction.
+// They're probably the only vehicle that works right.
+
 public class HoverVehicle extends VehicleEntity {
 	
 	private float currentAcceleration = 0f;
@@ -36,30 +39,30 @@ public class HoverVehicle extends VehicleEntity {
 		Vector2 engineForce = new Vector2(0,0);
 		
 		switch (turnDirection) {
-		case TURN_DIRECTION_RIGHT:
+		case RIGHT:
 			getBody().setAngularVelocity(-2f);
 			break;
-		case TURN_DIRECTION_LEFT:
+		case LEFT:
 			getBody().setAngularVelocity(2f);
 			break;
-		case TURN_DIRECTION_NONE:
+		case NONE:
 			break;
 		}
 		
 		switch(driveDirection) {
-		case DRIVE_DIRECTION_FORWARD:
+		case FORWARD:
 			if (currentAcceleration < 0)
 				currentAcceleration = Math.min(currentAcceleration + ACCELERATION_DECAY, 0);
 			if (currentAcceleration < MAX_ACCELERATION)
 				currentAcceleration = Math.min(currentAcceleration + ACCELERATION_STEP, MAX_ACCELERATION);
 			break;
-		case DRIVE_DIRECTION_BACKWARD:
+		case BACKWARD:
 			if (currentAcceleration > 0)
 				currentAcceleration = Math.max(currentAcceleration - ACCELERATION_DECAY, 0);
 			if (currentAcceleration > MAX_REVERSE_ACCELERATION)
 				currentAcceleration = Math.max(currentAcceleration + REVERSE_ACCELERATION_STEP , MAX_REVERSE_ACCELERATION);	
 			break;
-		case DRIVE_DIRECTION_NONE:
+		case NONE:
 			if (currentAcceleration > 0)
 				currentAcceleration = Math.max(currentAcceleration - ACCELERATION_DECAY, 0);
 			else if (currentAcceleration < 0)
